@@ -28,7 +28,7 @@ public class Competition implements Comparable<Competition>, Serializable
 		this.inscriptions = inscriptions;
 		this.nom = nom;
 		this.dateCloture = dateCloture;
-		candidats = new TreeSet<>();
+		candidats = new TreeSet<Candidat>();
 	}
 	
 	/**
