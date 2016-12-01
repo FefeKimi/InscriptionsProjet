@@ -24,8 +24,8 @@ public class Inscriptions implements Serializable
 	private static final String FILE_NAME = "Inscriptions.srz";
 	private static Inscriptions inscriptions;
 	
-	private SortedSet<Competition> competitions = new TreeSet<>();
-	private SortedSet<Candidat> candidats = new TreeSet<>();
+	private SortedSet<Competition> competitions = new TreeSet<Competition>();
+	private SortedSet<Candidat> candidats = new TreeSet<Candidat>();
 
 	private Inscriptions()
 	{
@@ -58,7 +58,7 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Personne> getPersonnes()
 	{
-		SortedSet<Personne> personnes = new TreeSet<>();
+		SortedSet<Personne> personnes = new TreeSet<Personne>();
 		for (Candidat c : getCandidats())
 			if (c instanceof Personne)
 				personnes.add((Personne)c);
