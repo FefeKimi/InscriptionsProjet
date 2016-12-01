@@ -2,6 +2,7 @@ package testUnit;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -19,7 +20,6 @@ public class TestInscription extends TestCase {
 	SortedSet<Candidat> cand;
 	SortedSet<Competition> compet;
 
-	
 	
 	protected void setUp() throws Exception
 	{
@@ -51,7 +51,12 @@ public class TestInscription extends TestCase {
 		SortedSet<Equipe> equipes = new TreeSet<>();
 		equipes = i.getEquipes();
 		assertNotNull(i);
-		assertEquals(Inscriptions.getEquipes(),equipes);
+		assertEquals(i.getEquipes(),equipes);
+	}
+	
+	@Test
+	public void testRecharger() {
+		i.recharger();
 	}
 	
 	@Test
@@ -60,7 +65,9 @@ public class TestInscription extends TestCase {
 		assertNotEquals(Inscriptions.getInscriptions(),i);
 	}
 	
-	 
-	
+	@Test
+	public void testSauvegarder() throws IOException {
+		i.sauvegarder();
+	}
 
 }
