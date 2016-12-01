@@ -1,11 +1,3 @@
--- Database: Inscription2017
-
-DROP DATABASE Inscription2017;
-
-CREATE DATABASE Inscription2017;
-use Inscription2017;
-
-
 #------------------------------------------------------------
 #        Script MySQL.
 #------------------------------------------------------------
@@ -14,7 +6,9 @@ use Inscription2017;
 #------------------------------------------------------------
 # Table: Candidat
 #------------------------------------------------------------
-
+DROP DATABASE inscription2017;
+CREATE DATABASE inscription2017;
+USE inscription2017;
 CREATE TABLE Candidat(
         NumCandidat  Int NOT NULL ,
         NomCandidat  Varchar (25) ,
@@ -40,7 +34,6 @@ CREATE TABLE Equipe(
 CREATE TABLE Personne(
         PrenomPersonne Varchar (25) ,
         NumCandidat    Int NOT NULL ,
-        NumCandidat_1  Int ,
         PRIMARY KEY (NumCandidat )
 )ENGINE=InnoDB;
 
@@ -68,16 +61,20 @@ CREATE TABLE Participer(
         PRIMARY KEY (NumCandidat ,LabelComp )
 )ENGINE=InnoDB;
 
-CREATE TABLE Erreur (
-    id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    erreur VARCHAR(255) UNIQUE);
-}
 
+#------------------------------------------------------------
+# Table: ETRE DANS
+#------------------------------------------------------------
 
-
+CREATE TABLE ETRE_DANS(
+        NumCandidat_Equipe   Int NOT NULL ,
+        NumCandidat_Personne Int NOT NULL ,
+        PRIMARY KEY (NumCandidat_Personne ,NumCandidat_Equipe )
 )ENGINE=InnoDB;
+
 ALTER TABLE Equipe ADD CONSTRAINT FK_Equipe_NumCandidat FOREIGN KEY (NumCandidat) REFERENCES Candidat(NumCandidat);
 ALTER TABLE Personne ADD CONSTRAINT FK_Personne_NumCandidat FOREIGN KEY (NumCandidat) REFERENCES Candidat(NumCandidat);
-ALTER TABLE Personne ADD CONSTRAINT FK_Personne_NumCandidat_1 FOREIGN KEY (NumCandidat_1) REFERENCES Equipe(NumCandidat);
 ALTER TABLE Participer ADD CONSTRAINT FK_Participer_NumCandidat FOREIGN KEY (NumCandidat) REFERENCES Candidat(NumCandidat);
 ALTER TABLE Participer ADD CONSTRAINT FK_Participer_LabelComp FOREIGN KEY (LabelComp) REFERENCES Competition(LabelComp);
+ALTER TABLE ETRE_DANS ADD CONSTRAINT FK_ETRE_DANS_NumCandidat FOREIGN KEY (NumCandidat_Equipe) REFERENCES Equipe(NumCandidat);
+ALTER TABLE ETRE_DANS ADD CONSTRAINT FK_ETRE_DANS_NumCandidat_1 FOREIGN KEY (NumCandidat_Personne) REFERENCES Personne(NumCandidat);
