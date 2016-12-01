@@ -1,20 +1,6 @@
 procedure.sql
 
 
-DELIMITER |
-	DROP PROCEDURE IF EXISTS DEL_CANDIDAT;
-	create procedure DEL_CANDIDAT (numCanDel int(25)) 
-	BEGIN
-		DELETE FROM PERSONNE
-		WHERE NumCandidat =numCanDel;
-		DELETE FROM EQUIPE
-		WHERE NumCandidat =numCanDel;
-		DELETE FROM CANDIDAT
-		WHERE NumCandidat =numCanDel;
-
-	END;	
-|
-
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PERSONNE;
@@ -78,12 +64,10 @@ DELIMITER |
 	end;
 |
 DELIMITER |
-	DROP PROCEDURE IF EXISTS DEL_CANDIDAT;
-	create procedure before_del_comp (LabelComp varchar(25)) 
+	DROP PROCEDURE IF EXISTS DEL_CCOMP;
+	create procedure DEL_COMP (LabelComp varchar(25)) 
 	BEGIN
 		DELETE FROM COMPETITION
-		WHERE LabelComp = LabelComp;
-		DELETE FROM PARTICIPATION
 		WHERE LabelComp = LabelComp;
 
 	END;	
@@ -112,16 +96,18 @@ DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PARTICIPATION;
 	create procedure ADD_PARTICIPATION(NumCandidat int, LabelComp varchar(25)) 
 	BEGIN
-		INSERT INTO PARTICIPATION(NumCandidat, LabelComp) VALUES (NumCandidat, LabelComp);
+		INSERT INTO PARTICIPER (NumCandidat, LabelComp) VALUES (NumCandidat, LabelComp);
 	END;
 
 |
 DELIMITER |
-	DROP TRIGGER IF EXISTS
+	
 	CREATE TRIGGER before_del_comp BEFORE DELETE
-	ON  PARTICIPATION
+	ON COMPETITION FOR EACH ROW
 	BEGIN
-		IF Old.NumCandidat=NumCandidat 
- 		DELETE FROM PERSONNE
+		
+ 		DELETE FROM PARTICIPER
+ 		WHERE LabelComp = Old.LabelComp;
 	END;	
 |
+
