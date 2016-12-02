@@ -13,12 +13,6 @@ public class MenuDialogue {
 		/*Candidats*/
 		Menu menuCandidats = new Menu("Menu Candidats","a");
 		menuPrincipal.ajoute(menuCandidats);
-
-		menuCandidats.ajoute(new Option("Ajouter un candidat","b",new Action() {
-			public void optionSelectionnee()
-			{
-			}
-		}));
 		
 		menuCandidats.ajoute(new Option("Supprimer un candidat","c",new Action() {
 			public void optionSelectionnee()
@@ -45,16 +39,11 @@ public class MenuDialogue {
 			{
 			}
 		}));
-		menuCandidats.ajouteRevenir("r");
+		menuCompetition.ajouteRevenir("r");
 		
 		/*Equipes*/
 		Menu menuEquipe = new Menu("Menu Equipe","c");
 		menuPrincipal.ajoute(menuEquipe);
-		menuEquipe.ajoute(new Option("Afficher les membres","a",new Action() {
-			public void optionSelectionnee()
-			{
-			}
-		}));
 		
 		menuEquipe.ajoute(new Option("Ajouter un membre","b",new Action() {
 			public void optionSelectionnee()
@@ -80,27 +69,27 @@ public class MenuDialogue {
 			{
 			}
 		}));
-		menuInscription.ajoute(new Option("Visualiser les personnes","b",new Action() {
+		menuInscription.ajoute(new Option("Visualiser les personnes","c",new Action() {
 			public void optionSelectionnee()
 			{
 			}
 		}));
-		menuInscription.ajoute(new Option("Visualiser les inscriptions","c",new Action() {
+		menuInscription.ajoute(new Option("Visualiser les inscriptions","d",new Action() {
 			public void optionSelectionnee()
 			{
 			}
 		}));
-		menuInscription.ajoute(new Option("Creer une competition","d",new Action() {
+		menuInscription.ajoute(new Option("Creer une competition","e",new Action() {
 			public void optionSelectionnee()
 			{
 			}
 		}));
-		menuInscription.ajoute(new Option("Creer une equipe","e",new Action() {
+		menuInscription.ajoute(new Option("Creer une equipe","f",new Action() {
 			public void optionSelectionnee()
 			{
 			}
 		}));
-		menuInscription.ajoute(new Option("Creer une personne","f",new Action() {
+		menuInscription.ajoute(new Option("Creer une personne","g",new Action() {
 			public void optionSelectionnee()
 			{
 			}
@@ -109,7 +98,11 @@ public class MenuDialogue {
 		/*Personnes*/
 		Menu menuPersonne = new Menu("Menu Personne","e");
 		menuPrincipal.ajoute(menuPersonne);
-		
+		menuPersonne.ajoute(new Option("Informations sur la personne","a",new Action() {
+			public void optionSelectionnee()
+			{
+			}
+		}));
 		menuPrincipal.ajouteQuitter("q");
 		
 		menuPrincipal.start();
