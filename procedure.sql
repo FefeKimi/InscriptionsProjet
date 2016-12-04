@@ -180,6 +180,16 @@ DELIMITER |
 	end;
 |
 /*competition*/
+DELIMITER |
+	DROP PROCEDURE IF EXISTS SET_NAME_COMP;
+	create procedure SET_NAME_COMP (newName varchar(25), Label varchar(25)) 
+	BEGIN
+		UPDATE COMPETITION
+		SET NomComp = newName
+		WHERE LabelComp = Label;
+
+	END;	
+|
 
 
 DELIMITER |
@@ -281,16 +291,7 @@ DELIMITER |
 		AND COMPETITION.LabelComp=PARTICIPER.LabelComp;
 	END;	
 |
-DELIMITER |
-	
-	CREATE TRIGGER before_del_comp BEFORE DELETE
-	ON COMPETITION FOR EACH ROW
-	BEGIN
-		
- 		DELETE FROM PARTICIPER
- 		WHERE LabelComp = Old.LabelComp;
-	END;	
-|
+
 DELIMITER |
 	
 	CREATE TRIGGER before_del_comp BEFORE DELETE
