@@ -27,7 +27,7 @@ public class Connect {
 	  String passwd = "";
 
       Connection conn = DriverManager.getConnection(url, login, passwd);
-      System.out.println("Connexion effective !"); 
+      System.out.println("Requête executée !"); 
       st=conn.createStatement();
 		
       st.executeUpdate(requete);
