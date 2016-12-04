@@ -6,12 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.mysql.jdbc.CallableStatement;
+
 //CTRL + SHIFT + O pour générer les imports
 public class Connect {
     public static void main(String[]args){
-    
     	requete("DELETE from EQUIPE WHERE NumCandidat=1");
-    	readBDD("SELECT * FROM CANDIDAT");
+    	//readBDD("SELECT * FROM CANDIDAT");
     
     }
 	public static Statement requete(String requete) {
@@ -29,18 +30,14 @@ public class Connect {
       System.out.println("Connexion effective !"); 
       st=conn.createStatement();
 		
-	  String sql = requete;
-	  st.executeUpdate(sql);
-      
+      st.executeUpdate(requete);
          
     } catch (Exception e) {
       e.printStackTrace();
     }
 	return st;
-	      
 	}
-	public static ResultSet readBDD(String requete) {
-
+	public static ResultSet readBDD(String requete,String id, String nom) {
 
 		// Information d'accès à la base de données
 
@@ -66,11 +63,13 @@ public class Connect {
 
 			// Etape 4 : exécution requête
 			rs = st.executeQuery(sql);
-
+			System.out.println();
 			while(rs.next()){
-	    		System.out.println(rs.getString("NumCandidat"));
-	    		System.out.println(rs.getString("NomCandidat"));
-	    	}
+				System.out.print("| ");
+	    		System.out.print(rs.getString(id));
+	    		System.out.print(" | ");
+	    		System.out.println(rs.getString(nom));
+	    	}	System.out.println();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
