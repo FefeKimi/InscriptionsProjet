@@ -180,9 +180,20 @@ DELIMITER |
 	end;
 |
 /*competition*/
+
+DELIMITER |
+	DROP PROCEDURE IF EXISTS GET_CANDIDATS_FROM_COMP;
+	create procedure GET_CANDIDATS_FROM_COMP
+	(Label varchar(25))
+	begin
+		SELECT NomCandidat FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND LabelComp = Label;
+		
+	end;
+|
+
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_NAME_COMP;
-	create procedure SET_NAME_COMP (newName varchar(25), Label varchar(25)) 
+	create procedure SET_NAME_COMP (newName varchar(25), Labe varchar(25)) 
 	BEGIN
 		UPDATE COMPETITION
 		SET NomComp = newName
