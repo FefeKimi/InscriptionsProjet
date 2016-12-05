@@ -1,10 +1,7 @@
 procedure.sql
 
 /*PERSONNE*/
-get MailCandidat ok
-get PrenomPersonne ok
-set MailCandidat ok
-set PrenomPersonne ok
+
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PERSONNE;
 	create procedure ADD_PERSONNE
@@ -104,17 +101,21 @@ DELIMITER |
 
 |
 /*CANDIDAT*/
-get nom candidat à faire
-get comp candidat à faire
+
 DELIMITER |
 	DROP PROCEDURE IF EXISTS DEL_CANDIDAT;
 	create procedure DEL_CANDIDAT (numCanDel int(25)) 
 	BEGIN
+	
+		DELETE FROM ETRE_DANS
+ 		WHERE NumCandidat_Personne = numCanDel;
+ 		DELETE FROM ETRE_DANS
+ 		WHERE NumCandidat_Equipe = numCanDel;
 		DELETE FROM PERSONNE
 		WHERE NumCandidat =numCanDel;
 		DELETE FROM EQUIPE
 		WHERE NumCandidat =numCanDel;
-		DELETE FROM PARTICIPATION
+		DELETE FROM PARTICIPER
 		WHERE NumCandidat =numCanDel;
 		DELETE FROM CANDIDAT
 		WHERE NumCandidat =numCanDel;
@@ -122,7 +123,18 @@ DELIMITER |
 
 	END;	
 |
-
+DELIMITER |
+	
+	CREATE TRIGGER before_del_cand BEFORE DELETE
+	ON COMPETITION FOR EACH ROW
+	BEGIN
+		
+ 		DELETE FROM ETRE_DANS
+ 		WHERE NumCandidat_Personne = Old.NumCandidat;
+ 		DELETE FROM ETRE_DANS
+ 		WHERE NumCandidat_Equipe = Old.NumCandidat;
+	END;	
+|
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_CANDIDAT;
 	create procedure GET_CANDIDAT()
@@ -133,9 +145,22 @@ DELIMITER |
 	END;
 
 |
+
 DELIMITER |
-	DROP PROCEDURE IF EXISTS MODIF_NOM_CANDIDAT;
-	create procedure MODIF_NOM_CANDIDAT (newName varchar(25), NumCand int(25)) 
+	DROP PROCEDURE IF EXISTS GET_NAME_CANDIDAT;
+	create procedure GET_NAME_CANDIDAT(NumCandidat int)
+	BEGIN
+
+		SELECT * FROM CANDIDAT
+		WHERE NumCandidat = NumCandidat;
+
+	END;
+
+|
+
+DELIMITER |
+	DROP PROCEDURE IF EXISTS SET_NAME_CANDIDAT;
+	create procedure SET_NAME_CANDIDAT (newName varchar(25), NumCand int(25)) 
 	BEGIN
 		UPDATE CANDIDAT 
 		SET NomCandidat = newName
@@ -143,16 +168,7 @@ DELIMITER |
 
 	END;	
 |
-DELIMITER |
-	DROP PROCEDURE IF EXISTS GET_NOM_CANDIDAT;
-	create procedure GET_NOM_CANDIDAT (NumCand int(25)) 
-	BEGIN
-		SELECT NomCandidat 
-		FROM CANDIDAT 
-		WHERE NumCandidat = NumCand;
 
-	END;	
-|
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_COMP_CANDIDAT;
@@ -164,29 +180,70 @@ DELIMITER |
 	end;
 |
 /*competition*/
-add equipe comp
-add pers comp
-inscription ouverte
-get date cloture
-remove candidat compt dans participer
+
+DELIMITER |
+	DROP PROCEDURE IF EXISTS GET_CANDIDATS_FROM_COMP;
+	create procedure GET_CANDIDATS_FROM_COMP
+	(Label varchar(25))
+	begin
+		SELECT NomCandidat FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND LabelComp = Label;
+		
+	end;
+|
+
+DELIMITER |
+	DROP PROCEDURE IF EXISTS SET_NAME_COMP;
+	create procedure SET_NAME_COMP (newName varchar(25), Labe varchar(25)) 
+	BEGIN
+		UPDATE COMPETITION
+		SET NomComp = newName
+		WHERE LabelComp = Label;
+
+	END;	
+|
+
+
+DELIMITER |
+	DROP procedure IF EXISTS date_cloture;
+	create procedure date_cloture(Label varchar(25)) 
+	begin
+		SELECT DateCloture FROM COMPETITION WHERE LabelComp = Label;
+	end;
+|
+
+DELIMITER |
+	DROP function IF EXISTS inscription_ouverte;
+	create function inscription_ouverte (Label varchar(25)) returns boolean
+	begin
+		DECLARE DATE_COMP date;
+		DECLARE RES boolean;
+		SELECT `DateCloture` INTO DATE_COMP FROM `COMPETITION` WHERE `LabelComp`=Label ;
+		IF DATE_COMP < NOW() 
+		THEN SET RES=0;
+		ELSE 
+			 SET RES=1;
+		END IF;
+		return RES;
+	end;
+|
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_COMP;
 	create procedure ADD_COMP
-	(LabelComp varchar(25), NomComp varchar(25), DateCloture date, EnEquipe boolean)
+	(Label varchar(25), NomC varchar(25), DateClot date, Equipe boolean)
 	begin
-		insert into COMPETITION(LabelComp, NomComp, DateCloture,EnEquipe) values (LabelComp, NomComp, DateCloture,EnEquipe) ;
+		insert into COMPETITION(LabelComp, NomComp, DateCloture,EnEquipe) values (Label, NomC, DateClot,Equipe) ;
 		
 	end;
 |
 
 
 DELIMITER |
-	DROP PROCEDURE IF EXISTS DEL_CCOMP;
-	create procedure DEL_COMP (LabelComp varchar(25)) 
+	DROP PROCEDURE IF EXISTS DEL_COMP;
+	create procedure DEL_COMP (Label varchar(25)) 
 	BEGIN
 		DELETE FROM COMPETITION
-		WHERE LabelComp = LabelComp;
+		WHERE LabelComp = Label;
 
 	END;	
 |
@@ -200,21 +257,38 @@ DELIMITER |
 
 	END;	
 |
+DELIMITER |
+	DROP function IF EXISTS EN_EQUIPE_COMP;
+	create function EN_EQUIPE_COMP (Label varchar(25)) returns boolean 
+	BEGIN
+		DECLARE bool boolean;
+		SELECT EnEquipe into bool FROM COMPETITION WHERE LabelComp = Label ;
+		return bool;
+	END;	
+|
+
+DELIMITER |
+	DROP PROCEDURE IF EXISTS ADD_CANDIDAT_COMP;
+	create procedure ADD_CANDIDAT_COMP (NumCan int, Label varchar(25)) 
+	BEGIN	
+		insert into PARTICIPER(NumCandidat,LabelComp) values (NumCan,Label);
+	END;	
+|
 /*participer*/
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PARTICIPATION;
-	create procedure ADD_PARTICIPATION(NumCandidat int, LabelComp varchar(25)) 
+	create procedure ADD_PARTICIPATION(NumCan int, Label varchar(25)) 
 	BEGIN
-		INSERT INTO PARTICIPATION(NumCandidat, LabelComp) VALUES (NumCandidat, LabelComp);
+		INSERT INTO PARTICIPATION(NumCandidat, LabelComp) VALUES (NumCan, Label);
 	END;
 |
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS DEL_PARTICIPATION;
-	create procedure DEL_PARTICIPATION(NumCandidat int, LabelComp varchar(25)) 
+	create procedure DEL_PARTICIPATION(NumCan int, Label varchar(25)) 
 	BEGIN
-		DELETE FROM PARTICIPER  wHERE NumCandidat=NumCandidat and LabelComp=LabelComp;
+		DELETE FROM PARTICIPER  wHERE NumCandidat=NumCan and LabelComp=Label;
 	END;
 
 |
@@ -222,10 +296,13 @@ DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_PARTICIPATION;
 	create procedure GET_PARTICIPATION () 
 	BEGIN
-		SELECT * 
-		FROM PARTICIPER;
+		SELECT NomCandidat, NomComp
+		FROM PARTICIPER, CANDIDAT, COMPETITION
+		WHERE CANDIDAT.NumCandidat=PARTICIPER.NumCandidat
+		AND COMPETITION.LabelComp=PARTICIPER.LabelComp;
 	END;	
 |
+
 DELIMITER |
 	
 	CREATE TRIGGER before_del_comp BEFORE DELETE
@@ -237,7 +314,20 @@ DELIMITER |
 	END;	
 |
 
-/*ETRE DANS*/
-add membre 
-delete membre
 
+/*ETRE DANS*/
+
+	DROP PROCEDURE IF EXISTS ADD_MEMBRE;
+	create procedure ADD_MEMBRE (Num_Equipe int,Num_Personne int) 
+	BEGIN
+		insert into ETRE_DANS(NumCandidat_Equipe,NumCandidat_Personne) VALUES (Num_Equipe,Num_Personne); 
+	END;	
+|
+
+DELIMITER |
+	DROP PROCEDURE IF EXISTS DEL_MEMBRE;
+	create procedure DEL_MEMBRE (Num_Equipe int,Num_Personne int) 
+	BEGIN
+		DELETE FROM ETRE_DANS wHERE NumCandidat_Equipe =Num_Equipe AND  NumCandidat_Personne= Num_Personne; 
+	END;	
+|
