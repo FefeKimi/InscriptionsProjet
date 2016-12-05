@@ -19,7 +19,7 @@ public class TestCompetitions {
 	Equipe e;
 	Personne p;
 	Inscriptions i = Inscriptions.getInscriptions();
-	Competition compet = i.createCompetition("Tennis",null,true);
+	Competition compet = i.createCompetition("Tennis",LocalDate.of(2017,Month.APRIL,14),true);
 	
 	protected void setUp() throws Exception
 	{
@@ -61,7 +61,7 @@ public class TestCompetitions {
 	
 	@Test
 	public void testGetDateCloture() {
-		assertEquals(compet.getDateCloture(), null);
+		assertNotNull(compet.getDateCloture());
 	}
 	
 	@Test
@@ -82,10 +82,7 @@ public class TestCompetitions {
 	@Test
 	public void testSetDateCloture() {
 		LocalDate date=compet.getDateCloture();
-		
-		LocalDate dateNew = LocalDate.of(2017,Month.APRIL,10);
-		compet.setDateCloture(dateNew);
-		
+		compet.setDateCloture(LocalDate.of(2017,Month.APRIL,10));
 		assertNotEquals(compet.getDateCloture(),date);
 	}
 	
