@@ -33,7 +33,7 @@ public class MenuDialogue {
 				Connect.readBDD("call GET_CANDIDAT()","NumCandidat","NomCandidat");
 			}
 		}));
-		menuCandidats.ajoute(new Option("Visualiser les compétitions dont un candidat fait partie","a",new Action() {
+		menuCandidats.ajoute(new Option("Visualiser les compétitions dont un candidat fait partie","z",new Action() {
 			public void optionSelectionnee()
 			{
 				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
