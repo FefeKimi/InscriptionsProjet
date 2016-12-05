@@ -37,12 +37,13 @@ public class MenuDialogue {
 			public void optionSelectionnee()
 			{
 				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
-				Connect.readBDD("GET_COMP_CANDIDAT("+idCand+")","NumCandidat","NomComp");
+				Connect.readBDD("GET_COMP_CANDIDAT("+idCand+")","NumCandidat","NomCandidat");
 			}
 		}));
 		menuCandidats.ajoute(new Option("Modifier le nom d'un candidat","b",new Action() {
 			public void optionSelectionnee()
 			{
+				/*Ne veut pas modifier le nom du candidat*/
 				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
 				String newName = utilitaires.EntreesSorties.getString("Nouveau nom : ");
 				Connect.requete("call SET_NAME_CANDIDAT('"+newName+"')");
@@ -95,6 +96,7 @@ public class MenuDialogue {
 		menuCompetition.ajoute(new Option("Supprimer une compétition","e",new Action() {
 			public void optionSelectionnee()
 			{
+				/*Supprime toutes les compétitions au lieu de celle choisie*/
 				String label = utilitaires.EntreesSorties.getString("Label : ");
 				Connect.requete("call DEL_COMP('"+label+"')");
 			}
@@ -155,13 +157,20 @@ public class MenuDialogue {
 				}
 			}
 		}));
+		menuEquipes.ajoute(new Option("Ajouter un membre","g",new Action() {
+			public void optionSelectionnee()
+			{
+				int idPers = utilitaires.EntreesSorties.getInt("Saisir le numéro de la personne: ");
+				int idEq = utilitaires.EntreesSorties.getInt("Saisir l'equipe: ");
+				Connect.requete("call ADD_MEMBRE("+idPers+","+idEq+")");
+			}
+		}));
+	
 		menuEquipes.ajoute(new Option("Supprimer un membre d'une équipe","d",new Action() {
 			public void optionSelectionnee()
 			{
-				System.out.print("Saisir le numero de l'équipe: ");
-				int idEq = sc.nextInt();
-				System.out.print("Saisir le numero de la personne: ");
-				int idPers = sc.nextInt();
+				int idPers= utilitaires.EntreesSorties.getInt("Saisir le numéro du la personne: ");
+				int idEq = utilitaires.EntreesSorties.getInt("Saisir l'equipe: ");
 				Connect.requete("call DEL_MEMBRE("+idEq+","+idPers+")");
 			}
 		}));
