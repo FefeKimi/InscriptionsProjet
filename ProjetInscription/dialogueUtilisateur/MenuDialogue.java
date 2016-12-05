@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class MenuDialogue {
@@ -32,15 +33,31 @@ public class MenuDialogue {
 				Connect.readBDD("call GET_CANDIDAT()","NumCandidat","NomCandidat");
 			}
 		}));
-		menuCandidats.ajoute(new Option("Supprimer un candidat","b",new Action() {
+		menuCandidats.ajoute(new Option("Visualiser les compétitions dont un candidat fait partie","a",new Action() {
 			public void optionSelectionnee()
 			{
-				System.out.print("Saisir le numéro du candidat à supprimer: ");
-				int id = sc.nextInt();
-				Connect.requete("call DEL_CANDIDAT("+id+")");
+				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
+				Connect.readBDD("GET_COMP_CANDIDAT("+idCand+")","NumCandidat","NomComp");
+			}
+		}));
+		menuCandidats.ajoute(new Option("Modifier le nom d'un candidat","b",new Action() {
+			public void optionSelectionnee()
+			{
+				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
+				String newName = utilitaires.EntreesSorties.getString("Nouveau nom : ");
+				Connect.requete("call SET_NAME_CANDIDAT('"+newName+"')");
+			}
+		}));
+	
+		menuCandidats.ajoute(new Option("Supprimer un candidat","c",new Action() {
+			public void optionSelectionnee()
+			{
+				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du candidat à supprimer: ");
+				Connect.requete("call DEL_CANDIDAT("+idCand+")");
 			}
 		}));
 		menuCandidats.ajouteRevenir("r");
+		
 		
 		/*Compétitions*/
 		Menu menuCompetition = new Menu("Menu Competition","b");
@@ -50,28 +67,61 @@ public class MenuDialogue {
 				Connect.readBDD("call GET_COMP()","labelComp","NomComp");
 			}
 		}));
-		menuCompetition.ajoute(new Option("Créer une compétition","e",new Action() {
+		menuCompetition.ajoute(new Option("Modifier le nom d'une compétition","b",new Action() {
 			public void optionSelectionnee()
 			{
-				/*à faire*/
+				String label = utilitaires.EntreesSorties.getString("Saisir le label de la compétition : ");
+				String newName = utilitaires.EntreesSorties.getString("Nouveau nom : ");
+				Connect.requete("call SET_NAME_COMP('"+newName+"','"+label+"')");
 			}
 		}));
-		menuPrincipal.ajoute(menuCompetition);
-		menuCompetition.ajoute(new Option("Inscrire une équipe à une compétition","b",new Action() {
+		menuCompetition.ajoute(new Option("Visualiser les candidats d'une compétition","c",new Action() {
+			public void optionSelectionnee()
+			{
+				String label = utilitaires.EntreesSorties.getString("Saisir le label de la compétition : ");
+				Connect.readBDD("call GET_CANDIDATS_FROM_COMP('"+label+"')","NumCandidat","NomCandidat");
+			}
+		}));
+		menuCompetition.ajoute(new Option("Créer une compétition","d",new Action() {
+			public void optionSelectionnee()
+			{
+				String label = utilitaires.EntreesSorties.getString("Label : ");
+				String nom = utilitaires.EntreesSorties.getString("Nom : ");
+				String dateClot = utilitaires.EntreesSorties.getString("Date de clôture (annee-mois-jour): ");
+				int enEquipe = utilitaires.EntreesSorties.getInt("Compétition en équipe? (1 oui 0 non): ");
+				Connect.requete("call ADD_COMP('"+label+"','"+nom+"','"+dateClot+"',"+enEquipe+")");
+			}
+		}));
+		menuCompetition.ajoute(new Option("Supprimer une compétition","e",new Action() {
+			public void optionSelectionnee()
+			{
+				String label = utilitaires.EntreesSorties.getString("Label : ");
+				Connect.requete("call DEL_COMP('"+label+"')");
+			}
+		}));
+	
+		menuCompetition.ajoute(new Option("Inscrire une équipe à une compétition","f",new Action() {
 			public void optionSelectionnee()
 			{
 				/*Fonction Pas réussie*/
 			}
 		}));
-		menuCompetition.ajoute(new Option("Supprimer un candidat d'une compétition","c",new Action() {
+		menuCompetition.ajoute(new Option("Inscrire une personne à une compétition","g",new Action() {
 			public void optionSelectionnee()
 			{
-				System.out.print("Saisir le label de la compéttion: ");
-				int id = sc.nextInt();
-				Connect.requete("call DEL_COMP("+id+")");
+				/*Fonction Pas réussie*/
+			}
+		}));
+		menuCompetition.ajoute(new Option("Supprimer un candidat d'une compétition","h",new Action() {
+			public void optionSelectionnee()
+			{
+				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du candidat ");
+				String label = utilitaires.EntreesSorties.getString("Saisir le label de la compétition");
+				Connect.requete("call DEL_PARTICIPATION("+idCand+",'"+label+"')");
 			}
 		}));
 		menuCompetition.ajouteRevenir("r");
+		menuPrincipal.ajoute(menuCompetition);
 		
 		/*Equipes*/
 		final Menu menuEquipes = new Menu("Menu Equipe","c");
@@ -82,12 +132,16 @@ public class MenuDialogue {
 				Connect.readBDD("call GET_EQUIPE()","NumCandidat","NomCandidat");
 			}
 		}));
-		menuEquipes.ajoute(new Option("Creer une équipe","f",new Action() {
+		menuEquipes.ajoute(new Option("Creer une équipe","b",new Action() {
 			public void optionSelectionnee()
 			{
+				int id = utilitaires.EntreesSorties.getInt("Numéro: ");
+				String nom = utilitaires.EntreesSorties.getString("Nom de l'équipe: ");
+				String email = utilitaires.EntreesSorties.getString("Email: ");
+				Connect.requete("call ADD_EQUIPE("+id+",'"+nom+"','"+email+"')");
 			}
 		}));
-		menuEquipes.ajoute(new Option("Visualiser les membres d'une equipe","d",new Action() {
+		menuEquipes.ajoute(new Option("Visualiser les membres d'une equipe","c",new Action() {
 			public void optionSelectionnee()
 			{
 				System.out.print("Saisir le numéro de l'equipe à visualiser: ");
@@ -101,7 +155,7 @@ public class MenuDialogue {
 				}
 			}
 		}));
-		menuEquipes.ajoute(new Option("Supprimer un membre d'une équipe","c",new Action() {
+		menuEquipes.ajoute(new Option("Supprimer un membre d'une équipe","d",new Action() {
 			public void optionSelectionnee()
 			{
 				System.out.print("Saisir le numero de l'équipe: ");
@@ -115,15 +169,36 @@ public class MenuDialogue {
 		/*Personnes*/
 		Menu menuPersonne = new Menu("Menu Personne","e");
 		menuPrincipal.ajoute(menuPersonne);
-		menuPersonne.ajoute(new Option("Visualiser les personnes","c",new Action() {
+		menuPersonne.ajoute(new Option("Visualiser les personnes","a",new Action() {
 			public void optionSelectionnee()
 			{
 				Connect.readBDD("call GET_PERSONNE()","NumCandidat","PrenomPersonne");
 			}
 		}));
-		menuPersonne.ajoute(new Option("Créer une personne","g",new Action() {
+		menuPersonne.ajoute(new Option("Modifier le prénom d'une personne","b",new Action() {
 			public void optionSelectionnee()
 			{
+				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
+				String newFirstName = utilitaires.EntreesSorties.getString("Nouveau nom : ");
+				Connect.requete("call SET_PRENOM_PERSONNE('"+newFirstName+"')");
+			}
+		}));
+		menuPersonne.ajoute(new Option("Modifier l'email","c",new Action() {
+			public void optionSelectionnee()
+			{
+				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
+				String newMail = utilitaires.EntreesSorties.getString("Nouveau nom : ");
+				Connect.requete("call SET_MAIL_PERSONNE('"+newMail+"')");
+			}
+		}));
+		menuPersonne.ajoute(new Option("Créer une personne","d",new Action() {
+			public void optionSelectionnee()
+			{
+				int idCand = utilitaires.EntreesSorties.getInt("numéro : ");
+				String nom = utilitaires.EntreesSorties.getString("Nom : ");
+				String prenom = utilitaires.EntreesSorties.getString("Prénom: ");
+				String email = utilitaires.EntreesSorties.getString("Email: ");
+				Connect.requete("call ADD_COMP("+idCand+",'"+nom+"','"+email+"',"+prenom+")");
 			}
 		}));
 		menuPrincipal.ajouteQuitter("q");
