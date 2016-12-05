@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Scanner;
-
+/*Dialogue Utilisateur*/
 public class MenuDialogue {
 	public static void main(String[]args){
 		final Scanner sc = new Scanner(System.in);
