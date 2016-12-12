@@ -1,6 +1,8 @@
 
 /*EQUIPE*/
 
+/*
+Pas besoin, plus de table equipe
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_EQUIPE;
 	create procedure ADD_EQUIPE
@@ -10,7 +12,7 @@ DELIMITER |
 		insert into EQUIPE(NumCandidat) values (NumCandidat) ;
 	end;
 |
-
+*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_EQUIPE;
 	create procedure GET_EQUIPE()
