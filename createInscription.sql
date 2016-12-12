@@ -23,7 +23,7 @@ CREATE TABLE Personne(
         PrenomPersonne Varchar (25) ,
         MailPers       Varchar (25) ,
         NumCandidatPers    Int NOT NULL ,
-        PRIMARY KEY (NumCandidat )
+        PRIMARY KEY (NumCandidatPers )
 )ENGINE=InnoDB;
 
 
