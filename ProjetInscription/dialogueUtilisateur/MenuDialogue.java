@@ -5,6 +5,7 @@ import utilitaires.ligneDeCommande.Liste;
 import utilitaires.ligneDeCommande.Option;
 import utilitaires.ligneDeCommande.Menu;
 import utilitaires.ligneDeCommande.Action;
+import inscriptions.Inscriptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.Scanner;
 public class MenuDialogue {
 	public static void main(String[]args){
 		
-		Inscriptions i = new inscriptions();
+		Inscriptions i = new Inscriptions();
 		/*Création du menu principal*/
 		Menu menuPrincipal = new Menu("Menu principal");
 		
