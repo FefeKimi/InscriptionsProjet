@@ -81,9 +81,8 @@ public class TestCompetitions {
 	
 	@Test
 	public void testSetDateCloture() {
-		LocalDate date=compet.getDateCloture();
 		compet.setDateCloture(LocalDate.of(2017,Month.APRIL,10));
-		assertNotEquals(compet.getDateCloture(),date);
+		assertEquals(compet.getDateCloture(),LocalDate.of(2017,Month.APRIL,10));
 	}
 	
 	@Test

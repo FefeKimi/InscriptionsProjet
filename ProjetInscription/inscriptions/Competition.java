@@ -1,5 +1,6 @@
 package inscriptions;
 
+import src.Connect;
 import java.io.Serializable;
 import java.util.Collections;
 import java.time.LocalDate;

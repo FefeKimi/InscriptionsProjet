@@ -19,46 +19,10 @@ import java.util.Scanner;
 /*Dialogue Utilisateur*/
 public class MenuDialogue {
 	public static void main(String[]args){
-		final Scanner sc = new Scanner(System.in);
 		
+		Inscriptions i = new inscriptions();
 		/*Création du menu principal*/
 		Menu menuPrincipal = new Menu("Menu principal");
-
-		/*Candidats*/
-		Menu menuCandidats = new Menu("Menu Candidats","a");
-		menuPrincipal.ajoute(menuCandidats);
-		menuCandidats.ajoute(new Option("Visualiser les candidats","a",new Action() {
-			public void optionSelectionnee()
-			{
-				Connect.readBDD("call GET_CANDIDAT()","NumCandidat","NomCandidat");
-			}
-		}));
-		menuCandidats.ajoute(new Option("Visualiser les compétitions dont un candidat fait partie","z",new Action() {
-			public void optionSelectionnee()
-			{
-				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
-				Connect.readBDD("GET_COMP_CANDIDAT("+idCand+")","NumCandidat","NomCandidat");
-			}
-		}));
-		menuCandidats.ajoute(new Option("Modifier le nom d'un candidat","b",new Action() {
-			public void optionSelectionnee()
-			{
-				/*Ne veut pas modifier le nom du candidat*/
-				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du Candidat : ");
-				String newName = utilitaires.EntreesSorties.getString("Nouveau nom : ");
-				Connect.requete("call SET_NAME_CANDIDAT('"+newName+"')");
-			}
-		}));
-	
-		menuCandidats.ajoute(new Option("Supprimer un candidat","c",new Action() {
-			public void optionSelectionnee()
-			{
-				int idCand = utilitaires.EntreesSorties.getInt("Saisir le numéro du candidat à supprimer: ");
-				Connect.requete("call DEL_CANDIDAT("+idCand+")");
-			}
-		}));
-		menuCandidats.ajouteRevenir("r");
-		
 		
 		/*Compétitions*/
 		Menu menuCompetition = new Menu("Menu Competition","b");
@@ -178,7 +142,7 @@ public class MenuDialogue {
 		/*Personnes*/
 		Menu menuPersonne = new Menu("Menu Personne","e");
 		menuPrincipal.ajoute(menuPersonne);
-		menuPersonne.ajoute(new Option("Visualiser les personnes","a",new Action() {
+		menuPersonne.ajoute(new Option("Visualiser les personnes","v",new Action() {
 			public void optionSelectionnee()
 			{
 				Connect.readBDD("call GET_PERSONNE()","NumCandidat","PrenomPersonne");
