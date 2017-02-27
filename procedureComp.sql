@@ -2,41 +2,39 @@
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_CANDIDATS_FROM_COMP;
-	create procedure GET_CANDIDATS_FROM_COMP
-	(Label varchar(25))
+	create procedure GET_CANDIDATS_FROM_COMP(Num varchar(25))
 	begin
-		SELECT NomCandidat FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND LabelComp = Label;
+		SELECT NomCandidat FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND NumComp = Num;
 		
 	end;
 |
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_NAME_COMP;
-	create procedure SET_NAME_COMP (newName varchar(25), Labe varchar(25)) 
+	create procedure SET_NAME_COMP (newName varchar(25), Num varchar(25)) 
 	BEGIN
 		UPDATE COMPETITION
 		SET NomComp = newName
-		WHERE LabelComp = Label;
-
+		WHERE NumComp = Num;
 	END;	
 |
 
 
 DELIMITER |
 	DROP procedure IF EXISTS date_cloture;
-	create procedure date_cloture(Label varchar(25)) 
+	create procedure date_cloture(Num int(25)) 
 	begin
-		SELECT DateCloture FROM COMPETITION WHERE LabelComp = Label;
+		SELECT DateCloture FROM COMPETITION WHERE NumComp = Num;
 	end;
 |
 
 DELIMITER |
 	DROP function IF EXISTS inscription_ouverte;
-	create function inscription_ouverte (Label varchar(25)) returns boolean
+	create function inscription_ouverte (Num int(25)) returns boolean
 	begin
 		DECLARE DATE_COMP date;
 		DECLARE RES boolean;
-		SELECT `DateCloture` INTO DATE_COMP FROM `COMPETITION` WHERE `LabelComp`=Label ;
+		SELECT `DateCloture` INTO DATE_COMP FROM `COMPETITION` WHERE `NumComp`=Num ;
 		IF DATE_COMP < NOW() 
 		THEN SET RES=0;
 		ELSE 
@@ -49,9 +47,9 @@ DELIMITER |
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_COMP;
 	create procedure ADD_COMP
-	(Label varchar(25), NomC varchar(25), DateClot date, Equipe boolean)
+	(NomC varchar(25), DateClot date, Equipe boolean)
 	begin
-		insert into COMPETITION(LabelComp, NomComp, DateCloture,EnEquipe) values (Label, NomC, DateClot,Equipe) ;
+		insert into COMPETITION(NumComp,NomComp, DateCloture,EnEquipe) values (NULL,NomC, DateClot,Equipe) ;
 		
 	end;
 |
@@ -59,10 +57,10 @@ DELIMITER |
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS DEL_COMP;
-	create procedure DEL_COMP (Label varchar(25)) 
+	create procedure DEL_COMP (Num int(25)) 
 	BEGIN
 		DELETE FROM COMPETITION
-		WHERE LabelComp = Label;
+		WHERE NumComp = Num;
 
 	END;	
 |
@@ -73,23 +71,22 @@ DELIMITER |
 		SELECT * 
 		FROM COMPETITION;
 
-
 	END;	
 |
 DELIMITER |
 	DROP function IF EXISTS EN_EQUIPE_COMP;
-	create function EN_EQUIPE_COMP (Label varchar(25)) returns boolean 
+	create function EN_EQUIPE_COMP (Num int(25)) returns boolean 
 	BEGIN
 		DECLARE bool boolean;
-		SELECT EnEquipe into bool FROM COMPETITION WHERE LabelComp = Label ;
+		SELECT EnEquipe into bool FROM COMPETITION WHERE NumComp = Num;
 		return bool;
 	END;	
 |
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_CANDIDAT_COMP;
-	create procedure ADD_CANDIDAT_COMP (NumCan int, Label varchar(25)) 
+	create procedure ADD_CANDIDAT_COMP (NumCan int, Num int(25)) 
 	BEGIN	
-		insert into PARTICIPER(NumCandidat,LabelComp) values (NumCan,Label);
+		insert into PARTICIPER(NumCandidat,NumComp) values (NumCan,Num);
 	END;	
 |
