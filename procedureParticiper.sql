@@ -2,17 +2,17 @@
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PARTICIPATION;
-	create procedure ADD_PARTICIPATION(NumCan int, Label varchar(25)) 
+	create procedure ADD_PARTICIPATION(NumCan int, Num int(25)) 
 	BEGIN
-		INSERT INTO PARTICIPATION(NumCandidat, LabelComp) VALUES (NumCan, Label);
+		INSERT INTO PARTICIPATION(NumCandidat, NumComp) VALUES (NumCan, Num);
 	END;
 |
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS DEL_PARTICIPATION;
-	create procedure DEL_PARTICIPATION(NumCan int, Label varchar(25)) 
+	create procedure DEL_PARTICIPATION(NumCan int, Num int(25)) 
 	BEGIN
-		DELETE FROM PARTICIPER  wHERE NumCandidat=NumCan and LabelComp=Label;
+		DELETE FROM PARTICIPER  wHERE NumCandidat=NumCan and NumComp=Num;
 	END;
 
 |
@@ -23,7 +23,7 @@ DELIMITER |
 		SELECT NomCandidat, NomComp
 		FROM PARTICIPER, CANDIDAT, COMPETITION
 		WHERE CANDIDAT.NumCandidat=PARTICIPER.NumCandidat
-		AND COMPETITION.LabelComp=PARTICIPER.LabelComp;
+		AND COMPETITION.NumComp=PARTICIPER.NumComp;
 	END;	
 |
 
@@ -34,6 +34,6 @@ DELIMITER |
 	BEGIN
 		
  		DELETE FROM PARTICIPER
- 		WHERE LabelComp = Old.LabelComp;
+ 		WHERE NumComp = Old.NumComp;
 	END;	
 |

@@ -1,6 +1,6 @@
 
 /*ETRE DANS*/
-
+DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_MEMBRE;
 	create procedure ADD_MEMBRE (Num_Equipe int,Num_Personne int) 
 	BEGIN
@@ -12,7 +12,7 @@ DELIMITER |
 	DROP PROCEDURE IF EXISTS DEL_MEMBRE;
 	create procedure DEL_MEMBRE (Num_Equipe int,Num_Personne int) 
 	BEGIN
-		DELETE FROM ETRE_DANS wHERE NumCandidat_Equipe =Num_Equipe AND  NumCandidat_Personne= Num_Personne; 
+		DELETE FROM ETRE_DANS WHERE NumCandidat_Equipe =Num_Equipe AND  NumCandidat_Personne= Num_Personne; 
 	END;	
 |
 
