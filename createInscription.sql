@@ -9,7 +9,7 @@ USE inscription2017;
 #------------------------------------------------------------
 
 CREATE TABLE Candidat(
-        NumCandidat Int NOT NULL ,
+        NumCandidat Int NOT NULL AUTO_INCREMENT,
         NomCandidat Varchar (25) ,
         PRIMARY KEY (NumCandidat )
 )ENGINE=InnoDB;
@@ -32,11 +32,11 @@ CREATE TABLE Personne(
 #------------------------------------------------------------
 
 CREATE TABLE Competition(
-        NumComp   Int (25) NOT NULL ,
+        NumComp   Int (25) NOT NULL AUTO_INCREMENT,
         NomComp     Varchar (25) ,
         DateCloture Date ,
         EnEquipe    Bool ,
-        PRIMARY KEY (LabelComp )
+        PRIMARY KEY (NumComp)
 )ENGINE=InnoDB;
 
 
@@ -46,7 +46,7 @@ CREATE TABLE Competition(
 
 CREATE TABLE Participer(
         NumCandidat Int NOT NULL ,
-        NumComp   Int (25) NOT NULL ,
+        NumComp   Int (25) NOT NULL  ,
         PRIMARY KEY (NumCandidat ,NumComp )
 )ENGINE=InnoDB;
 
@@ -63,6 +63,6 @@ CREATE TABLE ETRE_DANS(
 
 ALTER TABLE Personne ADD CONSTRAINT FK_Personne_NumCandidat FOREIGN KEY (NumCandidatPers) REFERENCES Candidat(NumCandidat);
 ALTER TABLE Participer ADD CONSTRAINT FK_Participer_NumCandidat FOREIGN KEY (NumCandidat) REFERENCES Candidat(NumCandidat);
-ALTER TABLE Participer ADD CONSTRAINT FK_Participer_LabelComp FOREIGN KEY (LabelComp) REFERENCES Competition(LabelComp);
+ALTER TABLE Participer ADD CONSTRAINT FK_Participer_NumComp FOREIGN KEY (NumComp) REFERENCES Competition(NumComp);
 ALTER TABLE ETRE_DANS ADD CONSTRAINT FK_ETRE_DANS_NumCandidat_Equipe FOREIGN KEY (NumCandidatEquipe) REFERENCES Candidat(NumCandidat);
 ALTER TABLE ETRE_DANS ADD CONSTRAINT FK_ETRE_DANS_NumCandidat_Pers FOREIGN KEY (NumCandidatPers) REFERENCES Candidat(NumCandidat);
