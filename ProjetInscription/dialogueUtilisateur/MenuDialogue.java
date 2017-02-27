@@ -17,11 +17,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Scanner;
+
 /*Dialogue Utilisateur*/
 public class MenuDialogue {
+	
 	public static void main(String[]args){
 		
-		Inscriptions i = new Inscriptions();
 		/*Création du menu principal*/
 		Menu menuPrincipal = new Menu("Menu principal");
 		
@@ -55,7 +56,8 @@ public class MenuDialogue {
 				String nom = utilitaires.EntreesSorties.getString("Nom : ");
 				String dateClot = utilitaires.EntreesSorties.getString("Date de clôture (annee-mois-jour): ");
 				int enEquipe = utilitaires.EntreesSorties.getInt("Compétition en équipe? (1 oui 0 non): ");
-				Connect.requete("call ADD_COMP('"+label+"','"+nom+"','"+dateClot+"',"+enEquipe+")");
+				createCompetition(label,nom,dateClot,enEquipe);
+				/*Connect.requete("call ADD_COMP('"+label+"','"+nom+"','"+dateClot+"',"+enEquipe+")");*/
 			}
 		}));
 		menuCompetition.ajoute(new Option("Supprimer une compétition","e",new Action() {
