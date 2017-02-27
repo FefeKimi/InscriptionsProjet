@@ -1,6 +1,6 @@
 /*CANDIDAT*/
 
-DELIMITER | ok
+DELIMITER | 
 	DROP PROCEDURE IF EXISTS DEL_CANDIDAT;
 	create procedure DEL_CANDIDAT (numCanDel int(25)) 
 	BEGIN
@@ -19,7 +19,7 @@ DELIMITER | ok
 
 	END;	
 |
-DELIMITER | ok
+DELIMITER | 
 	
 	CREATE TRIGGER before_del_cand BEFORE DELETE
 	ON CANDIDAT FOR EACH ROW
@@ -31,7 +31,7 @@ DELIMITER | ok
  		WHERE NumCandidat = Old.NumCandidat;
 	END;	
 |
-DELIMITER | ok
+DELIMITER | 
 	DROP PROCEDURE IF EXISTS GET_CANDIDAT;
 	create procedure GET_CANDIDAT()
 	BEGIN
@@ -42,7 +42,7 @@ DELIMITER | ok
 
 |
 
-DELIMITER | ok
+DELIMITER | 
 	DROP PROCEDURE IF EXISTS GET_NAME_CANDIDAT;
 	create procedure GET_NAME_CANDIDAT(NumCandidat int)
 	BEGIN
@@ -54,7 +54,7 @@ DELIMITER | ok
 
 |
 
-DELIMITER | ok
+DELIMITER | 
 	DROP PROCEDURE IF EXISTS SET_NAME_CANDIDAT;
 	create procedure SET_NAME_CANDIDAT (newName varchar(25), NumCand int(25)) 
 	BEGIN
@@ -66,14 +66,14 @@ DELIMITER | ok
 |
 
 
-DELIMITER | ok
+DELIMITER | 
 	DROP PROCEDURE IF EXISTS GET_COMP_CANDIDAT;
 	create procedure GET_COMP_CANDIDAT
 	(NumCandidat int)
 	begin
 		SELECT NomComp 
 		FROM PARTICIPER, COMPETITION 
-		WHERE PARTICIPER.LabelComp=COMPETITION.LabelComp 
+		WHERE PARTICIPER.NumComp=COMPETITION.NumComp 
 		AND NumCandidat =NumCandidat ;
 		
 	end;
