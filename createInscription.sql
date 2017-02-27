@@ -32,7 +32,7 @@ CREATE TABLE Personne(
 #------------------------------------------------------------
 
 CREATE TABLE Competition(
-        LabelComp   Varchar (25) NOT NULL ,
+        NumComp   Int (25) NOT NULL ,
         NomComp     Varchar (25) ,
         DateCloture Date ,
         EnEquipe    Bool ,
@@ -46,8 +46,8 @@ CREATE TABLE Competition(
 
 CREATE TABLE Participer(
         NumCandidat Int NOT NULL ,
-        LabelComp   Varchar (25) NOT NULL ,
-        PRIMARY KEY (NumCandidat ,LabelComp )
+        NumComp   Int (25) NOT NULL ,
+        PRIMARY KEY (NumCandidat ,NumComp )
 )ENGINE=InnoDB;
 
 
