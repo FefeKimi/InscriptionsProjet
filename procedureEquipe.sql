@@ -29,12 +29,13 @@ DELIMITER |
 	END;
 
 |
+
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_EQUIPE;
 	create procedure ADD_EQUIPE(NomCandidat  Varchar(25) )
 	BEGIN
 
-		insert into CANDIDAT(NumCandidat, NomCandidat, Equipe) values (null, NomCandidat, 1) 
+		insert into CANDIDAT(NumCandidat, NomCandidat, Equipe) values (null, NomCandidat, true) ;
 	END;
 
 |
