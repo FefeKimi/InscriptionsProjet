@@ -7,7 +7,8 @@ DELIMITER |
 	BEGIN
 
 		insert into CANDIDAT(NumCandidat, NomCandidat) values (null, NomCandidat) ;
-		insert into PERSONNE(PrenomPersonne, NumCandidat, MailPers)  values (PrenomPersonne, NumCandidat, MailPers) ;
+		insert into PERSONNE(PrenomPersonne, NumCandidat, MailPers)  values (PrenomPersonne, null, MailPers);
+		
 	END;
 
 |
