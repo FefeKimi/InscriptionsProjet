@@ -3,11 +3,12 @@
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PERSONNE;
 	create procedure ADD_PERSONNE
-	(NumCandidat  Int(25),NomCandidat  Varchar(25),MailCandidat Varchar(25), PrenomPersonne Varchar(25))
+	(NomCandidat  Varchar(25),MailCandidat Varchar(25), PrenomPersonne Varchar(25))
 	BEGIN
 
-		insert into CANDIDAT(NumCandidat, NomCandidat, MailCandidat) values (NumCandidat, NomCandidat, MailCandidat) ;
-		insert into PERSONNE(PrenomPersonne, NumCandidat)  values (PrenomPersonne, NumCandidat) ;
+		insert into CANDIDAT(NumCandidat, NomCandidat) values (null, NomCandidat) ;
+		insert into PERSONNE(PrenomPersonne, NumCandidat, MailPers)  values (PrenomPersonne, null, MailPers);
+		
 	END;
 
 |
