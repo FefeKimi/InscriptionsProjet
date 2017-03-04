@@ -11,6 +11,7 @@ USE inscription2017;
 CREATE TABLE Candidat(
         NumCandidat Int NOT NULL AUTO_INCREMENT,
         NomCandidat Varchar (25) ,
+        Equipe Boolean;
         PRIMARY KEY (NumCandidat )
 )ENGINE=InnoDB;
 
