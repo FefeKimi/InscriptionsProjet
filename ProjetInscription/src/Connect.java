@@ -96,8 +96,9 @@ public class Connect {
   Connect.requete("call ADD_COMP('"+nom+"','"+dateCloture+"',"+enEquipe+")");
  }
  
+ /*MAIL UNIQUE*/
  public void addPersonne(String nom,String prenom, String mail){
-  Connect.requete("call ADD_PERS('"+nom+"','"+mail+"',"+prenom+")");
+  Connect.requete("call ADD_PERSONNE('"+nom+"','"+mail+"','"+prenom+"')");
  }
  
  
