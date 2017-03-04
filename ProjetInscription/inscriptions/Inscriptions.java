@@ -1,5 +1,5 @@
 package inscriptions;
-//test2
+//test
 import src.Connect;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
