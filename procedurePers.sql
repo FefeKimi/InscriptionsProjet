@@ -4,10 +4,13 @@ DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PERSONNE;
 	create procedure ADD_PERSONNE
 	(NomCandidat  Varchar(25),MailCandidat Varchar(25), PrenomPersonne Varchar(25))
+	DECLARE 
+		Num varchar(25):
 	BEGIN
-
+		
 		insert into CANDIDAT(NumCandidat, NomCandidat) values (null, NomCandidat) ;
-		insert into PERSONNE(PrenomPersonne, NumCandidat, MailPers)  values (PrenomPersonne, null, MailPers);
+		SELECT NumCandidat INTO Num FROM CANDIDAT WHERE MailPers=MailCandidat ; 
+		insert into PERSONNE(PrenomPersonne, NumCandidatPers, MailPers)  values (PrenomPersonne, null, MailPers);
 		
 	END;
 
