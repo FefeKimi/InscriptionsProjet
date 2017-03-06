@@ -60,7 +60,7 @@ DELIMITER |
 	create procedure SET_MAIL_PERSONNE (newFirstMail varchar(25), NumCand int 
 	BEGIN
 		UPDATE PERSONNE 
-		SET MailCandidat = newFirstMail
+		SET MailPers = newFirstMail
 		WHERE NumCandidatPers = NumCand;
 
 	END;	
