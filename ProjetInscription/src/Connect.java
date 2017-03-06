@@ -73,6 +73,7 @@ public class Connect {
 
    // Etape 4 : exécution requête
    rs = st.executeQuery(sql);
+ /*
    System.out.println();
    while(rs.next()){
     System.out.print("| ");
@@ -93,9 +94,10 @@ public class Connect {
    } catch (SQLException e) {
     e.printStackTrace();
    }
-  }
+  }*/
   return rs;
  }
+ 
  /*Candidat*/
  public void setNameCandidat(String prenom,int id){
 	 Connect.requete("call SET_NAME_CANDIDAT('"+prenom+"','"+id+"')");
