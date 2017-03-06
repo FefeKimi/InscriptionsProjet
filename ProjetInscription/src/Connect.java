@@ -22,7 +22,7 @@ public class Connect {
      c.addPersonne("Jules","Cesar","jc@gmail.com");
      //c.setPrenomPersonne("Felana",5);
      
-     c.setNameCandidat("Zorc",1);
+     c.getPrenomPersonne(1);
     }
     
  public static void requete(String requete) {
@@ -33,8 +33,8 @@ public class Connect {
       System.out.println("Driver O.K.");
 
       String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
-   String login= "root";
-   String passwd = "";
+      String login= "root";
+      String passwd = "";
 
       Connection conn = DriverManager.getConnection(url, login, passwd);
       System.out.println("Requête executée !"); 
@@ -47,12 +47,12 @@ public class Connect {
     }
 
  }
- public static ResultSet readBDD(String requete,String id, String nom) {
+ public static void readBDD(String requete, String nomChamp) {
 
   // Information d'accès à la base de données
 
-  Connection cn =null;
-  Statement st =null;
+  Connection cn = null;
+  Statement st = null;
   ResultSet rs = null;
   String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
   String login= "root";
@@ -73,15 +73,12 @@ public class Connect {
 
    // Etape 4 : exécution requête
    rs = st.executeQuery(sql);
- 
-   System.out.println();
+
    while(rs.next()){
-    System.out.print("| ");
-       System.out.print(rs.getString(id));
-       System.out.print(" | ");
-       System.out.println(rs.getString(nom));
-      } System.out.println();
+    	System.out.println(rs.getString(nomChamp));
+      } 
    
+  
   } catch (SQLException e) {
    e.printStackTrace();
   } catch (ClassNotFoundException e) {
@@ -95,7 +92,7 @@ public class Connect {
     e.printStackTrace();
    }
   }
-  return rs;
+
  }
  
  /*Candidat*/
@@ -121,6 +118,11 @@ public class Connect {
  }
  public void setMailPersonne(String mail,int id){
 	 Connect.requete("call SET_MAIL_PERSONNE('"+mail+"','"+id+"')");
+ }
+ public void getPrenomPersonne(int id){
+	 
+	Connect.readBDD("call GET_PRENOM_PERSONNE('"+id+"')","PrenomPersonne");
+
  }
  /*Equipe*/
  public void addEquipe(String nom){
