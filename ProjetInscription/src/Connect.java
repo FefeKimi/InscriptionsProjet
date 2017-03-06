@@ -106,8 +106,8 @@ public class Connect {
 	 Connect.requete("call ADD_EQUIPE('"+nom+"')");
  }
  
- public void addMembreEquipe(String nomPersonne,String nomEquipe){
-	 
+ public void addMembreEquipe(int idEquipe,int idPersonne){
+	 Connect.requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  
 }
