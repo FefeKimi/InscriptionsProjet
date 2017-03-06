@@ -9,7 +9,7 @@ DELIMITER |
   DECLARE Num int;
   insert into CANDIDAT(NumCandidat, NomCandidat,Equipe) values (null, NomCandidat,0) ;
   SELECT MAX(NumCandidat) INTO Num FROM CANDIDAT; 
-  insert into PERSONNE(PrenomPersonne, NumCandidatPers, MailPers)  values (PrenomPersonne, Num, MailPers);
+  insert into PERSONNE(PrenomPersonne, NumCandidatPers, MailPers)  values (PrenomPersonne, Num, MailCandidat);
   
  END;
 |
