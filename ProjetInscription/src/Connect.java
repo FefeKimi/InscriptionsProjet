@@ -93,12 +93,14 @@ public class Connect {
  
  /*inscriptions*/
  public void addComp(String nom, LocalDate dateCloture, boolean enEquipe){
-  Connect.requete("call ADD_COMP('"+nom+"','"+dateCloture+"',"+enEquipe+")");
+	 Connect.requete("call ADD_COMP('"+nom+"','"+dateCloture+"',"+enEquipe+")");
  }
- 
- /*MAIL UNIQUE*/
+ public void setNameComp(String newName){
+	 Connect.requete("call SET_NAME_COMP('"+newName+"')");
+ }
+ /*Personne*/
  public void addPersonne(String nom,String prenom, String mail){
-  Connect.requete("call ADD_PERSONNE('"+nom+"','"+mail+"','"+prenom+"')");
+	 Connect.requete("call ADD_PERSONNE('"+nom+"','"+mail+"','"+prenom+"')");
  }
  
  /*Equipe*/
