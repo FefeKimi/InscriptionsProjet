@@ -20,7 +20,8 @@ public class Connect {
      c.addComp("badminton", dateCloture,false);
      c.setNameComp("ping pong",1);*/
      c.addPersonne("Jules","Cesar","jc@gmail.com");
-     c.setPrenomPersonne("Fabrice",1);
+     c.setPrenomPersonne("Felana",5);
+     c.setPrenomPersonne("Fefe",6);
     }
     
  public static void requete(String requete) {
@@ -111,6 +112,9 @@ public class Connect {
  }
  public void setPrenomPersonne(String prenom,int id){
 	 Connect.requete("call SET_PRENOM_PERSONNE('"+prenom+"','"+id+"')");
+ }
+ public void setMailPersonne(String prenom,int id){
+	 Connect.requete("call SET_Mail_PERSONNE('"+prenom+"','"+id+"')");
  }
  /*Equipe*/
  public void addEquipe(String nom){
