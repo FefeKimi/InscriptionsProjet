@@ -73,7 +73,7 @@ public class Connect {
 
    // Etape 4 : exécution requête
    rs = st.executeQuery(sql);
- /*
+ 
    System.out.println();
    while(rs.next()){
     System.out.print("| ");
@@ -94,7 +94,7 @@ public class Connect {
    } catch (SQLException e) {
     e.printStackTrace();
    }
-  }*/
+  }
   return rs;
  }
  
