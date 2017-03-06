@@ -32,7 +32,7 @@ DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_NAME_COMP;
 	create procedure GET_NAME_COMP (int numCompet) 
 	BEGIN
-		SELECT NumComp
+		SELECT NomComp
 		FROM COMPETITION
 		WHERE NumComp = NumCompet;
 	END;	
