@@ -25,7 +25,7 @@ DELIMITER |
 	BEGIN
 		UPDATE COMPETITION
 		SET DateCloture = newDate
-		WHERE DateCloture = newDate;
+		WHERE NumComp = Num;
 	END;	
 |
 DELIMITER |
