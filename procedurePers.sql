@@ -57,7 +57,7 @@ DELIMITER |
 |
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_MAIL_PERSONNE;
-	create procedure SET_MAIL_PERSONNE (newFirstMail varchar(25), NumCand int(25)) 
+	create procedure SET_MAIL_PERSONNE (newFirstMail varchar(25), NumCand int 
 	BEGIN
 		UPDATE PERSONNE 
 		SET MailCandidat = newFirstMail
