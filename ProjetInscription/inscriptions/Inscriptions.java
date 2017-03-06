@@ -24,7 +24,7 @@ public class Inscriptions implements Serializable
 	private static final long serialVersionUID = -3095339436048473524L;
 	private static final String FILE_NAME = "Inscriptions.srz";
 	private static Inscriptions inscriptions;
-	
+	private Connect c;
 	private SortedSet<Competition> competitions = new TreeSet<Competition>();
 	private SortedSet<Candidat> candidats = new TreeSet<Candidat>();
 
@@ -93,6 +93,7 @@ public class Inscriptions implements Serializable
 			LocalDate dateCloture, boolean enEquipe)
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
+		c.addComp(nom,dateCloture,enEquipe);
 		competitions.add(competition);
 		return competition;
 	}
@@ -110,6 +111,7 @@ public class Inscriptions implements Serializable
 	public Personne createPersonne(String nom, String prenom, String mail)
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
+		c.addPersonne(nom,prenom,mail);
 		candidats.add(personne);
 		return personne;
 	}
@@ -127,6 +129,7 @@ public class Inscriptions implements Serializable
 	{
 		Equipe equipe = new Equipe(this, nom);
 		candidats.add(equipe);
+		c.addEquipe(nom);
 		return equipe;
 	}
 	
