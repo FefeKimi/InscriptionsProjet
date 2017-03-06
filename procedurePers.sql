@@ -30,7 +30,7 @@ DELIMITER |
 	BEGIN
 		SELECT PrenomPersonne
 		FROM PERSONNE
-		WHERE NumCandidat = NumCand;
+		WHERE NumCandidatPers = NumCand;
 
 	END;	
 |
@@ -41,7 +41,7 @@ DELIMITER |
 	BEGIN
 		UPDATE PERSONNE 
 		SET PrenomPersonne = newFirstName
-		WHERE NumCandidat = NumCand;
+		WHERE NumCandidatPers = NumCand;
 
 	END;	
 |
@@ -61,7 +61,7 @@ DELIMITER |
 	BEGIN
 		UPDATE CANDIDAT 
 		SET MailCandidat = newFirstMail
-		WHERE NumCandidat = NumCand;
+		WHERE NumCandidatPers = NumCand;
 
 	END;	
 |
