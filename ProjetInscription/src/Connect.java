@@ -18,11 +18,11 @@ public class Connect {
      LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
      c.setDateComp(newDate,2);
      c.addComp("badminton", dateCloture,false);
-     c.setNameComp("ping pong",1);
+     c.setNameComp("ping pong",1);*/
      c.addPersonne("Jules","Cesar","jc@gmail.com");
-     c.setPrenomPersonne("Felana",5);
-     */
-     c.setMailPersonne("ge@gamil.com",10);
+     //c.setPrenomPersonne("Felana",5);
+     
+     c.setNameCandidat("Zorc",1);
     }
     
  public static void requete(String requete) {
@@ -96,7 +96,10 @@ public class Connect {
   }
   return rs;
  }
- 
+ /*Candidat*/
+ public void setNameCandidat(String prenom,int id){
+	 Connect.requete("call SET_NAME_CANDIDAT('"+prenom+"','"+id+"')");
+ }
  /*competition*/
  public void addComp(String nom, LocalDate dateCloture, boolean enEquipe){
 	 Connect.requete("call ADD_COMP('"+nom+"','"+dateCloture+"',"+enEquipe+")");
