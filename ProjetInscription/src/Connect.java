@@ -14,9 +14,10 @@ import com.mysql.jdbc.CallableStatement;
 public class Connect {
     public static void main(String[]args){
      Connect c = new Connect();
-     /*LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
+     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
      c.addComp("badminton", dateCloture,false);
-     c.addPersonne("Jules","Cesar","jc@gmail.com");*/
+     c.setNameComp("tennis",1);
+     // c.addPersonne("Jules","Cesar","jc@gmail.com");
     }
     
  public static void requete(String requete) {
@@ -95,8 +96,8 @@ public class Connect {
  public void addComp(String nom, LocalDate dateCloture, boolean enEquipe){
 	 Connect.requete("call ADD_COMP('"+nom+"','"+dateCloture+"',"+enEquipe+")");
  }
- public void setNameComp(String newName){
-	 Connect.requete("call SET_NAME_COMP('"+newName+"')");
+ public void setNameComp(String newName,int id){
+	 Connect.requete("call SET_NAME_COMP('"+newName+"','"+id+"')");
  }
  /*Personne*/
  public void addPersonne(String nom,String prenom, String mail){
