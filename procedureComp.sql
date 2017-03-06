@@ -19,6 +19,24 @@ DELIMITER |
 	END;	
 |
 
+DELIMITER |
+	DROP PROCEDURE IF EXISTS SET_DATE_COMP;
+	create procedure SET_DATE_COMP (newDate varchar(25), Num varchar(25)) 
+	BEGIN
+		UPDATE COMPETITION
+		SET DateCloture = newDate
+		WHERE DateCloture = newDate;
+	END;	
+|
+DELIMITER |
+	DROP PROCEDURE IF EXISTS GET_NAME_COMP;
+	create procedure GET_NAME_COMP (int numCompet) 
+	BEGIN
+		SELECT NumComp
+		FROM COMPETITION
+		WHERE NumComp = NumCompet;
+	END;	
+|
 
 DELIMITER |
 	DROP procedure IF EXISTS date_cloture;
