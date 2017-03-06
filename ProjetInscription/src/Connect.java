@@ -22,7 +22,7 @@ public class Connect {
      c.addPersonne("Jules","Cesar","jc@gmail.com");
      c.setPrenomPersonne("Felana",5);
      */
-     c.setMailPersonne("ge@gamil.com",4);
+     c.setMailPersonne("ge@gamil.com",10);
     }
     
  public static void requete(String requete) {
@@ -115,7 +115,7 @@ public class Connect {
 	 Connect.requete("call SET_PRENOM_PERSONNE('"+prenom+"','"+id+"')");
  }
  public void setMailPersonne(String mail,int id){
-	 Connect.requete("call SET_Mail_PERSONNE('"+mail+"','"+id+"')");
+	 Connect.requete("call SET_MAIL_PERSONNE('"+mail+"','"+id+"')");
  }
  /*Equipe*/
  public void addEquipe(String nom){
