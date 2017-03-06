@@ -15,8 +15,8 @@ public class Connect {
     public static void main(String[]args){
      Connect c = new Connect();
      /*LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
-     c.addComp("badminton", dateCloture,false);*/
-     c.addPersonne("Jules","Cesar","jc@gmail.com");
+     c.addComp("badminton", dateCloture,false);
+     c.addPersonne("Jules","Cesar","jc@gmail.com");*/
     }
     
  public static void requete(String requete) {
@@ -101,5 +101,13 @@ public class Connect {
   Connect.requete("call ADD_PERSONNE('"+nom+"','"+mail+"','"+prenom+"')");
  }
  
+ /*Equipe*/
+ public void addEquipe(String nom){
+	 Connect.requete("call ADD_EQUIPE('"+nom+"')");
+ }
+ 
+ public void addMembreEquipe(String nomPersonne,String nomEquipe){
+	 
+ }
  
 }
