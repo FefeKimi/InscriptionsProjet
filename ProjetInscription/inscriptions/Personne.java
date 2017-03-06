@@ -32,7 +32,7 @@ public class Personne extends Candidat
 	
 	public String getPrenom()
 	{
-		return prenom;
+		return c.getPrenomPersonne(this.getIdCandidat());
 	}
 
 	/**
