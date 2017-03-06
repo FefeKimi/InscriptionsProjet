@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
+import src.Connect;
+
 /**
  * Représente une personne physique pouvant s'inscrire à une compétition.
  */
@@ -13,6 +15,7 @@ public class Personne extends Candidat
 	private static final long serialVersionUID = 4434646724271327254L;
 	private String prenom, mail;
 	private Set<Equipe> equipes;
+	private Connect c;
 	
 	Personne(Inscriptions inscriptions, String nom, String prenom, String mail)
 	{
@@ -39,7 +42,7 @@ public class Personne extends Candidat
 	
 	public void setPrenom(String prenom)
 	{
-		this.prenom = prenom;
+		c.setPrenomPersonne(prenom,this.getIdCandidat());
 	}
 
 	/**
@@ -59,7 +62,7 @@ public class Personne extends Candidat
 	
 	public void setMail(String mail)
 	{
-		this.mail = mail;
+		c.setMailPersonne(mail,this.getIdCandidat());
 	}
 
 	/**

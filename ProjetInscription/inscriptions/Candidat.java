@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
+import src.Connect;
+
 /**
  * Candidat à un événement sportif, soit une personne physique, soit une équipe.
  *
@@ -16,6 +18,7 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	private Inscriptions inscriptions;
 	private String nom;
 	private Set<Competition> competitions;
+	private Connect c;
 	private int idCandidat;
 	Candidat(Inscriptions inscriptions, String nom)
 	{
@@ -38,12 +41,15 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	 * Modifie le nom du candidat.
 	 * @param nom
 	 */
-	
+
 	public void setNom(String nom)
 	{
-		this.nom = nom;
+		c.setNameCandidat(nom,idCandidat);
 	}
-
+	
+	public int getIdCandidat(){
+		return idCandidat;
+	}
 	/**
 	 * Retourne toutes les compétitions auxquelles ce candidat est inscrit.s
 	 * @return
