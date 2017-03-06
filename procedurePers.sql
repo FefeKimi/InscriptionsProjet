@@ -51,7 +51,7 @@ DELIMITER |
 	BEGIN
 		SELECT MailPers
 		FROM PERSONNE
-		WHERE NumCandidat = NumCand;
+		WHERE NumCandidatPers = NumCand;
 
 	END;	
 |
