@@ -59,7 +59,7 @@ DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_MAIL_PERSONNE;
 	create procedure SET_MAIL_PERSONNE (newFirstMail varchar(25), NumCand int(25)) 
 	BEGIN
-		UPDATE CANDIDAT 
+		UPDATE PERSONNE 
 		SET MailCandidat = newFirstMail
 		WHERE NumCandidatPers = NumCand;
 
