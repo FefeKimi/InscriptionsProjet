@@ -19,10 +19,10 @@ public class Connect {
      c.setDateComp(newDate,2);
      c.addComp("badminton", dateCloture,false);
      c.setNameComp("ping pong",1);*/
-     c.addPersonne("Jules","Cesar","jc@gmail.com");
+     //c.addPersonne("Jules","Cesar","jc@gmail.com");
      //c.setPrenomPersonne("Felana",5);
      
-     c.getPrenomPersonne(1);
+     System.out.println(c.getMailPersonne(1));
     }
     
  public static void requete(String requete) {
@@ -47,10 +47,10 @@ public class Connect {
     }
 
  }
- public static void readBDD(String requete, String nomChamp) {
+ public static String readBDD(String requete, String nomChamp) {
 
   // Information d'accès à la base de données
-
+  String Resultat = null;	 
   Connection cn = null;
   Statement st = null;
   ResultSet rs = null;
@@ -74,10 +74,10 @@ public class Connect {
    // Etape 4 : exécution requête
    rs = st.executeQuery(sql);
 
-   while(rs.next()){
-    	System.out.println(rs.getString(nomChamp));
+   if(rs.first()){
+    	Resultat = rs.getString(nomChamp);
       } 
-   
+   return Resultat; 
   
   } catch (SQLException e) {
    e.printStackTrace();
@@ -92,6 +92,7 @@ public class Connect {
     e.printStackTrace();
    }
   }
+  return null;
 
  }
  
@@ -119,10 +120,13 @@ public class Connect {
  public void setMailPersonne(String mail,int id){
 	 Connect.requete("call SET_MAIL_PERSONNE('"+mail+"','"+id+"')");
  }
- public void getPrenomPersonne(int id){
-	 
-	Connect.readBDD("call GET_PRENOM_PERSONNE('"+id+"')","PrenomPersonne");
-
+ public String getPrenomPersonne(int id){	 
+	String resultat = Connect.readBDD("call GET_PRENOM_PERSONNE('"+id+"')","PrenomPersonne");
+	return resultat;
+ }
+ public String getMailPersonne(int id){	 
+	String resultat = Connect.readBDD("call GET_MAIL('"+id+"')","MailPers");
+	return resultat;
  }
  /*Equipe*/
  public void addEquipe(String nom){
