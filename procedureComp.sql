@@ -2,7 +2,7 @@
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_CANDIDATS_FROM_COMP;
-	create procedure GET_CANDIDATS_FROM_COMP(Num varchar(25))
+	create procedure GET_CANDIDATS_FROM_COMP(Num int))
 	begin
 		SELECT NomCandidat FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND NumComp = Num;
 		
@@ -11,7 +11,7 @@ DELIMITER |
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_NAME_COMP;
-	create procedure SET_NAME_COMP (newName varchar(25), Num varchar(25)) 
+	create procedure SET_NAME_COMP (newName varchar(25), Num int) 
 	BEGIN
 		UPDATE COMPETITION
 		SET NomComp = newName
@@ -21,7 +21,7 @@ DELIMITER |
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_DATE_COMP;
-	create procedure SET_DATE_COMP (newDate varchar(25), Num varchar(25)) 
+	create procedure SET_DATE_COMP (newDate varchar(25), Num int) 
 	BEGIN
 		UPDATE COMPETITION
 		SET DateCloture = newDate
