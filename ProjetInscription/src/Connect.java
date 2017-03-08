@@ -22,11 +22,10 @@ public class Connect {
      /*LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
      c.setDateComp(newDate,2);
      */
-     c.addComp("badminton", dateCloture,false);
-     c.setNameComp("ping pong",1);
+
      //c.addPersonne("Jules","Cesar","jc@gmail.com");
      //c.setPrenomPersonne("Felana",5);
-     
+     c.delCandidat(2);
      System.out.println(c.getDateComp(1));
     }
     
@@ -104,6 +103,9 @@ public class Connect {
  /*Candidat*/
  public void setNameCandidat(String prenom,int id){
    Connect.requete("call SET_NAME_CANDIDAT('"+prenom+"','"+id+"')");
+ }
+ public void delCandidat(int id){
+	   Connect.requete("call DEL_CANDIDAT('"+id+"')");
  }
  /*competition*/
  public void addComp(String nom, LocalDate dateCloture, boolean enEquipe){
