@@ -6,9 +6,9 @@ DELIMITER |
 	BEGIN
 	
 		DELETE FROM ETRE_DANS
- 		WHERE NumCandidat_Personne = numCanDel;
+ 		WHERE NumCandidatPers = numCanDel;
  		DELETE FROM ETRE_DANS
- 		WHERE NumCandidat_Equipe = numCanDel;
+ 		WHERE NumCandidatEquipe = numCanDel;
 		DELETE FROM PERSONNE
 		WHERE NumCandidatPers =numCanDel;
 		DELETE FROM PARTICIPER
