@@ -2,9 +2,19 @@
 
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PARTICIPATION;
-	create procedure ADD_PARTICIPATION(NumCan int, Num int(25)) 
+	create procedure ADD_PARTICIPATION(NumCan int, NumCom int(25)) 
 	BEGIN
-		INSERT INTO PARTICIPATION(NumCandidat, NumComp) VALUES (NumCan, Num);
+		DECLARE etreUneEquipe boolean;
+		DECLARE enEquipe boolean;
+		SELECT Equipe INTO etreUneEquipe FROM CANDIDAT WHERE NumCandidat = NumCan; 
+		SELECT EnEquipe INTO enEquipe FROM COMPETITION WHERE NumComp = NumCom; 
+		
+		IF(enEquipe && etreUneEquipe) THEN
+			INSERT INTO PARTICIPER(NumCandidat, NumComp) VALUES (NumCan, NumCom);
+		END IF;
+		IF(!enEquipe && !etreUneEquipe) THEN
+			INSERT INTO PARTICIPER(NumCandidat, NumComp) VALUES (NumCan, NumCom);
+		END IF;
 	END;
 |
 /* pas fait*/
