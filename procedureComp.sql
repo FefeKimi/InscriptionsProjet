@@ -1,10 +1,10 @@
 /*competition*/
-
+/* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_CANDIDATS_FROM_COMP;
 	create procedure GET_CANDIDATS_FROM_COMP(Num int))
 	begin
-		SELECT NomCandidat FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND NumComp = Num;
+		SELECT * FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND NumComp = Num;
 		
 	end;
 |
@@ -45,7 +45,7 @@ DELIMITER |
 		SELECT DateCloture FROM COMPETITION WHERE NumComp = Num;
 	end;
 |
-
+/* pas fait*/
 DELIMITER |
 	DROP function IF EXISTS inscription_ouverte;
 	create function inscription_ouverte (Num int(25)) returns boolean
@@ -72,7 +72,7 @@ DELIMITER |
 	end;
 |
 
-
+/* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS DEL_COMP;
 	create procedure DEL_COMP (Num int(25)) 
@@ -91,6 +91,7 @@ DELIMITER |
 
 	END;	
 |
+/* pas fait*/
 DELIMITER |
 	DROP function IF EXISTS EN_EQUIPE_COMP;
 	create function EN_EQUIPE_COMP (Num int(25)) returns boolean 
@@ -100,7 +101,7 @@ DELIMITER |
 		return bool;
 	END;	
 |
-
+/* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_CANDIDAT_COMP;
 	create procedure ADD_CANDIDAT_COMP (NumCan int, Num int(25)) 

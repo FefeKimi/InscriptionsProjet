@@ -66,4 +66,4 @@ ALTER TABLE Personne ADD CONSTRAINT FK_Personne_NumCandidat FOREIGN KEY (NumCand
 ALTER TABLE Participer ADD CONSTRAINT FK_Participer_NumCandidat FOREIGN KEY (NumCandidat) REFERENCES Candidat(NumCandidat);
 ALTER TABLE Participer ADD CONSTRAINT FK_Participer_NumComp FOREIGN KEY (NumComp) REFERENCES Competition(NumComp);
 ALTER TABLE ETRE_DANS ADD CONSTRAINT FK_ETRE_DANS_NumCandidat_Equipe FOREIGN KEY (NumCandidatEquipe) REFERENCES Candidat(NumCandidat);
-ALTER TABLE ETRE_DANS ADD CONSTRAINT FK_ETRE_DANS_NumCandidat_Pers FOREIGN KEY (NumCandidatPers) REFERENCES Candidat(NumCandidat);
+ALTER TABLE ETRE_DANS ADD CONSTRAINT FK_ETRE_DANS_NumCandidat_Pers FOREIGN KEY (NumCandidatPers) REFERENCES Personne(NumCandidatPers);
