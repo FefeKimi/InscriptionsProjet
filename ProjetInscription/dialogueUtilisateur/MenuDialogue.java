@@ -28,12 +28,12 @@ public class MenuDialogue {
 		
 		/*Compétitions*/
 		Menu menuCompetition = new Menu("Menu Competition","b");
-		menuCompetition.ajoute(new Option("Visualiser les compétitions","a",new Action() {
+		/*menuCompetition.ajoute(new Option("Visualiser les compétitions","a",new Action() {
 			public void optionSelectionnee()
 			{
 				Connect.readBDD("call GET_COMP()","labelComp","NomComp");
 			}
-		}));
+		}));*/
 		menuCompetition.ajoute(new Option("Modifier le nom d'une compétition","b",new Action() {
 			public void optionSelectionnee()
 			{

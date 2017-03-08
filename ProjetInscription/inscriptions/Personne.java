@@ -52,7 +52,7 @@ public class Personne extends Candidat
 	
 	public String getMail()
 	{
-		return mail;
+		return c.getMailPersonne(this.getIdCandidat());
 	}
 
 	/**
