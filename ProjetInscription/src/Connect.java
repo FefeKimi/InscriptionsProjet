@@ -19,14 +19,16 @@ public class Connect {
     public static void main(String[]args){
      Connect c = new Connect();
      LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
-     /*LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
-     c.setDateComp(newDate,2);
-     */
+     //LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
+     //c.setDateComp(newDate,2);
+     
 
-     //c.addPersonne("Jules","Cesar","jc@gmail.com");
-     //c.setPrenomPersonne("Felana",5);
-     c.delCandidat(2);
+     c.addPersonne("Jules","Cesar","jc@gmail.com");
+     c.setPrenomPersonne("Felana",5);
+     c.addEquipe("Team 1");
+     c.addComp("tennis", dateCloture, false);
      System.out.println(c.getDateComp(1));
+     c.delMembreEquipe(3,1 );
     }
     
  public static void requete(String requete) {
@@ -215,6 +217,9 @@ public class Connect {
     return null;
 
    } 
+ public void delComp(int id){
+	   Connect.requete("call DEL_COMP('"+id+"')");
+	 }
  /*Personne*/
  public void addPersonne(String nom,String prenom, String mail){
    Connect.requete("call ADD_PERSONNE('"+nom+"','"+mail+"','"+prenom+"')");
@@ -241,5 +246,7 @@ public class Connect {
  public void addMembreEquipe(int idEquipe,int idPersonne){
    Connect.requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
- 
+ public void delMembreEquipe(int idEquipe,int idPersonne){
+	   Connect.requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
+ }
 }
