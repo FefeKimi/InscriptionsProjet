@@ -36,7 +36,7 @@ CREATE TABLE Competition(
         NumComp   Int (25) NOT NULL AUTO_INCREMENT,
         NomComp     Varchar (25) ,
         DateCloture Date ,
-        EnEquipe    Bool ,
+        EnEquipe    Boolean ,
         PRIMARY KEY (NumComp)
 )ENGINE=InnoDB;
 

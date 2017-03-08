@@ -22,13 +22,12 @@ public class Connect {
      //LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
      //c.setDateComp(newDate,2);
      
-
-     c.addPersonne("Jules","Cesar","jc@gmail.com");
-     c.setPrenomPersonne("Felana",5);
-     c.addEquipe("Team 1");
-     c.addComp("tennis", dateCloture, false);
-     System.out.println(c.getDateComp(1));
-     c.delMembreEquipe(3,1 );
+     //c.addPersonne("NGUY", "Fabrice", "fabrice.nguy@gmail.com");
+     //c.addComp("basketball", dateCloture, true);
+     c.addParticipation(11, 17);
+     //c.addMembreEquipe(17, 18);
+     //System.out.println(c.getDateComp(1));
+     
     }
     
  public static void requete(String requete) {
@@ -249,4 +248,8 @@ public class Connect {
  public void delMembreEquipe(int idEquipe,int idPersonne){
 	   Connect.requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
+ /*Participation*/
+ public void addParticipation(int idComp,int idCandidat){
+	   Connect.requete("call ADD_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
+ } 
 }
