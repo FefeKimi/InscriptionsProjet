@@ -19,12 +19,14 @@ public class Connect {
     public static void main(String[]args){
      Connect c = new Connect();
      LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
-     //LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
+     LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
      //c.setDateComp(newDate,2);
-     
+     //c.addComp("Tennis", dateCloture, false);
      //c.addPersonne("NGUY", "Fabrice", "fabrice.nguy@gmail.com");
      //c.addComp("basketball", dateCloture, true);
-     c.addParticipation(11, 17);
+     //c.addEquipe("Zea");
+     c.delParticipation(3, 2);
+    // c.addMembreEquipe(1, 3);
      //c.addMembreEquipe(17, 18);
      //System.out.println(c.getDateComp(1));
      
@@ -249,7 +251,10 @@ public class Connect {
 	   Connect.requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  /*Participation*/
- public void addParticipation(int idComp,int idCandidat){
+ public void addParticipation(int idCandidat, int idComp){
 	   Connect.requete("call ADD_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
- } 
+ }
+ public void delParticipation(int idCandidat, int idComp){
+	   Connect.requete("call DEL_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
+} 
 }
