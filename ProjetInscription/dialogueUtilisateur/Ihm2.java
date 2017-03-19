@@ -78,7 +78,7 @@ public class Ihm2 {
 		competition.add(competitions);
 		
 		JButton btnNewButton = new JButton("Modifier");
-		btnNewButton.setBounds(131, 35, 89, 23);
+		btnNewButton.setBounds(127, 35, 89, 23);
 		competition.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Supprimer");
@@ -86,11 +86,11 @@ public class Ihm2 {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_1.setBounds(234, 35, 89, 23);
+		btnNewButton_1.setBounds(235, 35, 89, 23);
 		competition.add(btnNewButton_1);
 		
 		JLabel lblCrerUneComptition = new JLabel("Cr\u00E9er une comp\u00E9tition");
-		lblCrerUneComptition.setBounds(10, 83, 138, 14);
+		lblCrerUneComptition.setBounds(10, 82, 138, 14);
 		competition.add(lblCrerUneComptition);
 		
 		textField = new JTextField();
@@ -103,21 +103,21 @@ public class Ihm2 {
 		competition.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Date de cl\u00F4ture");
-		lblNewLabel_1.setBounds(10, 151, 99, 14);
+		lblNewLabel_1.setBounds(10, 160, 99, 14);
 		competition.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("En \u00E9quipe ?");
-		lblNewLabel_2.setBounds(10, 195, 99, 14);
+		lblNewLabel_2.setBounds(10, 216, 99, 14);
 		competition.add(lblNewLabel_2);
 		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
-		textField_1.setBounds(10, 164, 111, 20);
+		textField_1.setBounds(10, 174, 111, 20);
 		competition.add(textField_1);
 		
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
-		textField_2.setBounds(10, 211, 111, 20);
+		textField_2.setBounds(10, 228, 111, 20);
 		competition.add(textField_2);
 		
 		JLayeredPane equipes = new JLayeredPane();
