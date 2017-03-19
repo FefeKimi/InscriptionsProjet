@@ -25,7 +25,7 @@ public class Connect {
      //c.addPersonne("NGUY", "Fabrice", "fabrice.nguy@gmail.com");
      //c.addComp("basketball", dateCloture, true);
      //c.addEquipe("Zea");
-     c.delParticipation(3, 2);
+     System.out.println(c.getNameCandidat(3));
     // c.addMembreEquipe(1, 3);
      //c.addMembreEquipe(17, 18);
      //System.out.println(c.getDateComp(1));
@@ -110,6 +110,10 @@ public class Connect {
  public void delCandidat(int id){
 	   Connect.requete("call DEL_CANDIDAT('"+id+"')");
  }
+ public String getNameCandidat(int id){
+	 String resultat = Connect.readBDD("call GET_NAME_CANDIDAT('"+id+"')","NomCandidat");
+	 return resultat;
+}
  /*competition*/
  public void addComp(String nom, LocalDate dateCloture, boolean enEquipe){
    Connect.requete("call ADD_COMP('"+nom+"','"+dateCloture+"',"+enEquipe+")");

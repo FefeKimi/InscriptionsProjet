@@ -1,5 +1,5 @@
 /*CANDIDAT*/
-
+/*fait*/
 DELIMITER | 
 	DROP PROCEDURE IF EXISTS DEL_CANDIDAT;
 	create procedure DEL_CANDIDAT (numCanDel int(25)) 
@@ -31,6 +31,7 @@ DELIMITER |
  		WHERE NumCandidat = Old.NumCandidat;
 	END;	
 |
+/*pas fait*/
 DELIMITER | 
 	DROP PROCEDURE IF EXISTS GET_CANDIDAT;
 	create procedure GET_CANDIDAT()
@@ -41,7 +42,7 @@ DELIMITER |
 	END;
 
 |
-
+/*fait*/
 DELIMITER | 
 	DROP PROCEDURE IF EXISTS GET_NAME_CANDIDAT;
 	create procedure GET_NAME_CANDIDAT(NumCandidat int)
