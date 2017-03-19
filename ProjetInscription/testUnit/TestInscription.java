@@ -3,6 +3,8 @@ package testUnit;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -19,13 +21,19 @@ public class TestInscription extends TestCase {
 	Inscriptions i ;
 	SortedSet<Candidat> cand;
 	SortedSet<Competition> compet;
-
+	Competition c;
 	
 	protected void setUp() throws Exception
 	{
 		i = Inscriptions.getInscriptions();
 		cand = i.getCandidats();
 		compet = i.getCompetitions();
+		LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
+	}
+	@Test
+	public void testAddcompetition() {
+		Competition c = i.createCompetition("TestCreate", null, false);
+		assertNotNull(c);
 	}
 	
 	@Test

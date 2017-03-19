@@ -123,8 +123,6 @@ public class Ihm2 {
 		JLayeredPane equipes = new JLayeredPane();
 		tabbedPane.addTab("Equipes", null, equipes, null);
 		
-	
-		
 		
 		JLayeredPane personne = new JLayeredPane();
 		tabbedPane.addTab("Personne", null, personne, null);
