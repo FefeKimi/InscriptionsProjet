@@ -59,7 +59,7 @@ DELIMITER |
 		SELECT DateCloture FROM COMPETITION WHERE NumComp = Num;
 	end;
 |
-/* pas fait*/
+/*fait*/
 DELIMITER |
 	DROP function IF EXISTS inscription_ouverte;
 	create function inscription_ouverte (Num int(25)) returns boolean
@@ -86,7 +86,7 @@ DELIMITER |
 	end;
 |
 
-/* pas fait*/
+/* fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS DEL_COMP;
 	create procedure DEL_COMP (Num int(25)) 
@@ -108,19 +108,11 @@ DELIMITER |
 |
 /* pas fait*/
 DELIMITER |
-	DROP function IF EXISTS EN_EQUIPE_COMP;
-	create function EN_EQUIPE_COMP (Num int(25)) returns boolean 
+	DROP procedure IF EXISTS EN_EQUIPE_COMP;
+	create procedure EN_EQUIPE_COMP(Num int(25)) 
 	BEGIN
-		DECLARE bool boolean;
-		SELECT EnEquipe into bool FROM COMPETITION WHERE NumComp = Num;
-		return bool;
-	END;	
-|
-/* pas fait*/
-DELIMITER |
-	DROP PROCEDURE IF EXISTS ADD_CANDIDAT_COMP;
-	create procedure ADD_CANDIDAT_COMP (NumCan int, Num int(25)) 
-	BEGIN	
-		insert into PARTICIPER(NumCandidat,NumComp) values (NumCan,Num);
+		
+		SELECT EnEquipe FROM COMPETITION WHERE NumComp = Num;
+		
 	END;	
 |
