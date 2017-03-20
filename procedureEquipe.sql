@@ -14,7 +14,7 @@ DELIMITER |
 |
 */
 
-
+/* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_MEMBRE_EQUIPE;
 	create procedure GET_MEMBRE_EQUIPE(NumEQUIPE int )
@@ -29,7 +29,7 @@ DELIMITER |
 	END;
 
 |
-
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_EQUIPE;
 	create procedure ADD_EQUIPE(NomCandidat  Varchar(25) )

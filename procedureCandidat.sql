@@ -66,7 +66,7 @@ DELIMITER |
 	END;	
 |
 
-
+/*pas fait*/
 DELIMITER | 
 	DROP PROCEDURE IF EXISTS GET_COMP_CANDIDAT;
 	create procedure GET_COMP_CANDIDAT

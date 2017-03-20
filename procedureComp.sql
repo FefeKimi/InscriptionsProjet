@@ -2,13 +2,26 @@
 /* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_CANDIDATS_FROM_COMP;
-	create procedure GET_CANDIDATS_FROM_COMP(Num int))
+	create procedure GET_CANDIDATS_FROM_COMP(Num int)
 	begin
-		SELECT * FROM PARTICIPER, CANDIDAT WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat AND NumComp = Num;
-		
+		DECLARE une_Equipe boolean;
+		SELECT Equipe INTO une_Equipe FROM CANDIDAT WHERE NumCandidat = Num;
+		IF(!une_Equipe) THEN
+			SELECT NumCandidat, NomCandidat 
+			FROM PARTICIPER, CANDIDAT 
+			WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat 
+			AND NumComp = Num;
+		END IF;
+		IF(une_Equipe) THEN
+			SELECT NumCandidat, NomCandidat, PrenomPersonne 
+			FROM PARTICIPER, CANDIDAT, PERSONNE 
+			WHERE PARTICIPER.NumCandidat=CANDIDAT.NumCandidat 
+			AND PERSONNE.NumCandidatPers=CANDIDAT.NumCandidat 
+			AND NumComp = Num;
+		END IF;
 	end;
 |
-
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_NAME_COMP;
 	create procedure SET_NAME_COMP (newName varchar(25), Num int) 
@@ -18,7 +31,7 @@ DELIMITER |
 		WHERE NumComp = Num;
 	END;	
 |
-
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_DATE_COMP;
 	create procedure SET_DATE_COMP (newDate varchar(25), Num int) 
@@ -28,6 +41,7 @@ DELIMITER |
 		WHERE NumComp = Num;
 	END;	
 |
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_NAME_COMP;
 	create procedure GET_NAME_COMP (numCompet int) 
@@ -37,7 +51,7 @@ DELIMITER |
 		WHERE NumComp = NumCompet;
 	END;	
 |
-
+/*fait*/
 DELIMITER |
 	DROP procedure IF EXISTS date_cloture;
 	create procedure date_cloture(Num int(25)) 
@@ -61,7 +75,7 @@ DELIMITER |
 		return RES;
 	end;
 |
-
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_COMP;
 	create procedure ADD_COMP
@@ -82,6 +96,7 @@ DELIMITER |
 
 	END;	
 |
+/* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_COMP;
 	create procedure GET_COMP () 

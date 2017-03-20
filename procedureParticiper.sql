@@ -1,5 +1,5 @@
 /*participer*/
-
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS ADD_PARTICIPATION;
 	create procedure ADD_PARTICIPATION(NumCan int(25), NumCom int(25)) 
@@ -31,6 +31,7 @@ DELIMITER |
 	END;
 
 |
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_PARTICIPATION;
 	create procedure GET_PARTICIPATION () 

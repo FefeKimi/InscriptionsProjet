@@ -1,5 +1,5 @@
 /*PERSONNE*/
-
+/*fait*/
 DELIMITER |
  DROP PROCEDURE IF EXISTS ADD_PERSONNE;
  create procedure ADD_PERSONNE
@@ -13,7 +13,7 @@ DELIMITER |
   
  END;
 |
-
+/* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_PERSONNE;
 	create procedure GET_PERSONNE()
@@ -24,6 +24,7 @@ DELIMITER |
 	END;
 
 |
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_PRENOM_PERSONNE;
 	create procedure GET_PRENOM_PERSONNE (NumCand int(25)) 
@@ -34,7 +35,7 @@ DELIMITER |
 
 	END;	
 |
-
+/* pas fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_PRENOM_PERSONNE;
 	create procedure SET_PRENOM_PERSONNE (newFirstName varchar(25), NumCand int(25)) 
@@ -45,6 +46,7 @@ DELIMITER |
 
 	END;	
 |
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS GET_MAIL;
 	create procedure GET_MAIL (NumCand int(25)) 
@@ -55,6 +57,7 @@ DELIMITER |
 
 	END;	
 |
+/*fait*/
 DELIMITER |
 	DROP PROCEDURE IF EXISTS SET_MAIL_PERSONNE;
 	create procedure SET_MAIL_PERSONNE (newFirstMail varchar(25), NumCand int) 
