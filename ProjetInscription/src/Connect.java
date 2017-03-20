@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Set;
 
 import com.mysql.jdbc.CallableStatement;
@@ -25,11 +26,12 @@ public class Connect {
      //c.addPersonne("NGUY", "Fabrice", "fabrice.nguy@gmail.com");
      //c.addComp("basketball", dateCloture, true);
      //c.addEquipe("Zea");
-     System.out.println(c.getNameCandidat(3));
-    // c.addMembreEquipe(1, 3);
+     //System.out.println(c.getNameCandidat(3));
+     // c.addMembreEquipe(1, 3);
      //c.addMembreEquipe(17, 18);
      //System.out.println(c.getDateComp(1));
-     
+     LocalDate date = LocalDate.now();
+     System.out.println(c.CompOuverte(1));
     }
     
  public static void requete(String requete) {
@@ -128,52 +130,15 @@ public class Connect {
     String resultat = Connect.readBDD("call GET_NAME_COMP('"+id+"')","NomComp");
     return resultat;
 }
- public Set<Candidat> getCandidatsComp(int id){  
-	    Set<Candidat> resultat;
-	   
-	    Connection cn = null;
-	    Statement st = null;
-	    ResultSet rs = null;
-	    String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
-	    String login= "root";
-	    String passwd = "";
+public Boolean CompOuverte(int id){  
 	    
-	    try {
-
-	     // Etape 1 : Chargement du driver
-	     Class.forName("com.mysql.jdbc.Driver");
-
-	     // Etape 2 : récupération de la connexion
-	     cn = DriverManager.getConnection(url, login, passwd);
-
-	     // Etape 3 : Création d'un statement
-	     st = cn.createStatement();
-
-	     String sql = ("call date_cloture('"+id+"')");
-
-	     // Etape 4 : exécution requête
-	     rs = st.executeQuery(sql);
-
-	     while(rs.next()){
-	         resultat.add(rs.getString("NomCandidat"));
-	        } 
-	     return resultat; 
-	    
-	    } catch (SQLException e) {
-	     e.printStackTrace();
-	    } catch (ClassNotFoundException e) {
-	     e.printStackTrace();
-	    } finally {
-	     try {
-	    
-	      cn.close();
-	      st.close();
-	     } catch (SQLException e) {
-	      e.printStackTrace();
-	     }
-	    }
-	    return null;
+	    Date today = Date.valueOf(LocalDate.now());
+		Date dateCloture = getDateComp(id);
+		
+		Boolean resultat = dateCloture.after(today);
+		return resultat;
 }
+
  public Date getDateComp(int id) {
 
     // Information d'accès à la base de données
