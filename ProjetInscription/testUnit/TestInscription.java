@@ -20,16 +20,17 @@ import org.junit.Test;
 
 public class TestInscription extends TestCase {
 	Inscriptions i ;
-	SortedSet<Candidat> cand;
-	SortedSet<Competition> compet;
-	Competition c;
+	SortedSet<Candidat> cands;
+	SortedSet<Competition> compets;
+	Competition compet;
+	Candidat cand;
 	
 	protected void setUp() throws Exception
 	{
 		Inscriptions.SERIALIZE = true;
 		i = Inscriptions.getInscriptions();
-		cand = i.getCandidats();
-		compet = i.getCompetitions();
+		cands = i.getCandidats();
+		compets = i.getCompetitions();
 		
 	}
 	@Test
@@ -40,10 +41,16 @@ public class TestInscription extends TestCase {
 		assertEquals(c.getNom(), "TestCreate");
 		assertEquals(c.getDateCloture(),dateCloture);
 		assertEquals(c.estEnEquipe(), false);
+		/*vérifie l'insertion a bien été effectuée*/
 		i.closeConnection();
 		i.openConnection();
-		//i.getCompetitions().get(...)...
+		c = i.getCompetitions().first();
+		assertNotNull(c);
+		assertEquals(c.getNom(), "TestCreate");
+		assertEquals(c.getDateCloture(),dateCloture);
+		assertEquals(c.estEnEquipe(), false);
 	}
+	
 	@Test
 	public void testAddPersonne() {
 		Personne p  = i.createPersonne("Dupuis", "Michel", "dm@gmail.com");
@@ -51,9 +58,28 @@ public class TestInscription extends TestCase {
 		assertEquals(p.getNom(), "Dupuis");
 		assertEquals(p.getPrenom(), "Michel");
 		assertEquals(p.getMail(), "dm@gmail.com");
+		/*vérifie l'insertion a bien été effectuée*/
 		i.closeConnection();
 		i.openConnection();
-		//i.getCompetitions().get(...)...
+		p = (Personne) i.getCandidats().first();
+		assertNotNull(p);
+		assertEquals(p.getNom(), "Dupuis");
+		assertEquals(p.getPrenom(), "Michel");
+		assertEquals(p.getMail(), "dm@gmail.com");
+	}
+	
+	@Test
+	public void testAddEquipe() {
+		Equipe e = i.createEquipe("FRANCE");
+		assertNotNull(e);
+		assertEquals(e.getNom(), "FRANCE");
+		/*vérifie l'insertion a bien été effectuée*/
+		i.closeConnection();
+		i.openConnection();
+		e = (Equipe) i.getCandidats().first();
+		assertNotNull(e);
+		assertNotNull(e);
+		assertEquals(e.getNom(), "FRANCE");
 	}
 	
 	@Test
