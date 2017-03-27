@@ -20,18 +20,17 @@ import org.junit.Test;
 
 public class TestInscription extends TestCase {
 	Inscriptions i ;
-	SortedSet<Candidat> cands;
+	SortedSet<Candidat> candidats;
 	SortedSet<Competition> compets;
-	Competition compet;
-	Candidat cand;
+	Personne p;
 	
 	protected void setUp() throws Exception
 	{
 		Inscriptions.SERIALIZE = true;
 		i = Inscriptions.getInscriptions();
-		cands = i.getCandidats();
+		candidats = i.getCandidats();
 		compets = i.getCompetitions();
-		
+		Personne p  = i.createPersonne("Dupuis", "Michel", "dm@gmail.com");
 	}
 	@Test
 	public void testAddcompetition() {
@@ -82,7 +81,7 @@ public class TestInscription extends TestCase {
 		assertEquals(e.getNom(), "FRANCE");
 	}
 	
-	@Test
+	/*@Test
 	public void testGetCandidats() {
 		assertNotNull(i);
 		assertEquals(i.getCandidats(),cand);
@@ -106,7 +105,21 @@ public class TestInscription extends TestCase {
 		equipes = i.getEquipes();
 		assertNotNull(i);
 		assertEquals(i.getEquipes(),equipes);
+	}*/
+	@Test
+	public void testRemoveCompet() {
+		candidats.add(p);
+		i.remove(p);
 	}
+	
+	@Test
+	public void testRemoveCandidat() {
+		SortedSet<Equipe> equipes = new TreeSet<>();
+		equipes = i.getEquipes();
+		assertNotNull(i);
+		assertEquals(i.getEquipes(),equipes);
+	}
+	
 	
 	@Test
 	public void testRecharger() {
