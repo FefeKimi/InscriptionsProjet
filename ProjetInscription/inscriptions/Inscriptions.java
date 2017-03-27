@@ -1,5 +1,4 @@
 package inscriptions;
-//pizza
 import src.Connect;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,7 +23,7 @@ public class Inscriptions implements Serializable
 	private static final long serialVersionUID = -3095339436048473524L;
 	private static final String FILE_NAME = "Inscriptions.srz";
 	private static Inscriptions inscriptions;
-	private Connect c;
+	private Connect connect;
 	private SortedSet<Competition> competitions = new TreeSet<Competition>();
 	private SortedSet<Candidat> candidats = new TreeSet<Candidat>();
 	public static boolean SERIALIZE = false; 
@@ -95,7 +94,7 @@ public class Inscriptions implements Serializable
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
 		if (!SERIALIZE)
-			c.add(competition);
+			connect.addComp(competition);
 		competitions.add(competition);
 		return competition;
 	}
@@ -113,7 +112,9 @@ public class Inscriptions implements Serializable
 	public Personne createPersonne(String nom, String prenom, String mail)
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
-		c.addPersonne(nom,prenom,mail);
+		if (!SERIALIZE)
+			//TODO ADD PERSONNE CONNECT
+			connect.addPers(personne);
 		candidats.add(personne);
 		return personne;
 	}
@@ -130,8 +131,10 @@ public class Inscriptions implements Serializable
 	public Equipe createEquipe(String nom)
 	{
 		Equipe equipe = new Equipe(this, nom);
-		candidats.add(equipe);
-		c.addEquipe(nom);
+		if (!SERIALIZE)
+			//TODO ADD EQUIPE CONNECT
+			candidats.add(equipe);
+		connect.add(equipe);
 		return equipe;
 	}
 	
@@ -161,7 +164,7 @@ public class Inscriptions implements Serializable
 			if (inscriptions == null)
 				inscriptions = new Inscriptions();
 			if (!SERIALIZE)
-			inscriptions.c = new Connect();
+			inscriptions.connect = new Connect();
 		}
 		return inscriptions;
 	}
@@ -277,11 +280,11 @@ public class Inscriptions implements Serializable
 	
 	public void openConnection()
 	{
-		c = new Connect();
+		connect = new Connect();
 	}
 	
 	public void closeConnection()
 	{
-		c.close();
+		connect.close();
 	}
 }

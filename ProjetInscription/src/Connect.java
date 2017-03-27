@@ -2,6 +2,8 @@ package src;
 
 import inscriptions.Candidat;
 import inscriptions.Competition;
+import inscriptions.Equipe;
+import inscriptions.Personne;
 
 import java.awt.List;
 import java.sql.Connection;
@@ -195,7 +197,7 @@ public class Connect {
 	 return resultat;
 }
  /*competition*/
- public void add(Competition competition){
+ public void addComp(Competition competition){
    Connect.requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
    // TODO récupérer l'ID
@@ -277,8 +279,8 @@ public Boolean CompOuverte(int id){
 	   Connect.requete("call DEL_COMP('"+id+"')");
  }
  /*Personne*/
- public void addPersonne(String nom,String prenom, String mail){
-   Connect.requete("call ADD_PERSONNE('"+nom+"','"+mail+"','"+prenom+"')");
+ public void addPers(Personne p){
+   Connect.requete("call ADD_PERSONNE('"+p.getNom()+"','"+p.getMail()+"','"+p.getPrenom()+"')");
  }
  public void setPrenomPersonne(String prenom,int id){
    Connect.requete("call SET_PRENOM_PERSONNE('"+prenom+"','"+id+"')");
@@ -295,8 +297,8 @@ public Boolean CompOuverte(int id){
   return resultat;
  }
  /*Equipe*/
- public void addEquipe(String nom){
-   Connect.requete("call ADD_EQUIPE('"+nom+"')");
+ public void addEquipe(Equipe equipe){
+   Connect.requete("call ADD_EQUIPE('"+equipe.nom()+"')");
  }
  
  public void addMembreEquipe(int idEquipe,int idPersonne){
