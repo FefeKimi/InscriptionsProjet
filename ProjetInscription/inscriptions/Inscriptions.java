@@ -113,7 +113,6 @@ public class Inscriptions implements Serializable
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
 		if (!SERIALIZE)
-			//TODO ADD PERSONNE CONNECT
 			connect.add(personne);
 		candidats.add(personne);
 		return personne;

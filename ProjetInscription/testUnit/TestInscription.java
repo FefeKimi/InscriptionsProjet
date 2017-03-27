@@ -13,6 +13,7 @@ import inscriptions.Candidat;
 import inscriptions.Competition;
 import inscriptions.Equipe;
 import inscriptions.Inscriptions;
+import inscriptions.Personne;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,15 +30,27 @@ public class TestInscription extends TestCase {
 		i = Inscriptions.getInscriptions();
 		cand = i.getCandidats();
 		compet = i.getCompetitions();
-		LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
+		
 	}
 	@Test
 	public void testAddcompetition() {
-		Competition c = i.createCompetition("TestCreate", null, false);
+		LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
+		Competition c = i.createCompetition("TestCreate", dateCloture, false);
 		assertNotNull(c);
 		assertEquals(c.getNom(), "TestCreate");
-		// TODO assertEquals(c.getDateCloture(), ...);
+		assertEquals(c.getDateCloture(),dateCloture);
 		assertEquals(c.estEnEquipe(), false);
+		i.closeConnection();
+		i.openConnection();
+		//i.getCompetitions().get(...)...
+	}
+	@Test
+	public void testAddPersonne() {
+		Personne p  = i.createPersonne("Dupuis", "Michel", "dm@gmail.com");
+		assertNotNull(p);
+		assertEquals(p.getNom(), "Dupuis");
+		assertEquals(p.getPrenom(), "Michel");
+		assertEquals(p.getMail(), "dm@gmail.com");
 		i.closeConnection();
 		i.openConnection();
 		//i.getCompetitions().get(...)...
