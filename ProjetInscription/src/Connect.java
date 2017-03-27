@@ -3,6 +3,7 @@ package src;
 import inscriptions.Candidat;
 import inscriptions.Competition;
 import inscriptions.Equipe;
+import inscriptions.Inscriptions;
 import inscriptions.Personne;
 
 import java.awt.List;
@@ -27,9 +28,11 @@ import com.mysql.jdbc.CallableStatement;
 public class Connect {
 	
 	private Connection conn;
+	private Inscriptions inscription;
 	
-//    public static void main(String[]args){
-//     Connect c = new Connect();
+    public static void main(String[]args){
+       Connect c = new Connect();
+       SortedSet<Competition> competitions = null ;
 //     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
 //     LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
 //     //c.setDateComp(newDate,2);
@@ -44,7 +47,17 @@ public class Connect {
 //     //LocalDate date = LocalDate.now();
 //     //System.out.println(c.CompOuverte(1));
 //     System.out.println(c.enEquipeComp(1));
-//    }
+       try {
+		  competitions= c.getCompetitions();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+       c.close();
+       for (Competition competition : competitions) {
+    	   System.out.println(competition.getNom());
+       }
+    }
     
     public Connect() {
         try {
@@ -187,7 +200,52 @@ public class Connect {
   return null;
 
  }
- 
+ public ResultSet resultatRequete(String requete) {
+
+	  // Information d'accès à la base de données
+
+	  Connection cn = null;
+	  Statement st = null;
+	  ResultSet rs = null;
+	  String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
+	  String login= "root";
+	  String passwd = "";
+	  
+	  try {
+
+	   // Etape 1 : Chargement du driver
+	   Class.forName("com.mysql.jdbc.Driver");
+
+	   // Etape 2 : récupération de la connexion
+	   cn = DriverManager.getConnection(url, login, passwd);
+
+	   // Etape 3 : Création d'un statement
+	   st = cn.createStatement();
+
+	   String sql = requete;
+
+	   // Etape 4 : exécution requête
+	   rs = st.executeQuery(sql);
+
+
+	   return rs; 
+	  
+	  } catch (SQLException e) {
+	   e.printStackTrace();
+	  } catch (ClassNotFoundException e) {
+	   e.printStackTrace();
+	  } finally {
+	   try {
+	  
+	    cn.close();
+	    st.close();
+	   } catch (SQLException e) {
+	    e.printStackTrace();
+	   }
+	  }
+	  return null;
+
+	 } 
  /*Candidat*/
 // public List<Candidat>
  public void setNameCandidat(String prenom,int id){
@@ -201,7 +259,8 @@ public class Connect {
 	 return resultat;
 }
  /*competition*/
- public SortedSet<Competition> getCompetitions(){
+ 
+ public SortedSet<Competition> getCompetitions() throws SQLException{
 	 SortedSet<Competition> competitions = new SortedSet<Competition>() {
 		
 		@Override
@@ -319,11 +378,18 @@ public class Connect {
 			return null;
 		}
 	};
-	 Connect.requete
+	 ResultSet rs = resultatRequete("SELECT * FROM Competition");
+	 while(!rs.last()){
+		 inscription = null;
+		 Competition competition = inscription.createCompetition(rs.getString("NumComp"),
+				 rs.getDate("DateCloture").toLocalDate(), 
+				 rs.getBoolean("EnEquipe")); 
+		 competitions.add(competition);
+	 }
 	 return competitions;
  }
  public void add(Competition competition){
-   Connect.requete("call ADD_COMP('"+competition.getNom()+"','"+
+   requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
    // TODO récupérer l'ID
    // ....
@@ -331,10 +397,10 @@ public class Connect {
  }
  
  public void setNameComp(String newName,int id){
-   Connect.requete("call SET_NAME_COMP('"+newName+"','"+id+"')");
+   requete("call SET_NAME_COMP('"+newName+"','"+id+"')");
  }
  public void setDateComp(LocalDate newDate,int id){
-   Connect.requete("call SET_DATE_COMP('"+newDate+"','"+id+"')");
+   requete("call SET_DATE_COMP('"+newDate+"','"+id+"')");
  }
  public String getNameComp(int id){  
     String resultat = Connect.readBDD("call GET_NAME_COMP('"+id+"')","NomComp");
@@ -405,7 +471,7 @@ public Boolean CompOuverte(int id){
  }
  /*Personne*/
  public void add(Personne p){
-   Connect.requete("call ADD_PERSONNE('"+p.getNom()+
+   requete("call ADD_PERSONNE('"+p.getNom()+
 		   "','"+p.getMail()+
 		   "','"+p.getPrenom()+"')");
  }
@@ -424,15 +490,15 @@ public Boolean CompOuverte(int id){
   return resultat;
  }
  /*Equipe*/
- public void addEquipe(Equipe equipe){
-   Connect.requete("call ADD_EQUIPE('"+equipe.nom()+"')");
+ public void add(Equipe equipe){
+   requete("call ADD_EQUIPE('"+equipe.getNom()+"')");
  }
  
  public void addMembreEquipe(int idEquipe,int idPersonne){
    Connect.requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  public void delMembreEquipe(int idEquipe,int idPersonne){
-	   Connect.requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
+	   requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  /*Participation*/
  public void addParticipation(int idCandidat, int idComp){
