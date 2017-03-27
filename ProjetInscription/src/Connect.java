@@ -30,7 +30,7 @@ public class Connect {
 	private Connection conn;
 	private Inscriptions inscription;
 	
-//    public static void main(String[]args){
+   public static void main(String[]args){
 //       Connect c = new Connect();
 //       SortedSet<Competition> competitions = null ;
 //     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
@@ -57,7 +57,7 @@ public class Connect {
 //       for (Competition competition : competitions) {
 //    	   System.out.println(competition.getNom());
 //       }
-//    }
+    }
     
     public Connect() {
         try {
