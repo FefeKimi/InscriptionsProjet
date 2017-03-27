@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.junit.Test;
@@ -20,22 +21,33 @@ public class TestCompetitions {
 	Personne p;
 	Inscriptions i = Inscriptions.getInscriptions();
 	Competition compet = i.createCompetition("Tennis",LocalDate.of(2017,Month.APRIL,14),true);
-	
+	SortedSet<Candidat> candidats;
+
 	protected void setUp() throws Exception
 	{
+		candidats = (SortedSet<Candidat>) compet.getCandidats();
 		i = Inscriptions.getInscriptions();
 		compet = i.createCompetition("Tennis",null,true);
-		p = i.createPersonne("Julien","Jul","j@gmail.com");
+		p = i.createPersonne("Daurelle","Jul","j@gmail.com");
+		
 	}
 	
 	@Test
 	public void testAddPersonne() {
-		assert(compet.add(p));
+		compet.add(p);
+		p = (Personne) ((SortedSet<Candidat>) compet.getCandidats()).first();
+		assertEquals(p.getNom(),"Daurelle");
+		assertEquals(p.getPrenom(),"Jul");
+		assertEquals(p.getMail(),"j@gmail.com");
 	}
 
 	@Test
-	public void testAddEquipe() {
-		assert(compet.add(e));
+	public void testDelete() {
+		compet.delete();
+		Competition c = (Competition) i.getCompetitions().first();
+		assertNotEquals(c.getNom(), "Tennis");
+		assertEquals(c.getDateCloture(),LocalDate.of(2017,Month.APRIL,10));
+		assertEquals(c.estEnEquipe(), true);
 	}
 	
 	@Test
@@ -44,10 +56,6 @@ public class TestCompetitions {
 		assertNotNull(compet.compareTo(compet2));
 	}
 
-	@Test
-	public void testDelete() {
-		compet.delete();
-	}
 	
 	@Test
 	public void estEnEquipe() {
