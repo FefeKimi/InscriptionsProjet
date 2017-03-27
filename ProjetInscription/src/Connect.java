@@ -30,9 +30,9 @@ public class Connect {
 	private Connection conn;
 	private Inscriptions inscription;
 	
-    public static void main(String[]args){
-       Connect c = new Connect();
-       SortedSet<Competition> competitions = null ;
+//    public static void main(String[]args){
+//       Connect c = new Connect();
+//       SortedSet<Competition> competitions = null ;
 //     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
 //     LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
 //     //c.setDateComp(newDate,2);
@@ -47,17 +47,17 @@ public class Connect {
 //     //LocalDate date = LocalDate.now();
 //     //System.out.println(c.CompOuverte(1));
 //     System.out.println(c.enEquipeComp(1));
-       try {
-		  competitions= c.getCompetitions();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-       c.close();
-       for (Competition competition : competitions) {
-    	   System.out.println(competition.getNom());
-       }
-    }
+//       try {
+//		  competitions= c.getCompetitions();
+//	} catch (SQLException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//       c.close();
+//       for (Competition competition : competitions) {
+//    	   System.out.println(competition.getNom());
+//       }
+//    }
     
     public Connect() {
         try {
@@ -476,10 +476,10 @@ public Boolean CompOuverte(int id){
 		   "','"+p.getPrenom()+"')");
  }
  public void setPrenomPersonne(String prenom,int id){
-   Connect.requete("call SET_PRENOM_PERSONNE('"+prenom+"','"+id+"')");
+   requete("call SET_PRENOM_PERSONNE('"+prenom+"','"+id+"')");
  }
  public void setMailPersonne(String mail,int id){
-   Connect.requete("call SET_MAIL_PERSONNE('"+mail+"','"+id+"')");
+   requete("call SET_MAIL_PERSONNE('"+mail+"','"+id+"')");
  }
  public String getPrenomPersonne(int id){  
   String resultat = Connect.readBDD("call GET_PRENOM_PERSONNE('"+id+"')","PrenomPersonne");
@@ -495,16 +495,16 @@ public Boolean CompOuverte(int id){
  }
  
  public void addMembreEquipe(int idEquipe,int idPersonne){
-   Connect.requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
+   requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  public void delMembreEquipe(int idEquipe,int idPersonne){
 	   requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  /*Participation*/
  public void addParticipation(int idCandidat, int idComp){
-	   Connect.requete("call ADD_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
+	   requete("call ADD_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
  }
  public void delParticipation(int idCandidat, int idComp){
-	   Connect.requete("call DEL_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
+	   requete("call DEL_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
 } 
 }
