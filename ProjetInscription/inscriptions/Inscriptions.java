@@ -94,7 +94,7 @@ public class Inscriptions implements Serializable
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
 		if (!SERIALIZE)
-			connect.addComp(competition);
+			connect.add(competition);
 		competitions.add(competition);
 		return competition;
 	}
@@ -114,7 +114,7 @@ public class Inscriptions implements Serializable
 		Personne personne = new Personne(this, nom, prenom, mail);
 		if (!SERIALIZE)
 			//TODO ADD PERSONNE CONNECT
-			connect.addPers(personne);
+			connect.add(personne);
 		candidats.add(personne);
 		return personne;
 	}
