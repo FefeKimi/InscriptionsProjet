@@ -15,7 +15,11 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.chrono.ChronoLocalDate;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 
 import com.mysql.jdbc.CallableStatement;
 //
@@ -187,17 +191,138 @@ public class Connect {
  /*Candidat*/
 // public List<Candidat>
  public void setNameCandidat(String prenom,int id){
-   Connect.requete("call SET_NAME_CANDIDAT('"+prenom+"','"+id+"')");
+   requete("call SET_NAME_CANDIDAT('"+prenom+"','"+id+"')");
  }
  public void delCandidat(int id){
-	   Connect.requete("call DEL_CANDIDAT('"+id+"')");
+   requete("call DEL_CANDIDAT('"+id+"')");
  }
  public String getNameCandidat(int id){
 	 String resultat = Connect.readBDD("call GET_NAME_CANDIDAT('"+id+"')","NomCandidat");
 	 return resultat;
 }
  /*competition*/
- public void addComp(Competition competition){
+ public SortedSet<Competition> getCompetitions(){
+	 SortedSet<Competition> competitions = new SortedSet<Competition>() {
+		
+		@Override
+		public <T> T[] toArray(T[] a) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public Object[] toArray() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public int size() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		
+		@Override
+		public boolean retainAll(Collection<?> c) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public boolean removeAll(Collection<?> c) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public Iterator<Competition> iterator() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public boolean containsAll(Collection<?> c) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public boolean contains(Object o) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public void clear() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public boolean addAll(Collection<? extends Competition> c) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public boolean add(Competition e) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public SortedSet<Competition> tailSet(Competition fromElement) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public SortedSet<Competition> subSet(Competition fromElement,
+				Competition toElement) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public Competition last() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public SortedSet<Competition> headSet(Competition toElement) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public Competition first() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+		@Override
+		public Comparator<? super Competition> comparator() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+	 Connect.requete
+	 return competitions;
+ }
+ public void add(Competition competition){
    Connect.requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
    // TODO récupérer l'ID
@@ -279,8 +404,10 @@ public Boolean CompOuverte(int id){
 	   Connect.requete("call DEL_COMP('"+id+"')");
  }
  /*Personne*/
- public void addPers(Personne p){
-   Connect.requete("call ADD_PERSONNE('"+p.getNom()+"','"+p.getMail()+"','"+p.getPrenom()+"')");
+ public void add(Personne p){
+   Connect.requete("call ADD_PERSONNE('"+p.getNom()+
+		   "','"+p.getMail()+
+		   "','"+p.getPrenom()+"')");
  }
  public void setPrenomPersonne(String prenom,int id){
    Connect.requete("call SET_PRENOM_PERSONNE('"+prenom+"','"+id+"')");
