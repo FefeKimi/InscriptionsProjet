@@ -25,6 +25,7 @@ public class TestInscription extends TestCase {
 	
 	protected void setUp() throws Exception
 	{
+		Inscriptions.SERIALIZE = true;
 		i = Inscriptions.getInscriptions();
 		cand = i.getCandidats();
 		compet = i.getCompetitions();
@@ -34,6 +35,12 @@ public class TestInscription extends TestCase {
 	public void testAddcompetition() {
 		Competition c = i.createCompetition("TestCreate", null, false);
 		assertNotNull(c);
+		assertEquals(c.getNom(), "TestCreate");
+		// TODO assertEquals(c.getDateCloture(), ...);
+		assertEquals(c.estEnEquipe(), false);
+		i.closeConnection();
+		i.openConnection();
+		//i.getCompetitions().get(...)...
 	}
 	
 	@Test

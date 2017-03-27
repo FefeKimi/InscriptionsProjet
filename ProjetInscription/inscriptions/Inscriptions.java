@@ -14,9 +14,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Point d'entr√©e dans l'application, un seul objet de type Inscription
- * permet de g√©rer les comp√©titions, candidats (de type equipe ou personne)
- * ainsi que d'inscrire des candidats √† des comp√©tition.
+ * Point d'entrÈe dans l'application, un seul objet de type Inscription
+ * permet de gÈrer les compÈtitions, candidats (de type equipe ou personne)
+ * ainsi que d'inscrire des candidats ‡ des compÈtition.
  */
 
 public class Inscriptions implements Serializable
@@ -27,13 +27,15 @@ public class Inscriptions implements Serializable
 	private Connect c;
 	private SortedSet<Competition> competitions = new TreeSet<Competition>();
 	private SortedSet<Candidat> candidats = new TreeSet<Candidat>();
-
+	public static boolean SERIALIZE = false; 
+	
+	
 	private Inscriptions()
 	{
 	}
 	
 	/**
-	 * Retourne les comp√©titions.
+	 * Retourne les compÈtitions.
 	 * @return
 	 */
 	
@@ -43,7 +45,7 @@ public class Inscriptions implements Serializable
 	}
 	
 	/**
-	 * Retourne tous les candidats (personnes et √©quipes confondues).
+	 * Retourne tous les candidats (personnes et Èquipes confondues).
 	 * @return
 	 */
 	
@@ -67,7 +69,7 @@ public class Inscriptions implements Serializable
 	}
 
 	/**
-	 * Retourne toutes les √©quipes.
+	 * Retourne toutes les Èquipes.
 	 * @return
 	 */
 	
@@ -81,7 +83,7 @@ public class Inscriptions implements Serializable
 	}
 
 	/**
-	 * Cr√©√©e une comp√©tition. Ceci est le seul moyen, il n'y a pas
+	 * CrÈÈe une compÈtition. Ceci est le seul moyen, il n'y a pas
 	 * de constructeur public dans {@link Competition}.
 	 * @param nom
 	 * @param dateCloture
@@ -92,13 +94,14 @@ public class Inscriptions implements Serializable
 	public Competition createCompetition(String nom,LocalDate dateCloture, boolean enEquipe)
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
-		c.addComp(nom,dateCloture,enEquipe);
+		if (!SERIALIZE)
+			c.add(competition);
 		competitions.add(competition);
 		return competition;
 	}
 
 	/**
-	 * Cr√©√©e une Candidat de type Personne. Ceci est le seul moyen, il n'y a pas
+	 * CrÈÈe une Candidat de type Personne. Ceci est le seul moyen, il n'y a pas
 	 * de constructeur public dans {@link Personne}.
 
 	 * @param nom
@@ -116,7 +119,7 @@ public class Inscriptions implements Serializable
 	}
 	
 	/**
-	 * Cr√©√©e une Candidat de type √©quipe. Ceci est le seul moyen, il n'y a pas
+	 * CrÈÈe une Candidat de type Èquipe. Ceci est le seul moyen, il n'y a pas
 	 * de constructeur public dans {@link Equipe}.
 	 * @param nom
 	 * @param prenom
@@ -144,7 +147,7 @@ public class Inscriptions implements Serializable
 	
 	/**
 	 * Retourne l'unique instance de cette classe.
-	 * Cr√©e cet objet s'il n'existe d√©j√†.
+	 * CrÈe cet objet s'il n'existe dÈj‡.
 	 * @return l'unique objet de type {@link Inscriptions}.
 	 */
 	
@@ -153,16 +156,19 @@ public class Inscriptions implements Serializable
 		
 		if (inscriptions == null)
 		{
-			inscriptions = readObject();
+			if (SERIALIZE)
+				inscriptions = readObject();
 			if (inscriptions == null)
 				inscriptions = new Inscriptions();
+			if (!SERIALIZE)
+			inscriptions.c = new Connect();
 		}
 		return inscriptions;
 	}
 
 	/**
-	 * Retourne un object inscriptions vide. Ne modifie pas les comp√©titions
-	 * et candidats d√©j√† existants.
+	 * Retourne un object inscriptions vide. Ne modifie pas les compÈtitions
+	 * et candidats dÈj‡ existants.
 	 */
 	
 	public Inscriptions reinitialiser()
@@ -172,8 +178,8 @@ public class Inscriptions implements Serializable
 	}
 
 	/**
-	 * Efface toutes les modifications sur Inscriptions depuis la derni√®re sauvegarde.
-	 * Ne modifie pas les comp√©titions et candidats d√©j√† existants.
+	 * Efface toutes les modifications sur Inscriptions depuis la derniËre sauvegarde.
+	 * Ne modifie pas les compÈtitions et candidats dÈj‡ existants.
 	 */
 	
 	public Inscriptions recharger()
@@ -208,7 +214,7 @@ public class Inscriptions implements Serializable
 	
 	/**
 	 * Sauvegarde le gestionnaire pour qu'il soit ouvert automatiquement 
-	 * lors d'une ex√©cution ult√©rieure du programme.
+	 * lors d'une exÈcution ultÈrieure du programme.
 	 * @throws IOException 
 	 */
 	
@@ -247,7 +253,7 @@ public class Inscriptions implements Serializable
 	{
 		LocalDate date = LocalDate.of(2017,Month.APRIL,10);
 		Inscriptions inscriptions = Inscriptions.getInscriptions();
-		Competition flechettes = inscriptions.createCompetition("Mondial de fl√©chettes", date, false);
+		Competition flechettes = inscriptions.createCompetition("Mondial de flÈchettes", date, false);
 		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
 				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
 		flechettes.add(tony);
@@ -266,5 +272,16 @@ public class Inscriptions implements Serializable
 			System.out.println("Sauvegarde impossible." + e);
 		}
 		
+	}
+	
+	
+	public void openConnection()
+	{
+		c = new Connect();
+	}
+	
+	public void closeConnection()
+	{
+		c.close();
 	}
 }

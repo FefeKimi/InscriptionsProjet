@@ -1,7 +1,9 @@
 package src;
 
 import inscriptions.Candidat;
+import inscriptions.Competition;
 
+import java.awt.List;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -17,36 +19,62 @@ import com.mysql.jdbc.CallableStatement;
 //
 //CTRL + SHIFT + O pour générer les imports
 public class Connect {
-    public static void main(String[]args){
-     Connect c = new Connect();
-     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
-     LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
-     //c.setDateComp(newDate,2);
-     //c.addComp("Tennis", dateCloture, false);
-     //c.addPersonne("NGUY", "Fabrice", "fabrice.nguy@gmail.com");
-     //c.addComp("basketball", dateCloture, true);
-     //c.addEquipe("Zea");
-     //System.out.println(c.getNameCandidat(3));
-     // c.addMembreEquipe(1, 3);
-     //c.addMembreEquipe(17, 18);
-     //System.out.println(c.getDateComp(1));
-     //LocalDate date = LocalDate.now();
-     //System.out.println(c.CompOuverte(1));
-     System.out.println(c.enEquipeComp(1));
+	
+	private Connection conn;
+	
+//    public static void main(String[]args){
+//     Connect c = new Connect();
+//     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
+//     LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
+//     //c.setDateComp(newDate,2);
+//     //c.addComp("Tennis", dateCloture, false);
+//     //c.addPersonne("NGUY", "Fabrice", "fabrice.nguy@gmail.com");
+//     //c.addComp("basketball", dateCloture, true);
+//     //c.addEquipe("Zea");
+//     //System.out.println(c.getNameCandidat(3));
+//     // c.addMembreEquipe(1, 3);
+//     //c.addMembreEquipe(17, 18);
+//     //System.out.println(c.getDateComp(1));
+//     //LocalDate date = LocalDate.now();
+//     //System.out.println(c.CompOuverte(1));
+//     System.out.println(c.enEquipeComp(1));
+//    }
+    
+    public Connect() {
+        try {
+			Class.forName("com.mysql.jdbc.Driver");
+        System.out.println("Driver O.K.");
+
+        String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
+        String login= "root";
+        String passwd = "";
+
+        conn = DriverManager.getConnection(url, login, passwd);
+		
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+    
+    public void close()
+    {
+    	try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
- public static void requete(String requete) {
+ public  void requete(String requete) {
  
  Statement st =null;
  try {
-      Class.forName("com.mysql.jdbc.Driver");
-      System.out.println("Driver O.K.");
-
-      String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
-      String login= "root";
-      String passwd = "";
-
-      Connection conn = DriverManager.getConnection(url, login, passwd);
       System.out.println("Requête executée !"); 
       st=conn.createStatement();
   
@@ -155,6 +183,7 @@ public class Connect {
  }
  
  /*Candidat*/
+// public List<Candidat>
  public void setNameCandidat(String prenom,int id){
    Connect.requete("call SET_NAME_CANDIDAT('"+prenom+"','"+id+"')");
  }
@@ -166,9 +195,14 @@ public class Connect {
 	 return resultat;
 }
  /*competition*/
- public void addComp(String nom, LocalDate dateCloture, boolean enEquipe){
-   Connect.requete("call ADD_COMP('"+nom+"','"+dateCloture+"',"+enEquipe+")");
+ public void add(Competition competition){
+   Connect.requete("call ADD_COMP('"+competition.getNom()+"','"+
+		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
+   // TODO récupérer l'ID
+   // ....
+   competition.setId(/* */);
  }
+ 
  public void setNameComp(String newName,int id){
    Connect.requete("call SET_NAME_COMP('"+newName+"','"+id+"')");
  }
