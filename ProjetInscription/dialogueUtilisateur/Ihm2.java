@@ -100,83 +100,6 @@ public class Ihm2 {
 		
 		
 		/*Equipes*/
-		JLayeredPane competition = new JLayeredPane();
-		tabbedPane.addTab("Competitions", null, competition, null);
-		
-		JLabel lblComptitions = new JLabel("Comp\u00E9titions");
-		lblComptitions.setBounds(10, 11, 99, 14);
-		competition.add(lblComptitions);
-		
-		JComboBox competitions = new JComboBox();
-		competitions.setBounds(10, 36, 76, 20);
-		competition.add(competitions);
-		
-		JButton btnModifierCompet= new JButton("Modifier");
-		btnModifierCompet.setBounds(127, 35, 89, 23);
-		competition.add(btnModifierCompet);
-		
-		JButton btnSupprimerCompet = new JButton("Supprimer");
-		btnSupprimerCompet.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnSupprimerCompet.setBounds(235, 35, 89, 23);
-		competition.add(btnSupprimerCompet);
-		
-		JLabel lblCrerUneComptition = new JLabel("Nouvelle comp\u00E9tition");
-		lblCrerUneComptition.setBackground(Color.LIGHT_GRAY);
-		lblCrerUneComptition.setBounds(199, 79, 166, 14);
-		competition.add(lblCrerUneComptition);
-		
-		JLabel nomCompetlbl = new JLabel("Nom ");
-		nomCompetlbl.setForeground(Color.DARK_GRAY);
-		nomCompetlbl.setBounds(199, 107, 24, 14);
-		competition.add(nomCompetlbl);
-		
-		JLabel dateClotlbl = new JLabel("Date de cl\u00F4ture");
-		dateClotlbl.setForeground(Color.DARK_GRAY);
-		dateClotlbl.setBounds(199, 151, 99, 14);
-		competition.add(dateClotlbl);
-		JDatePickerImpl datePicker_1 = new JDatePickerImpl(datePanel, null); 
-		datePicker_1.setBackground(Color.WHITE);
-		competition.add(datePicker_1);
-		
-	
-		
-		
-		JPanel candidats = new JPanel();
-		candidats.setBounds(10, 102, 166, 144);
-		competition.add(candidats);
-		
-		JLabel enEquipelbl = new JLabel("En \u00E9quipe ?");
-		enEquipelbl.setForeground(Color.DARK_GRAY);
-		enEquipelbl.setBounds(199, 176, 64, 14);
-		competition.add(enEquipelbl);
-		
-		JRadioButton rdbtnOui = new JRadioButton("Oui");
-		rdbtnOui.setBackground(Color.WHITE);
-		rdbtnOui.setForeground(Color.BLACK);
-		rdbtnOui.setBounds(268, 172, 41, 23);
-		competition.add(rdbtnOui);
-		
-		JRadioButton rdbtnNon = new JRadioButton("Non");
-		rdbtnNon.setBackground(Color.WHITE);
-		rdbtnNon.setForeground(Color.BLACK);
-		rdbtnNon.setBounds(314, 172, 45, 23);
-		competition.add(rdbtnNon);
-		
-		JLabel lblNewLabel_3 = new JLabel("Candidats :");
-		lblNewLabel_3.setBounds(10, 79, 64, 14);
-		competition.add(lblNewLabel_3);
-		
-		JButton btnNewButton_3 = new JButton("Ajouter");
-		btnNewButton_3.setBounds(199, 223, 89, 23);
-		competition.add(btnNewButton_3);
-		
-		textField_3 = new JTextField();
-		textField_3.setBounds(235, 104, 86, 20);
-		competition.add(textField_3);
-		textField_3.setColumns(10);
 		JLayeredPane equipes = new JLayeredPane();
 		tabbedPane.addTab("Equipes", null, equipes, null);
 		
@@ -283,5 +206,86 @@ public class Ihm2 {
 		JButton btnNewButton_2 = new JButton("Ajouter");
 		btnNewButton_2.setBounds(259, 240, 89, 23);
 		personne.add(btnNewButton_2);
+		JLayeredPane competition = new JLayeredPane();
+		tabbedPane.addTab("Competitions", null, competition, null);
+		
+		JLabel lblComptitions = new JLabel("Comp\u00E9titions");
+		lblComptitions.setBounds(10, 11, 99, 14);
+		competition.add(lblComptitions);
+		
+		JComboBox competitions = new JComboBox();
+		competitions.setBounds(10, 36, 76, 20);
+		competition.add(competitions);
+		
+		JButton btnModifierCompet= new JButton("Modifier");
+		btnModifierCompet.setBounds(127, 35, 89, 23);
+		competition.add(btnModifierCompet);
+		
+		JButton btnSupprimerCompet = new JButton("Supprimer");
+		btnSupprimerCompet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnSupprimerCompet.setBounds(235, 35, 89, 23);
+		competition.add(btnSupprimerCompet);
+		
+		JLabel lblCrerUneComptition = new JLabel("Nouvelle comp\u00E9tition");
+		lblCrerUneComptition.setBackground(Color.LIGHT_GRAY);
+		lblCrerUneComptition.setBounds(199, 79, 166, 14);
+		competition.add(lblCrerUneComptition);
+		
+		JLabel nomCompetlbl = new JLabel("Nom ");
+		nomCompetlbl.setForeground(Color.DARK_GRAY);
+		nomCompetlbl.setBounds(199, 107, 24, 14);
+		competition.add(nomCompetlbl);
+		
+		JLabel dateClotlbl = new JLabel("Date de cl\u00F4ture");
+		dateClotlbl.setForeground(Color.DARK_GRAY);
+		dateClotlbl.setBounds(199, 151, 99, 14);
+		competition.add(dateClotlbl);
+		JDatePickerImpl datePicker_1 = new JDatePickerImpl(datePanel, null); 
+		datePicker_1.setBackground(Color.WHITE);
+		competition.add(datePicker_1);
+		
+	
+		
+		
+		JPanel candidats = new JPanel();
+		candidats.setBounds(10, 102, 166, 144);
+		competition.add(candidats);
+		
+		JLabel enEquipelbl = new JLabel("En \u00E9quipe ?");
+		enEquipelbl.setForeground(Color.DARK_GRAY);
+		enEquipelbl.setBounds(199, 253, 64, 14);
+		competition.add(enEquipelbl);
+		
+		JRadioButton rdbtnOui = new JRadioButton("Oui");
+		rdbtnOui.setBackground(Color.WHITE);
+		rdbtnOui.setForeground(Color.BLACK);
+		rdbtnOui.setBounds(269, 249, 41, 23);
+		competition.add(rdbtnOui);
+		
+		JRadioButton rdbtnNon = new JRadioButton("Non");
+		rdbtnNon.setBackground(Color.WHITE);
+		rdbtnNon.setForeground(Color.BLACK);
+		rdbtnNon.setBounds(312, 249, 45, 23);
+		competition.add(rdbtnNon);
+		
+		JLabel lblNewLabel_3 = new JLabel("Candidats :");
+		lblNewLabel_3.setBounds(10, 79, 64, 14);
+		competition.add(lblNewLabel_3);
+		
+		JButton btnNewButton_3 = new JButton("Ajouter");
+		btnNewButton_3.setBounds(199, 278, 89, 23);
+		competition.add(btnNewButton_3);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(235, 104, 86, 20);
+		competition.add(textField_3);
+		textField_3.setColumns(10);
+		
+		JLabel lblNewLabel_6 = new JLabel("New label");
+		lblNewLabel_6.setBounds(209, 172, 46, 14);
+		competition.add(lblNewLabel_6);
 	}
 }
