@@ -16,11 +16,13 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.chrono.ChronoLocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.mysql.jdbc.CallableStatement;
 //
@@ -28,11 +30,12 @@ import com.mysql.jdbc.CallableStatement;
 public class Connect {
 	
 	private Connection conn;
-	private Inscriptions inscription;
+
+
 	
    public static void main(String[]args){
-//       Connect c = new Connect();
-//       SortedSet<Competition> competitions = null ;
+       Connect c = new Connect();
+       SortedSet<Competition> competitions = new TreeSet<Competition>() ;
 //     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
 //     LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
 //     //c.setDateComp(newDate,2);
@@ -47,20 +50,22 @@ public class Connect {
 //     //LocalDate date = LocalDate.now();
 //     //System.out.println(c.CompOuverte(1));
 //     System.out.println(c.enEquipeComp(1));
-//       try {
-//		  competitions= c.getCompetitions();
-//	} catch (SQLException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
-//       c.close();
+      try {
+		  int taille = c.getCompetitions().size();
+		  System.out.println("taille "+taille);
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+       c.close();
 //       for (Competition competition : competitions) {
 //    	   System.out.println(competition.getNom());
 //       }
     }
     
     public Connect() {
-        try {
+        
+    	try {
 			Class.forName("com.mysql.jdbc.Driver");
         System.out.println("Driver O.K.");
 
@@ -234,15 +239,8 @@ public class Connect {
 	   e.printStackTrace();
 	  } catch (ClassNotFoundException e) {
 	   e.printStackTrace();
-	  } finally {
-	   try {
-	  
-	    cn.close();
-	    st.close();
-	   } catch (SQLException e) {
-	    e.printStackTrace();
-	   }
-	  }
+	  } 
+	   
 	  return null;
 
 	 } 
@@ -261,131 +259,24 @@ public class Connect {
  /*competition*/
  
  public SortedSet<Competition> getCompetitions() throws SQLException{
-	 SortedSet<Competition> competitions = new SortedSet<Competition>() {
-		
-		@Override
-		public <T> T[] toArray(T[] a) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public Object[] toArray() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public int size() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-		
-		@Override
-		public boolean retainAll(Collection<?> c) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public boolean removeAll(Collection<?> c) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public boolean remove(Object o) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public Iterator<Competition> iterator() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public boolean isEmpty() {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public boolean containsAll(Collection<?> c) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public boolean contains(Object o) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public void clear() {
-			// TODO Auto-generated method stub
-			
-		}
-		
-		@Override
-		public boolean addAll(Collection<? extends Competition> c) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public boolean add(Competition e) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
-		@Override
-		public SortedSet<Competition> tailSet(Competition fromElement) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public SortedSet<Competition> subSet(Competition fromElement,
-				Competition toElement) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public Competition last() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public SortedSet<Competition> headSet(Competition toElement) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public Competition first() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public Comparator<? super Competition> comparator() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	};
-	 ResultSet rs = resultatRequete("SELECT * FROM Competition");
-	 while(!rs.last()){
-		 inscription = null;
-		 Competition competition = inscription.createCompetition(rs.getString("NumComp"),
-				 rs.getDate("DateCloture").toLocalDate(), 
-				 rs.getBoolean("EnEquipe")); 
+	 Inscriptions inscription;
+	 inscription = Inscriptions.getInscriptions();
+	 SortedSet<Competition> competitions = new TreeSet<Competition>();
+	 
+	 ResultSet rs = resultatRequete("SELECT * FROM Competition WHERE NomComp ='Tennis'");
+	 while(rs.next()){
+		int num = rs.getInt("NumComp");
+		String nom = rs.getString("NomComp");
+		LocalDate date =rs.getDate("DateCloture").toLocalDate();
+		Boolean enEquipe = rs.getBoolean("EnEquipe");
+		System.out.println("num"+num+"nom "+nom+" date: "+ date+""+enEquipe+"");
+		Competition competition = inscription.createCompetition(nom,
+				 date, 
+				 enEquipe); 
 		 competitions.add(competition);
+		 
 	 }
+	 
 	 return competitions;
  }
  public void add(Competition competition){
@@ -393,7 +284,7 @@ public class Connect {
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
    // TODO récupérer l'ID
    // ....
-   competition.setId(/* */);
+//   competition.setId(/* */);
  }
  
  public void setNameComp(String newName,int id){
@@ -467,7 +358,7 @@ public Boolean CompOuverte(int id){
 	   return Connect.requeteBoolean("call EN_EQUIPE_COMP('"+id+"')","EnEquipe");
  }
  public void delComp(int id){
-	   Connect.requete("call DEL_COMP('"+id+"')");
+	   requete("call DEL_COMP('"+id+"')");
  }
  /*Personne*/
  public void add(Personne p){
