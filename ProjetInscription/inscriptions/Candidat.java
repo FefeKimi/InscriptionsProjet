@@ -47,8 +47,13 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 		c.setNameCandidat(nom,idCandidat);
 	}
 	
+	/*idCandidat*/
 	public int getIdCandidat(){
 		return idCandidat;
+	}
+	
+	public void setIdCandidat(int id){
+		 this.idCandidat= id;
 	}
 	/**
 	 * Retourne toutes les compétitions auxquelles ce candidat est inscrit.s

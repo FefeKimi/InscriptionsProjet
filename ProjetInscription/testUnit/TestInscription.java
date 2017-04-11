@@ -55,16 +55,16 @@ public class TestInscription extends TestCase {
 		Personne p  = i.createPersonne("Dupuis", "Michel", "dm@gmail.com");
 		assertNotNull(p);
 		assertEquals(p.getNom(), "Dupuis");
-		assertEquals(p.getPrenom(), "Michel");
-		assertEquals(p.getMail(), "dm@gmail.com");
+		//assertEquals(p.getPrenom(), "Michel");
+		/*assertEquals(p.getMail(), "dm@gmail.com");*/
 		/*vérifie l'insertion a bien été effectuée*/
-		i.closeConnection();
+		/*i.closeConnection();
 		i.openConnection();
 		p = (Personne) i.getCandidats().first();
 		assertNotNull(p);
 		assertEquals(p.getNom(), "Dupuis");
 		assertEquals(p.getPrenom(), "Michel");
-		assertEquals(p.getMail(), "dm@gmail.com");
+		assertEquals(p.getMail(), "dm@gmail.com");*/
 	}
 	
 	@Test
@@ -72,7 +72,6 @@ public class TestInscription extends TestCase {
 		Equipe e = i.createEquipe("FRANCE");
 		assertNotNull(e);
 		assertEquals(e.getNom(), "FRANCE");
-		/*vérifie l'insertion a bien été effectuée*/
 		i.closeConnection();
 		i.openConnection();
 		e = (Equipe) i.getCandidats().first();
@@ -81,7 +80,7 @@ public class TestInscription extends TestCase {
 		assertEquals(e.getNom(), "FRANCE");
 	}
 	
-	/*@Test
+	@Test
 	public void testGetCandidats() {
 		assertNotNull(i);
 		assertEquals(i.getCandidats(),cand);
@@ -105,7 +104,7 @@ public class TestInscription extends TestCase {
 		equipes = i.getEquipes();
 		assertNotNull(i);
 		assertEquals(i.getEquipes(),equipes);
-	}*/
+	}
 	@Test
 	public void testRemoveCompet() {
 		candidats.add(p);

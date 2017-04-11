@@ -140,13 +140,13 @@ public class Inscriptions implements Serializable
 	void remove(Competition competition)
 	{
 		competitions.remove(competition);
-		connect.delete(competition);
+		connect.delComp(competition.getIdcompetition());
 	}
 	
 	void remove(Candidat candidat)
 	{
 		candidats.remove(candidat);
-		connect.delete(candidat);
+		connect.delCandidat(candidat.getIdCandidat());
 	}
 	
 	/**
