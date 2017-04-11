@@ -105,6 +105,7 @@ public class TestInscription extends TestCase {
 		assertNotNull(i);
 		assertEquals(i.getEquipes(),equipes);
 	}
+	
 	@Test
 	public void testRemoveCompet() {
 		candidats.add(p);
