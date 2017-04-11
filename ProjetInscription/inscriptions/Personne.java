@@ -34,8 +34,8 @@ public class Personne extends Candidat
 	public String getPrenom()
 	{
 		if (!SERIALIZE)
-			return c.getPrenomPersonne(this.getIdCandidat());
-		return prenom;
+			return prenom;
+		return c.getPrenomPersonne(this.getIdCandidat());
 	}
 
 	/**
@@ -46,8 +46,8 @@ public class Personne extends Candidat
 	public void setPrenom(String prenom)
 	{
 		if (!SERIALIZE)
-			c.setPrenomPersonne(prenom,this.getIdCandidat());
-		this.prenom=prenom;
+			this.prenom=prenom;
+		c.setPrenomPersonne(prenom,this.getIdCandidat());
 	}
 
 	/**
@@ -58,8 +58,8 @@ public class Personne extends Candidat
 	public String getMail()
 	{
 		if (!SERIALIZE)
-			return c.getMailPersonne(this.getIdCandidat());
-		return mail;
+			return mail;
+		return c.getMailPersonne(this.getIdCandidat());
 	}
 
 	/**
