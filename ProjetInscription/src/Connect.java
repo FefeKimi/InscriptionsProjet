@@ -283,8 +283,8 @@ public class Connect {
    requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
    // TODO récupérer l'ID
-   // ....
-//   competition.setId(/* */);
+  // ....
+ //   competition.setId(/* */);
  }
  
  public void setNameComp(String newName,int id){
