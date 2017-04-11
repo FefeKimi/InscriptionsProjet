@@ -113,8 +113,8 @@ public class Inscriptions implements Serializable
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
 		if (!SERIALIZE)
-			connect.add(personne);
-		candidats.add(personne);
+			candidats.add(personne);
+		connect.add(personne);
 		return personne;
 	}
 	
@@ -139,13 +139,15 @@ public class Inscriptions implements Serializable
 	
 	void remove(Competition competition)
 	{
-		competitions.remove(competition);
+		if (!SERIALIZE)
+			competitions.remove(competition);
 		connect.delComp(competition.getIdcompetition());
 	}
 	
 	void remove(Candidat candidat)
 	{
-		candidats.remove(candidat);
+		if (!SERIALIZE)
+			candidats.remove(candidat);
 		connect.delCandidat(candidat.getIdCandidat());
 	}
 	
