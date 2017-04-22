@@ -41,8 +41,12 @@ public class Equipe extends Candidat
 
 	public boolean add(Personne membre)
 	{
-		membre.add(this);
-		return membres.add(membre);
+		if (!SERIALIZE){
+			membre.add(this);
+			return membres.add(membre);
+		}else {
+			return 
+		}
 	}
 
 	/**

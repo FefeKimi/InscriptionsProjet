@@ -324,8 +324,18 @@ public Boolean CompOuverte(int id){
 	 return equipe;
  }
  
- public void addMembreEquipe(int idEquipe,int idPersonne){
-   requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
+ public boolean addMembreEquipe(int idEquipe,int idPersonne) throws SQLException{
+	 boolean add=true;
+	 int idCandidat=0;
+	 requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
+	 ResultSet rs = resultatRequete("SELECT NumCandidatPers FROM ETRE_DANS WHERE NumCandidatEquipe ='"+idEquipe+"' AND NumCandidatPers='"+idPersonne+"'");
+	 while(rs.next()){
+		idCandidat = rs.getInt("NumCandidat");
+	 }
+	 if(idCandidat==0){
+		 add=false;
+	 }
+	 return add;
  }
  public void delMembreEquipe(int idEquipe,int idPersonne){
 	   requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
