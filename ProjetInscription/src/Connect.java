@@ -287,16 +287,11 @@ public class Connect {
  //   competition.setId(/* */);
  }
  
- public void setNameComp(String newName,int id){
-   requete("call SET_NAME_COMP('"+newName+"','"+id+"')");
- }
  public void setDateComp(LocalDate newDate,int id){
-   requete("call SET_DATE_COMP('"+newDate+"','"+id+"')");
+   requete("call SET_DATE_CLOTURE('"+id+"','"+newDate+"')");
  }
- public String getNameComp(int id){  
-    String resultat = Connect.readBDD("call GET_NAME_COMP('"+id+"')","NomComp");
-    return resultat;
-}
+
+ /*
 public Boolean CompOuverte(int id){  
 	    
 	    Date today = Date.valueOf(LocalDate.now());
@@ -305,7 +300,7 @@ public Boolean CompOuverte(int id){
 		Boolean resultat = dateCloture.after(today);
 		return resultat;
 }
-
+*/
  public Date getDateComp(int id) {
 
     // Information d'accès à la base de données
@@ -363,23 +358,15 @@ public Boolean CompOuverte(int id){
  /*Personne*/
  public void add(Personne p){
    requete("call ADD_PERSONNE('"+p.getNom()+
-		   "','"+p.getMail()+
-		   "','"+p.getPrenom()+"')");
+		   "','"+p.getPrenom()+"','"+p.getMail()+"')");
  }
- public void setPrenomPersonne(String prenom,int id){
-   requete("call SET_PRENOM_PERSONNE('"+prenom+"','"+id+"')");
+ public void setPrenomPersonne(int id,String prenom){
+   requete("call SET_PRENOM_PERSONNE('"+id+"','"+prenom+"')");
  }
- public void setMailPersonne(String mail,int id){
-   requete("call SET_MAIL_PERSONNE('"+mail+"','"+id+"')");
+ public void setMailPersonne(int id,String mail){
+   requete("call SET_MAIL_PERSONNE('"+id+"','"+mail+"')");
  }
- public String getPrenomPersonne(int id){  
-  String resultat = Connect.readBDD("call GET_PRENOM_PERSONNE('"+id+"')","PrenomPersonne");
-  return resultat;
- }
- public String getMailPersonne(int id){  
-  String resultat = Connect.readBDD("call GET_MAIL('"+id+"')","MailPers");
-  return resultat;
- }
+ 
  /*Equipe*/
  public void add(Equipe equipe){
    requete("call ADD_EQUIPE('"+equipe.getNom()+"')");
@@ -392,10 +379,10 @@ public Boolean CompOuverte(int id){
 	   requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  /*Participation*/
- public void addParticipation(int idCandidat, int idComp){
+/* public void addParticipation(int idCandidat, int idComp){
 	   requete("call ADD_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
  }
  public void delParticipation(int idCandidat, int idComp){
 	   requete("call DEL_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
-} 
+} */
 }
