@@ -51,20 +51,23 @@ public class Inscriptions implements Serializable
 	/**
 	 * Retourne tous les candidats (personnes et équipes confondues).
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public SortedSet<Candidat> getCandidats()
+	public SortedSet<Candidat> getCandidats() throws SQLException
 	{
 		if (!SERIALIZE)
 			return Collections.unmodifiableSortedSet(candidats);
+		return connect.getCandidats();
 	}
 
 	/**
 	 * Retourne toutes les personnes.
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public SortedSet<Personne> getPersonnes()
+	public SortedSet<Personne> getPersonnes() throws SQLException
 	{
 		SortedSet<Personne> personnes = new TreeSet<Personne>();
 		for (Candidat c : getCandidats())
@@ -76,9 +79,10 @@ public class Inscriptions implements Serializable
 	/**
 	 * Retourne toutes les équipes.
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public SortedSet<Equipe> getEquipes()
+	public SortedSet<Equipe> getEquipes() throws SQLException
 	{
 		SortedSet<Equipe> equipes = new TreeSet<>();
 		for (Candidat c : getCandidats())
@@ -94,9 +98,10 @@ public class Inscriptions implements Serializable
 	 * @param dateCloture
 	 * @param enEquipe
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public Competition createCompetition(String nom,LocalDate dateCloture, boolean enEquipe)
+	public Competition createCompetition(String nom,LocalDate dateCloture, boolean enEquipe) throws SQLException
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
 		if (!SERIALIZE)
@@ -113,9 +118,10 @@ public class Inscriptions implements Serializable
 	 * @param prenom
 	 * @param mail
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public Personne createPersonne(String nom, String prenom, String mail)
+	public Personne createPersonne(String nom, String prenom, String mail) throws SQLException
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
 		if (!SERIALIZE)
@@ -131,9 +137,10 @@ public class Inscriptions implements Serializable
 	 * @param prenom
 	 * @param mail
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public Equipe createEquipe(String nom)
+	public Equipe createEquipe(String nom) throws SQLException
 	{
 		Equipe equipe = new Equipe(this, nom);
 		if (!SERIALIZE)
@@ -256,11 +263,17 @@ public class Inscriptions implements Serializable
 	@Override
 	public String toString()
 	{
-		return "Candidats : " + getCandidats().toString()
-			+ "\nCompetitions  " + getCompetitions().toString();
+		try {
+			return "Candidats : " + getCandidats().toString()
+				+ "\nCompetitions  " + getCompetitions().toString();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws SQLException
 	{
 		LocalDate date = LocalDate.of(2017,Month.APRIL,10);
 		Inscriptions inscriptions = Inscriptions.getInscriptions();

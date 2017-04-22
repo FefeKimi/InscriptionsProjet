@@ -30,41 +30,10 @@ import com.mysql.jdbc.CallableStatement;
 public class Connect {
 	
 	private Connection conn;
-
-
-	
-   public static void main(String[]args){
-       Connect c = new Connect();
-       SortedSet<Competition> competitions = new TreeSet<Competition>() ;
-//     LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
-//     LocalDate newDate = LocalDate.of(2015,Month.APRIL,25);
-//     //c.setDateComp(newDate,2);
-//     //c.addComp("Tennis", dateCloture, false);
-//     //c.addPersonne("NGUY", "Fabrice", "fabrice.nguy@gmail.com");
-//     //c.addComp("basketball", dateCloture, true);
-//     //c.addEquipe("Zea");
-//     //System.out.println(c.getNameCandidat(3));
-//     // c.addMembreEquipe(1, 3);
-//     //c.addMembreEquipe(17, 18);
-//     //System.out.println(c.getDateComp(1));
-//     //LocalDate date = LocalDate.now();
-//     //System.out.println(c.CompOuverte(1));
-//     System.out.println(c.enEquipeComp(1));
-      try {
-		  int taille = c.getCompetitions().size();
-		  System.out.println("taille "+taille);
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-       c.close();
-//       for (Competition competition : competitions) {
-//    	   System.out.println(competition.getNom());
-//       }
+   /*public static void main(String[]args){ 
     }
-    
+    */
     public Connect() {
-        
     	try {
 			Class.forName("com.mysql.jdbc.Driver");
         System.out.println("Driver O.K.");
@@ -291,7 +260,7 @@ public class Connect {
  }
  
 	 
- public void add(Competition competition) throws SQLException{
+ public Competition add(Competition competition) throws SQLException{
    int idComp=0;
    requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
@@ -300,6 +269,7 @@ public class Connect {
 	   idComp = rs.getInt("NumComp");
    }
    competition.setIdcompetition(idComp);
+   return competition;
  }
  
  public void setDateComp(LocalDate newDate,int id){
@@ -324,7 +294,7 @@ public Boolean CompOuverte(int id){
 	   requete("call DEL_COMP('"+id+"')");
  }
  /*Personne*/
- public void add(Personne p) throws SQLException{
+ public Personne add(Personne p) throws SQLException{
 	 int idCandidat=0;
 	 requete("call ADD_PERSONNE('"+p.getNom()+"','"+p.getPrenom()+"','"+p.getMail()+"')");
 	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM COMPETITION");
@@ -332,6 +302,7 @@ public Boolean CompOuverte(int id){
 		 idCandidat = rs.getInt("NumCandidat");
 	   }
 	   p.setIdCandidat(idCandidat);
+	   return p;
  }
  
  public void setPrenomPersonne(int id,String prenom){
@@ -342,7 +313,7 @@ public Boolean CompOuverte(int id){
  }
  
  /*Equipe*/
- public void add(Equipe equipe) throws SQLException{
+ public Equipe add(Equipe equipe) throws SQLException{
 	 int idCandidat=0;
 	 requete("call ADD_EQUIPE('"+equipe.getNom()+"')");
 	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM COMPETITION");
@@ -350,6 +321,7 @@ public Boolean CompOuverte(int id){
 		idCandidat = rs.getInt("NumCandidat");
 	 }
 	 equipe.setIdCandidat(idCandidat);
+	 return equipe;
  }
  
  public void addMembreEquipe(int idEquipe,int idPersonne){
@@ -359,10 +331,10 @@ public Boolean CompOuverte(int id){
 	   requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
  }
  /*Participation*/
-/* public void addParticipation(int idCandidat, int idComp){
+public void addParticipation(int idCandidat, int idComp){
 	   requete("call ADD_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
  }
  public void delParticipation(int idCandidat, int idComp){
 	   requete("call DEL_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
-} */
+} 
 }
