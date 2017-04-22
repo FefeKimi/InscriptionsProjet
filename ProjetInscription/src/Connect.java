@@ -291,13 +291,15 @@ public class Connect {
  }
  
 	 
-
- public void add(Competition competition){
+ public void add(Competition competition) throws SQLException{
+   int idComp=0;
    requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
-   // TODO récupérer l'ID
-  // ....
- //   competition.setId(/* */);
+   ResultSet rs = resultatRequete("SELECT MAX(NumComp) AS Numcomp FROM COMPETITION");
+   while(rs.next()){
+	   idComp = rs.getInt("NumComp");
+   }
+   competition.setIdcompetition(idComp);
  }
  
  public void setDateComp(LocalDate newDate,int id){
@@ -314,54 +316,7 @@ public Boolean CompOuverte(int id){
 		return resultat;
 }
 */
- public Date getDateComp(int id) {
-
-    // Information d'accès à la base de données
-    Date Resultat = null;  
-    Connection cn = null;
-    Statement st = null;
-    ResultSet rs = null;
-    String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
-    String login= "root";
-    String passwd = "";
-    
-    try {
-
-     // Etape 1 : Chargement du driver
-     Class.forName("com.mysql.jdbc.Driver");
-
-     // Etape 2 : récupération de la connexion
-     cn = DriverManager.getConnection(url, login, passwd);
-
-     // Etape 3 : Création d'un statement
-     st = cn.createStatement();
-
-     String sql = ("call date_cloture('"+id+"')");
-
-     // Etape 4 : exécution requête
-     rs = st.executeQuery(sql);
-
-     if(rs.first()){
-        Resultat = rs.getDate("DateCloture");
-        } 
-     return Resultat; 
-    
-    } catch (SQLException e) {
-     e.printStackTrace();
-    } catch (ClassNotFoundException e) {
-     e.printStackTrace();
-    } finally {
-     try {
-    
-      cn.close();
-      st.close();
-     } catch (SQLException e) {
-      e.printStackTrace();
-     }
-    }
-    return null;
-
-   }
+ 
  public boolean enEquipeComp(int id){
 	   return Connect.requeteBoolean("call EN_EQUIPE_COMP('"+id+"')","EnEquipe");
  }
@@ -369,10 +324,16 @@ public Boolean CompOuverte(int id){
 	   requete("call DEL_COMP('"+id+"')");
  }
  /*Personne*/
- public void add(Personne p){
-   requete("call ADD_PERSONNE('"+p.getNom()+
-		   "','"+p.getPrenom()+"','"+p.getMail()+"')");
+ public void add(Personne p) throws SQLException{
+	 int idCandidat=0;
+	 requete("call ADD_PERSONNE('"+p.getNom()+"','"+p.getPrenom()+"','"+p.getMail()+"')");
+	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM COMPETITION");
+	 while(rs.next()){
+		 idCandidat = rs.getInt("NumCandidat");
+	   }
+	   p.setIdCandidat(idCandidat);
  }
+ 
  public void setPrenomPersonne(int id,String prenom){
    requete("call SET_PRENOM_PERSONNE('"+id+"','"+prenom+"')");
  }
@@ -381,8 +342,14 @@ public Boolean CompOuverte(int id){
  }
  
  /*Equipe*/
- public void add(Equipe equipe){
-   requete("call ADD_EQUIPE('"+equipe.getNom()+"')");
+ public void add(Equipe equipe) throws SQLException{
+	 int idCandidat=0;
+	 requete("call ADD_EQUIPE('"+equipe.getNom()+"')");
+	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM COMPETITION");
+	 while(rs.next()){
+		idCandidat = rs.getInt("NumCandidat");
+	 }
+	 equipe.setIdCandidat(idCandidat);
  }
  
  public void addMembreEquipe(int idEquipe,int idPersonne){
