@@ -228,7 +228,6 @@ public class Connect {
 	 SortedSet<Candidat> candidats = new TreeSet<Candidat>();
 	 ResultSet rs = resultatRequete("call GET_CANDIDATS()");
 	 while(rs.next()){
-		int num = rs.getInt("NumCandidat");
 		String nom = rs.getString("NomCandidat");
 		Boolean equipe = rs.getBoolean("Equipe");
 		if(equipe){
@@ -244,17 +243,15 @@ public class Connect {
  
  /*competition*/
  public SortedSet<Competition> getCompetitions() throws SQLException {
-	 Inscriptions i;
-	 i = Inscriptions.getInscriptions();
+	 Inscriptions i = Inscriptions.getInscriptions();
 	 SortedSet<Competition> competitions = new TreeSet<Competition>();
 	 ResultSet rs = resultatRequete("call GET_COMP()");
 	 while(rs.next()){
-		int num = rs.getInt("NumComp");
 		String nom = rs.getString("NomComp");
 		LocalDate date =rs.getDate("DateCloture").toLocalDate();
 		Boolean enEquipe = rs.getBoolean("EnEquipe");
 		Competition competition = i.createCompetition(nom,date, enEquipe); 
-		 competitions.add(competition);
+		competitions.add(competition);
 	 }
 	 return competitions;
  }
@@ -304,6 +301,17 @@ public Boolean CompOuverte(int id){
 	   p.setIdCandidat(idCandidat);
 	   return p;
  }
+ public Set<Equipe> getEquipesFromPersonne(int idCandidat) throws SQLException{
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 SortedSet<Equipe> equipes = new TreeSet<Equipe>();
+	 ResultSet rs = resultatRequete("call GET_EQUIPE_FROM_PERS('"+idCandidat+"')");
+	 while(rs.next()){
+		String nom = rs.getString("NomCandidat");
+		Equipe e = i.createEquipe(nom);
+		equipes.add(e);
+	 }
+	 return equipes;
+ }
  
  public void setPrenomPersonne(int id,String prenom){
    requete("call SET_PRENOM_PERSONNE('"+id+"','"+prenom+"')");
@@ -323,7 +331,19 @@ public Boolean CompOuverte(int id){
 	 equipe.setIdCandidat(idCandidat);
 	 return equipe;
  }
- 
+ public SortedSet<Personne> getMembreEquipe(String nomEquipe) throws SQLException{
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 SortedSet<Personne> personnes = new TreeSet<Personne>();
+	 ResultSet rs = resultatRequete("call GET_MEMBRE_EQUIPE('"+nomEquipe+"')");
+	 while(rs.next()){
+		String nom = rs.getString("NomCandidat");
+		String prenom = rs.getString("Prenom");
+		String mail = rs.getString("Mail");
+		Personne p = i.createPersonne(nom,prenom,mail);
+		personnes.add(p);
+	 }
+	 return personnes;
+ }
  public boolean addMembreEquipe(int idEquipe,int idPersonne) throws SQLException{
 	 boolean add=true;
 	 int idCandidat=0;

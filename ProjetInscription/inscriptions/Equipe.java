@@ -1,5 +1,6 @@
 package inscriptions;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -26,26 +27,30 @@ public class Equipe extends Candidat
 
 	/**
 	 * Retourne l'ensemble des personnes formant l'équipe.
+	 * @throws SQLException 
 	 */
 	
-	public SortedSet<Personne> getMembres()
+	public SortedSet<Personne> getMembres() throws SQLException
 	{
-		return Collections.unmodifiableSortedSet(membres);
+		if (!SERIALIZE)
+			return Collections.unmodifiableSortedSet(membres);
+		return c.getMembreEquipe(this.getNom());
 	}
 	
 	/**
 	 * Ajoute une personne dans l'équipe.
 	 * @param membre
 	 * @return
+	 * @throws SQLException 
 	 */
 
-	public boolean add(Personne membre)
+	public boolean add(Personne membre) throws SQLException
 	{
 		if (!SERIALIZE){
 			membre.add(this);
 			return membres.add(membre);
 		}else {
-			return 
+			return c.addMembreEquipe(this.getIdCandidat(),membre.getIdCandidat());
 		}
 	}
 

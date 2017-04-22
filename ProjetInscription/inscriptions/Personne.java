@@ -1,5 +1,6 @@
 package inscriptions;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
@@ -74,11 +75,14 @@ public class Personne extends Candidat
 	/**
 	 * Retoure les équipes dont cette personne fait partie.
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public Set<Equipe> getEquipes()
+	public Set<Equipe> getEquipes() throws SQLException
 	{
-		return Collections.unmodifiableSet(equipes);
+		if (!SERIALIZE)
+			return Collections.unmodifiableSet(equipes);
+		return c.getEquipesFromPersonne(this.getIdCandidat());
 	}
 	
 	boolean add(Equipe equipe)
