@@ -1,5 +1,6 @@
 package inscriptions;
 import src.Connect;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.SortedSet;
@@ -36,11 +38,14 @@ public class Inscriptions implements Serializable
 	/**
 	 * Retourne les compétitions.
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public SortedSet<Competition> getCompetitions()
+	public SortedSet<Competition> getCompetitions() throws SQLException
 	{
-		return Collections.unmodifiableSortedSet(competitions);
+		if (!SERIALIZE)
+			return Collections.unmodifiableSortedSet(competitions);
+		return connect.getCompetitions();
 	}
 	
 	/**
@@ -50,7 +55,8 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Candidat> getCandidats()
 	{
-		return Collections.unmodifiableSortedSet(candidats);
+		if (!SERIALIZE)
+			return Collections.unmodifiableSortedSet(candidats);
 	}
 
 	/**
@@ -94,8 +100,8 @@ public class Inscriptions implements Serializable
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
 		if (!SERIALIZE)
-			connect.add(competition);
-		competitions.add(competition);
+			competitions.add(competition);
+		connect.add(competition);
 		return competition;
 	}
 
@@ -159,7 +165,6 @@ public class Inscriptions implements Serializable
 	
 	public static Inscriptions getInscriptions()
 	{
-		
 		if (inscriptions == null)
 		{
 			if (SERIALIZE)
@@ -289,5 +294,9 @@ public class Inscriptions implements Serializable
 	public void closeConnection()
 	{
 		connect.close();
+	}
+	
+	public static boolean serializable(){
+		return SERIALIZE;
 	}
 }

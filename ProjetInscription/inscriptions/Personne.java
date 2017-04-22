@@ -16,7 +16,7 @@ public class Personne extends Candidat
 	private String prenom, mail;
 	private Set<Equipe> equipes;
 	private Connect c;
-	public static boolean SERIALIZE = false;
+	public boolean SERIALIZE = Inscriptions.serializable();
 	
 	Personne(Inscriptions inscriptions, String nom, String prenom, String mail)
 	{
@@ -33,9 +33,8 @@ public class Personne extends Candidat
 	
 	public String getPrenom()
 	{
-		if (!SERIALIZE)
-			return prenom;
-		return c.getPrenomPersonne(this.getIdCandidat());
+		return prenom;
+		//return c.getPrenomPersonne(this.getIdCandidat());
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class Personne extends Candidat
 	{
 		if (!SERIALIZE)
 			this.prenom=prenom;
-		c.setPrenomPersonne(prenom,this.getIdCandidat());
+		//c.setPrenomPersonne(prenom,this.getIdCandidat());
 	}
 
 	/**
@@ -57,9 +56,8 @@ public class Personne extends Candidat
 	
 	public String getMail()
 	{
-		if (!SERIALIZE)
-			return mail;
-		return c.getMailPersonne(this.getIdCandidat());
+		return mail;
+		//return c.getMailPersonne(this.getIdCandidat());
 	}
 
 	/**
@@ -70,7 +68,7 @@ public class Personne extends Candidat
 	public void setMail(String mail)
 	{
 		if (!SERIALIZE)
-			c.setMailPersonne(mail,this.getIdCandidat());
+			c.setMailPersonne(this.getIdCandidat(),mail);
 		this.mail = mail;
 	}
 
@@ -89,12 +87,10 @@ public class Personne extends Candidat
 		return equipes.add(equipe);
 	}
 
-	/*boolean remove(Equipe equipe)
+	boolean remove(Equipe equipe)
 	{
-		if (!SERIALIZE)
-			return equipes.remove(equipe);
-		
-	}*/
+		return equipes.remove(equipe);
+	}
 	
 	@Override
 	public void delete()

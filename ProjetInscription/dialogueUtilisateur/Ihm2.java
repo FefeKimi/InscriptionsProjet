@@ -42,7 +42,6 @@ public class Ihm2 {
 
 	private JFrame frame;
 	private JTextField dateClot;
-	private JDatePickerImpl datePicker;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -92,12 +91,6 @@ public class Ihm2 {
 		frame.getContentPane().add(tabbedPane);
 		
 		/*competition*/
-		
-		/*form competition*/
-		
-		UtilDateModel model = new UtilDateModel();
-		JDatePanelImpl datePanel = new JDatePanelImpl(model, null); // <<<<
-		
 		
 		/*Equipes*/
 		JLayeredPane equipes = new JLayeredPane();

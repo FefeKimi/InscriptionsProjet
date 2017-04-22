@@ -252,33 +252,46 @@ public class Connect {
  public void delCandidat(int id){
    requete("call DEL_CANDIDAT('"+id+"')");
  }
- public String getNameCandidat(int id){
-	 String resultat = Connect.readBDD("call GET_NAME_CANDIDAT('"+id+"')","NomCandidat");
-	 return resultat;
-}
- /*competition*/
  
- public SortedSet<Competition> getCompetitions() throws SQLException{
-	 Inscriptions inscription;
-	 inscription = Inscriptions.getInscriptions();
+ public SortedSet<Candidat> getCandidats() throws SQLException{
+	 Inscriptions i;
+	 i = Inscriptions.getInscriptions();
+	 SortedSet<Candidat> candidats = new TreeSet<Candidat>();
+	 ResultSet rs = resultatRequete("call GET_CANDIDATS()");
+	 while(rs.next()){
+		int num = rs.getInt("NumCandidat");
+		String nom = rs.getString("NomCandidat");
+		Boolean equipe = rs.getBoolean("Equipe");
+		if(equipe){
+			Equipe e = i.createEquipe(nom);
+			candidats.add(e);
+		}else {
+			Personne p = i.createPersonne(nom, null, null);
+			candidats.add(p);
+		}
+	 }
+	 return candidats;
+}
+ 
+ /*competition*/
+ public SortedSet<Competition> getCompetitions() throws SQLException {
+	 Inscriptions i;
+	 i = Inscriptions.getInscriptions();
 	 SortedSet<Competition> competitions = new TreeSet<Competition>();
-	 
-	 ResultSet rs = resultatRequete("SELECT * FROM Competition WHERE NomComp ='Tennis'");
+	 ResultSet rs = resultatRequete("call GET_COMP()");
 	 while(rs.next()){
 		int num = rs.getInt("NumComp");
 		String nom = rs.getString("NomComp");
 		LocalDate date =rs.getDate("DateCloture").toLocalDate();
 		Boolean enEquipe = rs.getBoolean("EnEquipe");
-		System.out.println("num"+num+"nom "+nom+" date: "+ date+""+enEquipe+"");
-		Competition competition = inscription.createCompetition(nom,
-				 date, 
-				 enEquipe); 
+		Competition competition = i.createCompetition(nom,date, enEquipe); 
 		 competitions.add(competition);
-		 
 	 }
-	 
 	 return competitions;
  }
+ 
+	 
+
  public void add(Competition competition){
    requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
