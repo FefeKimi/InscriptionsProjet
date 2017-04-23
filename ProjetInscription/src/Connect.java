@@ -29,10 +29,19 @@ import com.mysql.jdbc.CallableStatement;
 //CTRL + SHIFT + O pour générer les imports
 public class Connect {
 	
-	private Connection conn;
-   /*public static void main(String[]args){ 
+   private Connection conn;
+   public static void main(String[]args) throws SQLException{ 
+	   Inscriptions.SERIALIZE = true;
+	   Inscriptions i = Inscriptions.getInscriptions(); ;
+	   SortedSet<Competition> competitions = i.getCompetitions();
+	   LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
+	   Competition c = i.createCompetition("Tennis", dateCloture, false);
+	   competitions.add(c);
+	   for (Competition compet : competitions) {
+		   System.out.println(compet.getNom());
+	   }
     }
-    */
+    
     public Connect() {
     	try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -216,7 +225,7 @@ public class Connect {
  /*Candidat*/
 // public List<Candidat>
  public void setNameCandidat(String prenom,int id){
-   requete("call SET_NAME_CANDIDAT('"+prenom+"','"+id+"')");
+   requete("call SET_NAME_CANDIDAT('"+id+"','"+prenom+"')");
  }
  public void delCandidat(int id){
    requete("call DEL_CANDIDAT('"+id+"')");
@@ -228,13 +237,16 @@ public class Connect {
 	 SortedSet<Candidat> candidats = new TreeSet<Candidat>();
 	 ResultSet rs = resultatRequete("call GET_CANDIDATS()");
 	 while(rs.next()){
+		int id = rs.getInt("NumCandidat");
 		String nom = rs.getString("NomCandidat");
 		Boolean equipe = rs.getBoolean("Equipe");
 		if(equipe){
 			Equipe e = i.createEquipe(nom);
+			e.setIdCandidat(id);
 			candidats.add(e);
 		}else {
 			Personne p = i.createPersonne(nom, null, null);
+			p.setIdCandidat(id);
 			candidats.add(p);
 		}
 	 }
@@ -247,15 +259,20 @@ public class Connect {
 	 SortedSet<Competition> competitions = new TreeSet<Competition>();
 	 ResultSet rs = resultatRequete("call GET_COMP()");
 	 while(rs.next()){
+		int id = rs.getInt("NumComp");
 		String nom = rs.getString("NomComp");
 		LocalDate date =rs.getDate("DateCloture").toLocalDate();
 		Boolean enEquipe = rs.getBoolean("EnEquipe");
 		Competition competition = i.createCompetition(nom,date, enEquipe); 
+		competition.setIdcompetition(id);
 		competitions.add(competition);
 	 }
 	 return competitions;
  }
  
+ public void SetNomCompetition(int id,String nom){
+	 requete("call SET_NAME_COMPETITION('"+id+"','"+nom+"')");
+ }
 	 
  public Competition add(Competition competition) throws SQLException{
    int idComp=0;
@@ -273,17 +290,12 @@ public class Connect {
    requete("call SET_DATE_CLOTURE('"+id+"','"+newDate+"')");
  }
 
- /*
-public Boolean CompOuverte(int id){  
-	    
-	    Date today = Date.valueOf(LocalDate.now());
-		Date dateCloture = getDateComp(id);
-		
-		Boolean resultat = dateCloture.after(today);
-		return resultat;
+ public void addCandCompet(Personne p,int idComp) throws SQLException{
+	requete("call SET_DATE_CLOTURE('"+p.getIdCandidat()+"','"+idComp+"')");
+ }
+public void addCandCompet(Equipe e, int idComp) throws SQLException{
+	requete("call ADD_PARTICIPATION('"+e.getIdCandidat()+"','"+idComp+"')");
 }
-*/
- 
  public boolean enEquipeComp(int id){
 	   return Connect.requeteBoolean("call EN_EQUIPE_COMP('"+id+"')","EnEquipe");
  }
@@ -294,13 +306,28 @@ public Boolean CompOuverte(int id){
  public Personne add(Personne p) throws SQLException{
 	 int idCandidat=0;
 	 requete("call ADD_PERSONNE('"+p.getNom()+"','"+p.getPrenom()+"','"+p.getMail()+"')");
-	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM COMPETITION");
+	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM CANDIDAT");
 	 while(rs.next()){
 		 idCandidat = rs.getInt("NumCandidat");
-	   }
+	 }
 	   p.setIdCandidat(idCandidat);
 	   return p;
  }
+ 
+ public Set<Personne> getPersonnes() throws SQLException{
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 SortedSet<Personne> personnes = new TreeSet<Personne>();
+	 ResultSet rs = resultatRequete("call GET_PERSONNE()");
+	 while(rs.next()){
+		String nom = rs.getString("NomCandidat");
+		String prenom = rs.getString("Prenom");
+		String mail = rs.getString("Mail");
+		Personne p = i.createPersonne(nom, prenom, mail);		
+		personnes.add(p);
+	 }
+	 return personnes;
+ }
+ 
  public Set<Equipe> getEquipesFromPersonne(int idCandidat) throws SQLException{
 	 Inscriptions i = Inscriptions.getInscriptions();
 	 SortedSet<Equipe> equipes = new TreeSet<Equipe>();
@@ -321,10 +348,22 @@ public Boolean CompOuverte(int id){
  }
  
  /*Equipe*/
+ public Set<Equipe> getEquipes() throws SQLException{
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 SortedSet<Equipe> equipes = new TreeSet<Equipe>();
+	 ResultSet rs = resultatRequete("call GET_EQUIPE()");
+	 while(rs.next()){
+		String nom = rs.getString("NomCandidat");
+		Equipe e = i.createEquipe(nom);		
+		equipes.add(e);
+	 }
+	 return equipes;
+ }
+ 
  public Equipe add(Equipe equipe) throws SQLException{
 	 int idCandidat=0;
 	 requete("call ADD_EQUIPE('"+equipe.getNom()+"')");
-	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM COMPETITION");
+	 ResultSet rs = resultatRequete("SELECT MAX(NumCandidat) AS NumCandidat FROM CANDIDAT");
 	 while(rs.next()){
 		idCandidat = rs.getInt("NumCandidat");
 	 }

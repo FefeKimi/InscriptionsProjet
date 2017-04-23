@@ -3,6 +3,7 @@ package testUnit;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.SortedSet;
@@ -23,118 +24,106 @@ public class TestInscription extends TestCase {
 	SortedSet<Candidat> candidats;
 	SortedSet<Competition> compets;
 	Personne p;
+	LocalDate dateCloture;
 	
-	protected void setUp() throws Exception
+	/*protected void setUp() throws Exception
 	{
-		Inscriptions.SERIALIZE = true;
+		//Inscriptions.SERIALIZE = true;
 		i = Inscriptions.getInscriptions();
-		candidats = i.getCandidats();
-		compets = i.getCompetitions();
-		Personne p  = i.createPersonne("Dupuis", "Michel", "dm@gmail.com");
-	}
+		//candidats = i.getCandidats();
+		//compets = i.getCompetitions();
+	}*/
+	
 	@Test
-	public void testAddcompetition() {
+	public void testAddcompetition() throws SQLException {
+		i.openConnection();
 		LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
-		Competition c = i.createCompetition("TestCreate", dateCloture, false);
+		Competition c = i.createCompetition("Tennis", dateCloture, false);
 		assertNotNull(c);
-		assertEquals(c.getNom(), "TestCreate");
+		assertEquals(c.getNom(), "Tennis");
 		assertEquals(c.getDateCloture(),dateCloture);
 		assertEquals(c.estEnEquipe(), false);
 		/*vérifie l'insertion a bien été effectuée*/
 		i.closeConnection();
 		i.openConnection();
-		c = i.getCompetitions().first();
+		Inscriptions.SAVE_OBJECT = false;
+		c = i.getCompetitions().last();
 		assertNotNull(c);
-		assertEquals(c.getNom(), "TestCreate");
+		assertEquals(c.getNom(), "Tennis");
 		assertEquals(c.getDateCloture(),dateCloture);
 		assertEquals(c.estEnEquipe(), false);
-	}
+		i.closeConnection();
+	}  
 	
 	@Test
-	public void testAddPersonne() {
-		Personne p  = i.createPersonne("Dupuis", "Michel", "dm@gmail.com");
-		assertNotNull(p);
-		assertEquals(p.getNom(), "Dupuis");
-		//assertEquals(p.getPrenom(), "Michel");
-		/*assertEquals(p.getMail(), "dm@gmail.com");*/
-		/*vérifie l'insertion a bien été effectuée*/
-		/*i.closeConnection();
+	public void testAddPersonne() throws SQLException {
 		i.openConnection();
-		p = (Personne) i.getCandidats().first();
+		p  = i.createPersonne("Dupuis", "Michel", "dm@gmail.com");
 		assertNotNull(p);
 		assertEquals(p.getNom(), "Dupuis");
 		assertEquals(p.getPrenom(), "Michel");
-		assertEquals(p.getMail(), "dm@gmail.com");*/
-	}
-	
-	@Test
-	public void testAddEquipe() {
-		Equipe e = i.createEquipe("FRANCE");
-		assertNotNull(e);
-		assertEquals(e.getNom(), "FRANCE");
+		assertEquals(p.getMail(), "dm@gmail.com");
+		/*vérifie l'insertion a bien été effectuée*/
 		i.closeConnection();
 		i.openConnection();
-		e = (Equipe) i.getCandidats().first();
+		Inscriptions.SAVE_OBJECT = false;
+		p = (Personne) i.getCandidats().last();
+		assertNotNull(p);
+		assertEquals(p.getNom(), "Dupuis");
+		assertEquals(p.getPrenom(), "Michel");
+		assertEquals(p.getMail(), "dm@gmail.com");
+		i.closeConnection();
+	}
+	
+	
+	@Test
+	public void testAddEquipe() throws SQLException {
+		i.openConnection();
+		Equipe e = i.createEquipe("PSG");
 		assertNotNull(e);
+		assertEquals(e.getNom(), "PSG");
+		i.closeConnection();
+		i.openConnection();
+		Inscriptions.SAVE_OBJECT = false;
+		e = (Equipe) i.getCandidats().last();
 		assertNotNull(e);
-		assertEquals(e.getNom(), "FRANCE");
+		assertEquals(e.getNom(), "PSG");
+		i.closeConnection();
 	}
 	
 	@Test
-	public void testGetCandidats() {
-		assertNotNull(i);
-		assertEquals(i.getCandidats(),cand);
+	public void testRemoveCompet() throws SQLException {
+		i.openConnection();
+		boolean suppr = false;
+		LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
+		Competition c = i.createCompetition("Volley", dateCloture, false);
+		int idCompet = c.getIdcompetition();
+		i.remove(c);
+		Inscriptions.SAVE_OBJECT = false;
+		for(Competition compet : i.getCompetitions()){
+			if(compet.getIdcompetition()!= idCompet){
+				suppr = true;
+			}
+		}
+		assertEquals(suppr, true);
+		i.closeConnection();
 	}
 	
-	@Test
-	public void testGetCompetitions() {
-		assertNotNull(i);
-		assertEquals(i.getCompetitions(),compet);
-	}
-
-	@Test
-	public void testGetInscription() {
-		assertNotNull(i);
-		assertEquals(Inscriptions.getInscriptions(),i);
-	}
 	
 	@Test
-	public void testGetEquipes() {
-		SortedSet<Equipe> equipes = new TreeSet<>();
-		equipes = i.getEquipes();
-		assertNotNull(i);
-		assertEquals(i.getEquipes(),equipes);
-	}
-	
-	@Test
-	public void testRemoveCompet() {
-		candidats.add(p);
+	public void testRemoveCandidat() throws SQLException {
+		i.openConnection();
+		boolean suppr = false;
+		p  = i.createPersonne("Rose", "Lola", "rl@gmail.com");
+		int idCand = p.getIdCandidat();
 		i.remove(p);
+		Inscriptions.SAVE_OBJECT = false;
+		for(Candidat c : i.getCandidats()){
+			if(c.getIdCandidat()!= idCand){
+				suppr = true;
+			}
+		}
+		assertEquals(suppr, true);
 	}
 	
-	@Test
-	public void testRemoveCandidat() {
-		SortedSet<Equipe> equipes = new TreeSet<>();
-		equipes = i.getEquipes();
-		assertNotNull(i);
-		assertEquals(i.getEquipes(),equipes);
-	}
-	
-	
-	@Test
-	public void testRecharger() {
-		i.recharger();
-	}
-	
-	@Test
-	public void testReinit() {
-		i.reinitialiser();
-		assertNotEquals(Inscriptions.getInscriptions(),i);
-	}
-	
-	@Test
-	public void testSauvegarder() throws IOException {
-		i.sauvegarder();
-	}
-
 }

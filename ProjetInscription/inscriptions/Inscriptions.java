@@ -28,7 +28,9 @@ public class Inscriptions implements Serializable
 	private Connect connect;
 	private SortedSet<Competition> competitions = new TreeSet<Competition>();
 	private SortedSet<Candidat> candidats = new TreeSet<Candidat>();
-	public static boolean SERIALIZE = false; 
+	//Doit faire manip avec base
+	public static boolean SERIALIZE = true; 
+	public static boolean SAVE_OBJECT = true; 
 	
 	
 	private Inscriptions()
@@ -69,11 +71,15 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Personne> getPersonnes() throws SQLException
 	{
-		SortedSet<Personne> personnes = new TreeSet<Personne>();
-		for (Candidat c : getCandidats())
-			if (c instanceof Personne)
-				personnes.add((Personne)c);
-		return Collections.unmodifiableSortedSet(personnes);
+		if (!SERIALIZE){
+			SortedSet<Personne> personnes = new TreeSet<Personne>();
+			for (Candidat c : getCandidats())
+				if (c instanceof Personne)
+					personnes.add((Personne)c);
+			return Collections.unmodifiableSortedSet(personnes);
+		}else{
+			return (SortedSet<Personne>) connect.getPersonnes();
+		}
 	}
 
 	/**
@@ -84,11 +90,15 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Equipe> getEquipes() throws SQLException
 	{
-		SortedSet<Equipe> equipes = new TreeSet<>();
-		for (Candidat c : getCandidats())
-			if (c instanceof Equipe)
-				equipes.add((Equipe)c);
-		return Collections.unmodifiableSortedSet(equipes);
+		if (!SERIALIZE){
+			SortedSet<Equipe> equipes = new TreeSet<>();
+			for (Candidat c : getCandidats())
+				if (c instanceof Equipe)
+					equipes.add((Equipe)c);
+			return Collections.unmodifiableSortedSet(equipes);
+		}else{
+			return (SortedSet<Equipe>) connect.getEquipes();
+		}
 	}
 
 	/**
@@ -104,9 +114,9 @@ public class Inscriptions implements Serializable
 	public Competition createCompetition(String nom,LocalDate dateCloture, boolean enEquipe) throws SQLException
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
-		if (!SERIALIZE)
-			competitions.add(competition);
-		connect.add(competition);
+		if (SAVE_OBJECT)
+			connect.add(competition);
+		competitions.add(competition);
 		return competition;
 	}
 
@@ -124,9 +134,9 @@ public class Inscriptions implements Serializable
 	public Personne createPersonne(String nom, String prenom, String mail) throws SQLException
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
-		if (!SERIALIZE)
-			candidats.add(personne);
-		connect.add(personne);
+		if (SAVE_OBJECT)
+			connect.add(personne);
+		candidats.add(personne);
 		return personne;
 	}
 	
@@ -143,24 +153,21 @@ public class Inscriptions implements Serializable
 	public Equipe createEquipe(String nom) throws SQLException
 	{
 		Equipe equipe = new Equipe(this, nom);
-		if (!SERIALIZE)
-			//TODO ADD EQUIPE CONNECT
-			candidats.add(equipe);
-		connect.add(equipe);
+		if (SAVE_OBJECT)
+			connect.add(equipe);
+		candidats.add(equipe);
 		return equipe;
 	}
 	
-	void remove(Competition competition)
+	public void remove(Competition competition)
 	{
-		if (!SERIALIZE)
-			competitions.remove(competition);
+		competitions.remove(competition);
 		connect.delComp(competition.getIdcompetition());
 	}
 	
-	void remove(Candidat candidat)
+	public void remove(Candidat candidat)
 	{
-		if (!SERIALIZE)
-			candidats.remove(candidat);
+		candidats.remove(candidat);
 		connect.delCandidat(candidat.getIdCandidat());
 	}
 	
@@ -309,7 +316,4 @@ public class Inscriptions implements Serializable
 		connect.close();
 	}
 	
-	public static boolean serializable(){
-		return SERIALIZE;
-	}
 }

@@ -1,8 +1,10 @@
 package inscriptions;
 
 import src.Connect;
+
 import java.io.Serializable;
 import java.util.Collections;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,6 +24,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	private LocalDate dateCloture;
 	private boolean enEquipe = false;
 	private int idCompetition;
+	private Connect connect;
 	
 	Competition(Inscriptions inscriptions, String nom, LocalDate dateCloture, boolean enEquipe)
 	{
@@ -63,6 +66,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	public void setNom(String nom)
 	{
 		this.nom = nom ;
+		connect.SetNomCompetition(this.getIdcompetition(), nom);
 	}
 	
 	/**
@@ -131,14 +135,16 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * inscriptions sont closes.
 	 * @param personne
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public boolean add(Personne personne)
+	public boolean add(Personne personne) throws SQLException
 	{
 		// TODO vérifier que la date de clôture n'est pas passée
 		if (enEquipe || this.inscriptionsOuvertes()==true)
 			throw new RuntimeException();
 		personne.add(this);
+		connect.addCandCompet(personne, this.getIdcompetition());
 		return candidats.add(personne);
 	}
 
@@ -148,14 +154,16 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * les inscriptions sont closes.
 	 * @param personne
 	 * @return
+	 * @throws SQLException 
 	 */
 
-	public boolean add(Equipe equipe)
+	public boolean add(Equipe equipe) throws SQLException
 	{
 		// TODO vérifier que la date de clôture n'est pas passée
 		if (!enEquipe || this.inscriptionsOuvertes()==true)
 			throw new RuntimeException();
 		equipe.add(this);
+		connect.addCandCompet(equipe, this.getIdcompetition());
 		return candidats.add(equipe);
 	}
 

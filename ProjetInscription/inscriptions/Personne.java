@@ -17,8 +17,8 @@ public class Personne extends Candidat
 	private String prenom, mail;
 	private Set<Equipe> equipes;
 	private Connect c;
-	public boolean SERIALIZE = Inscriptions.serializable();
-	
+	public static boolean SERIALIZE = true; 
+
 	Personne(Inscriptions inscriptions, String nom, String prenom, String mail)
 	{
 		super(inscriptions, nom);
@@ -35,7 +35,6 @@ public class Personne extends Candidat
 	public String getPrenom()
 	{
 		return prenom;
-		//return c.getPrenomPersonne(this.getIdCandidat());
 	}
 
 	/**
@@ -45,9 +44,8 @@ public class Personne extends Candidat
 	
 	public void setPrenom(String prenom)
 	{
-		if (!SERIALIZE)
-			this.prenom=prenom;
-		//c.setPrenomPersonne(prenom,this.getIdCandidat());
+		this.prenom=prenom;
+		c.setPrenomPersonne(this.getIdCandidat(),prenom);
 	}
 
 	/**
@@ -67,9 +65,8 @@ public class Personne extends Candidat
 	
 	public void setMail(String mail)
 	{
-		if (!SERIALIZE)
-			c.setMailPersonne(this.getIdCandidat(),mail);
 		this.mail = mail;
+		c.setMailPersonne(this.getIdCandidat(),mail);
 	}
 
 	/**

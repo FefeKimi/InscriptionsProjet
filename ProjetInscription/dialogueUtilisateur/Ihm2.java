@@ -1,42 +1,26 @@
 package dialogueUtilisateur;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-
-import java.awt.BorderLayout;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextPane;
+import inscriptions.Competition;
+import inscriptions.Inscriptions;
 
 import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.SQLException;
+import java.util.SortedSet;
 
 import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.sql.Date;
-import java.util.Properties;
-
-import javax.swing.JLayeredPane;
-import javax.swing.JList;
-
-import net.miginfocom.swing.MigLayout;
-
 import javax.swing.JComboBox;
-import javax.swing.JTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
-import com.sun.org.apache.xerces.internal.util.DatatypeMessageFormatter;
-import javax.swing.JToolBar;
-import javax.swing.JEditorPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 public class Ihm2 {
 
@@ -47,6 +31,7 @@ public class Ihm2 {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
+	private JComboBox competitions;
 	/**
 	 * Launch the application.
 	 */
@@ -206,7 +191,31 @@ public class Ihm2 {
 		lblComptitions.setBounds(10, 11, 99, 14);
 		competition.add(lblComptitions);
 		
-		JComboBox competitions = new JComboBox();
+		Inscriptions i = Inscriptions.getInscriptions();
+
+		
+		i.openConnection();
+		Inscriptions.SAVE_OBJECT = false;
+		SortedSet<Competition> c = null;
+		try {
+			c = i.getCompetitions();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		i.closeConnection();
+		//Inscriptions.SERIALIZE = true;
+		
+		this.competitions = new JComboBox(c.toArray());
+		this.competitions.addItemListener(new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				System.out.println("change");
+				
+			}
+			
+		});
 		competitions.setBounds(10, 36, 76, 20);
 		competition.add(competitions);
 		
@@ -217,6 +226,12 @@ public class Ihm2 {
 		JButton btnSupprimerCompet = new JButton("Supprimer");
 		btnSupprimerCompet.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Competition c = (Competition)competitions.getSelectedItem();
+				Inscriptions i = Inscriptions.getInscriptions();
+				i.openConnection();
+				i.remove(c);
+				competitions.removeItem(c);
+				i.closeConnection();
 			}
 		});
 		btnSupprimerCompet.setBounds(235, 35, 89, 23);
@@ -236,9 +251,6 @@ public class Ihm2 {
 		dateClotlbl.setForeground(Color.DARK_GRAY);
 		dateClotlbl.setBounds(199, 151, 99, 14);
 		competition.add(dateClotlbl);
-		JDatePickerImpl datePicker_1 = new JDatePickerImpl(datePanel, null); 
-		datePicker_1.setBackground(Color.WHITE);
-		competition.add(datePicker_1);
 		
 	
 		
