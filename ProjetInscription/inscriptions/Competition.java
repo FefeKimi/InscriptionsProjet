@@ -171,19 +171,22 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * Désinscrit un candidat.
 	 * @param candidat
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public boolean remove(Candidat candidat)
+	public boolean remove(Candidat candidat) throws SQLException
 	{
 		candidat.remove(this);
+		connect.delCandCompet(candidat,this.getIdcompetition());
 		return candidats.remove(candidat);
 	}
 	
 	/**
 	 * Supprime la compétition de l'application.
+	 * @throws SQLException 
 	 */
 	
-	public void delete()
+	public void delete() throws SQLException
 	{
 		for (Candidat candidat : candidats)
 			remove(candidat);

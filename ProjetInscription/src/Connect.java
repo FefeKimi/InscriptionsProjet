@@ -290,12 +290,16 @@ public class Connect {
    requete("call SET_DATE_CLOTURE('"+id+"','"+newDate+"')");
  }
 
- public void addCandCompet(Personne p,int idComp) throws SQLException{
+public void addCandCompet(Personne p,int idComp) throws SQLException{
 	requete("call SET_DATE_CLOTURE('"+p.getIdCandidat()+"','"+idComp+"')");
- }
+}
 public void addCandCompet(Equipe e, int idComp) throws SQLException{
 	requete("call ADD_PARTICIPATION('"+e.getIdCandidat()+"','"+idComp+"')");
 }
+public void delCandCompet(Candidat c, int idComp) throws SQLException{
+	requete("call DEL_PARTICIPATION('"+c.getIdCandidat()+"','"+idComp+"')");
+}
+
  public boolean enEquipeComp(int id){
 	   return Connect.requeteBoolean("call EN_EQUIPE_COMP('"+id+"')","EnEquipe");
  }
