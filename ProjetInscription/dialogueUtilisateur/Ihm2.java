@@ -32,6 +32,8 @@ public class Ihm2 {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JComboBox competitions;
+	private JComboBox equipes;
+
 	/**
 	 * Launch the application.
 	 */
@@ -78,49 +80,49 @@ public class Ihm2 {
 		/*competition*/
 		
 		/*Equipes*/
-		JLayeredPane equipes = new JLayeredPane();
-		tabbedPane.addTab("Equipes", null, equipes, null);
+		JLayeredPane equipe = new JLayeredPane();
+		tabbedPane.addTab("Equipes", null, equipe, null);
 		
 		JLabel lblEquipes = new JLabel("Equipes");
 		lblEquipes.setBounds(10, 11, 46, 14);
-		equipes.add(lblEquipes);
+		equipe.add(lblEquipes);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(20, 36, 65, 20);
-		equipes.add(comboBox_1);
+		equipes= new JComboBox();
+		equipes.setBounds(20, 36, 65, 20);
+		equipe.add(equipes);
 		
 		JButton button = new JButton("Modifier");
 		button.setBounds(110, 35, 72, 23);
-		equipes.add(button);
+		equipe.add(button);
 		
 		JButton button_1 = new JButton("Supprimer");
 		button_1.setBounds(185, 35, 89, 23);
-		equipes.add(button_1);
+		equipe.add(button_1);
 		
 		JLabel label = new JLabel("Participe \u00E0 :");
 		label.setBounds(10, 88, 75, 14);
-		equipes.add(label);
+		equipe.add(label);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(10, 113, 205, 182);
-		equipes.add(panel_1);
+		equipe.add(panel_1);
 		
 		JLabel lblAjouterUnequipe = new JLabel("Ajouter une \u00E9quipe");
 		lblAjouterUnequipe.setBounds(232, 88, 123, 14);
-		equipes.add(lblAjouterUnequipe);
+		equipe.add(lblAjouterUnequipe);
 		
 		JLabel label_1 = new JLabel("Nom");
 		label_1.setBounds(232, 113, 31, 14);
-		equipes.add(label_1);
+		equipe.add(label_1);
 		
 		textField_4 = new JTextField();
 		textField_4.setColumns(10);
 		textField_4.setBounds(273, 110, 109, 20);
-		equipes.add(textField_4);
+		equipe.add(textField_4);
 		
 		JButton btnAjouter = new JButton("Ajouter");
 		btnAjouter.setBounds(258, 150, 89, 23);
-		equipes.add(btnAjouter);
+		equipe.add(btnAjouter);
 		
 		/*Personnes*/
 		JLayeredPane personne = new JLayeredPane();
@@ -180,7 +182,7 @@ public class Ihm2 {
 		textField_2.setBounds(277, 186, 109, 20);
 		personne.add(textField_2);
 		textField_2.setColumns(10);
-		
+		/*COMPETITION*/
 		JButton btnNewButton_2 = new JButton("Ajouter");
 		btnNewButton_2.setBounds(259, 240, 89, 23);
 		personne.add(btnNewButton_2);
@@ -192,7 +194,6 @@ public class Ihm2 {
 		competition.add(lblComptitions);
 		
 		Inscriptions i = Inscriptions.getInscriptions();
-
 		
 		i.openConnection();
 		Inscriptions.SAVE_OBJECT = false;
@@ -204,17 +205,15 @@ public class Ihm2 {
 			e1.printStackTrace();
 		}
 		i.closeConnection();
-		//Inscriptions.SERIALIZE = true;
 		
-		this.competitions = new JComboBox(c.toArray());
-		this.competitions.addItemListener(new ItemListener(){
-
+		
+		competitions = new JComboBox(c.toArray());
+		competitions.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				System.out.println("change");
-				
+					
 			}
-			
 		});
 		competitions.setBounds(10, 36, 76, 20);
 		competition.add(competitions);
@@ -237,6 +236,7 @@ public class Ihm2 {
 		btnSupprimerCompet.setBounds(235, 35, 89, 23);
 		competition.add(btnSupprimerCompet);
 		
+		/*FORMULAIRE COMPETITION*/
 		JLabel lblCrerUneComptition = new JLabel("Nouvelle comp\u00E9tition");
 		lblCrerUneComptition.setBackground(Color.LIGHT_GRAY);
 		lblCrerUneComptition.setBounds(199, 79, 166, 14);
@@ -251,9 +251,6 @@ public class Ihm2 {
 		dateClotlbl.setForeground(Color.DARK_GRAY);
 		dateClotlbl.setBounds(199, 151, 99, 14);
 		competition.add(dateClotlbl);
-		
-	
-		
 		
 		JPanel candidats = new JPanel();
 		candidats.setBounds(10, 102, 166, 144);
