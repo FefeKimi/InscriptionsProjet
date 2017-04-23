@@ -182,6 +182,7 @@ public class Ihm2 {
 		textField_2.setBounds(277, 186, 109, 20);
 		personne.add(textField_2);
 		textField_2.setColumns(10);
+		
 		/*COMPETITION*/
 		JButton btnNewButton_2 = new JButton("Ajouter");
 		btnNewButton_2.setBounds(259, 240, 89, 23);
