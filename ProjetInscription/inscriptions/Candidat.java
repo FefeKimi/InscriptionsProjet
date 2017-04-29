@@ -96,6 +96,6 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	@Override
 	public String toString()
 	{
-		return "\n" + getNom() + " -> inscrit à " + getCompetitions();
+		return getNom();
 	}
 }
