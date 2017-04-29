@@ -12,6 +12,7 @@ import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -64,11 +65,17 @@ public class CompetitionsOnglet extends JLayeredPane{
 						candidatsList.setListData(candidats.toArray());
 					} catch (SQLException e) {
 						e.printStackTrace();
-					
 					}
 				}
 			}
 		});
+	
+		
+		competitions.setBounds(10, 36, 76, 20);
+		this.add(competitions);
+		
+		candidatsList = new JList();
+		
 		Competition premierComp = (Competition)competitionsList[0];
 		try {
 			candidatsList.setListData(premierComp.getCandidats().toArray());
@@ -76,24 +83,21 @@ public class CompetitionsOnglet extends JLayeredPane{
 			e1.printStackTrace();
 		}
 		
-		competitions.setBounds(10, 36, 76, 20);
-		this.add(competitions);
-		
-		candidatsList = new JList();
-
 		/*Modifier Supprimer Candidat*/
-		JButton btnModifierCand= new JButton("Modifier");
-		btnModifierCand.addActionListener(new ActionListener() {
+		JButton btnSupprCand = new JButton("Supprimer");
+		btnSupprCand.setBounds(10, 257, 99, 23);
+		add(btnSupprCand);
+		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-
-			}
-		});
-		
-		JButton btnSupprimerCand= new JButton("Modifier");
-		btnSupprimerCand.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+				Inscriptions i = Inscriptions.getInscriptions();
+				ArrayList<Candidat> listCand = new ArrayList();
+				try {
+					listCand.addAll(i.getCandidats());
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				Candidat cand = listCand.get(candidatsList.getSelectedIndex());
+				System.out.println(cand);
 			}
 		});
 		
@@ -198,9 +202,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		JLabel lblNewLabel_6 = new JLabel("New label");
 		lblNewLabel_6.setBounds(209, 172, 46, 14);
 		this.add(lblNewLabel_6);
+		
+		
 	}
-	
-	
-	
-
 }
