@@ -26,11 +26,10 @@ public class Inscriptions implements Serializable
 	private static final String FILE_NAME = "Inscriptions.srz";
 	private static Inscriptions inscriptions;
 	private Connect connect;
-	private SortedSet<Competition> competitions = new TreeSet<Competition>();
-	private SortedSet<Candidat> candidats = new TreeSet<Candidat>();
+	private SortedSet<Competition> competitions = null;
+	private SortedSet<Candidat> candidats = null;
 	//Doit faire manip avec base
 	public static boolean SERIALIZE = true; 
-	public static boolean SAVE_OBJECT = true; 
 	
 	
 	private Inscriptions()
@@ -45,9 +44,14 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Competition> getCompetitions() throws SQLException
 	{
-		if (!SERIALIZE)
-			return Collections.unmodifiableSortedSet(competitions);
-		return connect.getCompetitions();
+		//if (!SERIALIZE)
+		if(competitions == null){
+			this.openConnection();
+			competitions = connect.getCompetitions();
+			this.closeConnection();
+		}
+		return Collections.unmodifiableSortedSet(competitions);
+		//return connect.getCompetitions();
 	}
 	
 	/**
@@ -58,9 +62,12 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Candidat> getCandidats() throws SQLException
 	{
-		if (!SERIALIZE)
-			return Collections.unmodifiableSortedSet(candidats);
-		return connect.getCandidats();
+		if (candidats == null){
+			this.openConnection();
+			candidats = connect.getCandidats();
+			this.closeConnection();
+		}
+		return Collections.unmodifiableSortedSet(candidats);
 	}
 
 	/**
@@ -71,15 +78,16 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Personne> getPersonnes() throws SQLException
 	{
-		if (!SERIALIZE){
+		/*if (candidats == null){*/
+			
 			SortedSet<Personne> personnes = new TreeSet<Personne>();
 			for (Candidat c : getCandidats())
 				if (c instanceof Personne)
 					personnes.add((Personne)c);
 			return Collections.unmodifiableSortedSet(personnes);
-		}else{
+		/*}else{
 			return (SortedSet<Personne>) connect.getPersonnes();
-		}
+		}*/
 	}
 
 	/**
@@ -90,15 +98,15 @@ public class Inscriptions implements Serializable
 	
 	public SortedSet<Equipe> getEquipes() throws SQLException
 	{
-		if (!SERIALIZE){
+		/*if (!SERIALIZE){*/
 			SortedSet<Equipe> equipes = new TreeSet<>();
 			for (Candidat c : getCandidats())
 				if (c instanceof Equipe)
 					equipes.add((Equipe)c);
 			return Collections.unmodifiableSortedSet(equipes);
-		}else{
+		/*}else{
 			return (SortedSet<Equipe>) connect.getEquipes();
-		}
+		}*/
 	}
 
 	/**
@@ -111,11 +119,17 @@ public class Inscriptions implements Serializable
 	 * @throws SQLException 
 	 */
 	
-	public Competition createCompetition(String nom,LocalDate dateCloture, boolean enEquipe) throws SQLException
+	public Competition createCompetition(int idCompetition, String nom,LocalDate dateCloture, boolean enEquipe) throws SQLException
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
-		if (SAVE_OBJECT)
+		competition.setIdcompetition(idCompetition);
+		if(competition.getIdcompetition() == 0){
 			connect.add(competition);
+			this.closeConnection();
+		}
+		if(competitions == null){
+			competitions = new TreeSet<Competition>();
+		}
 		competitions.add(competition);
 		return competition;
 	}
@@ -131,11 +145,17 @@ public class Inscriptions implements Serializable
 	 * @throws SQLException 
 	 */
 	
-	public Personne createPersonne(String nom, String prenom, String mail) throws SQLException
+	public Personne createPersonne(int idPersonne, String nom, String prenom, String mail) throws SQLException
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
-		if (SAVE_OBJECT)
+		personne.setIdCandidat(idPersonne);
+		if(personne.getIdCandidat() == 0){
 			connect.add(personne);
+			this.closeConnection();
+		}
+		if(candidats == null){
+			candidats = new TreeSet<Candidat>();
+		}
 		candidats.add(personne);
 		return personne;
 	}
@@ -150,11 +170,17 @@ public class Inscriptions implements Serializable
 	 * @throws SQLException 
 	 */
 	
-	public Equipe createEquipe(String nom) throws SQLException
+	public Equipe createEquipe(int id, String nom) throws SQLException
 	{
 		Equipe equipe = new Equipe(this, nom);
-		if (SAVE_OBJECT)
+		equipe.setIdCandidat(id);
+		if(equipe.getIdCandidat() == 0){
 			connect.add(equipe);
+			this.closeConnection();
+		}
+		if(candidats == null){
+			candidats = new TreeSet<Candidat>();
+		}
 		candidats.add(equipe);
 		return equipe;
 	}
@@ -162,13 +188,17 @@ public class Inscriptions implements Serializable
 	public void remove(Competition competition)
 	{
 		competitions.remove(competition);
+		this.openConnection();
 		connect.delComp(competition.getIdcompetition());
+		this.closeConnection();
 	}
 	
 	public void remove(Candidat candidat)
 	{
 		candidats.remove(candidat);
+		this.openConnection();
 		connect.delCandidat(candidat.getIdCandidat());
+		this.closeConnection();
 	}
 	
 	/**
@@ -181,11 +211,11 @@ public class Inscriptions implements Serializable
 	{
 		if (inscriptions == null)
 		{
-			if (SERIALIZE)
-				inscriptions = readObject();
-			if (inscriptions == null)
+			/*if (SERIALIZE)
+				inscriptions = readObject();*/
+			//if (inscriptions == null)
 				inscriptions = new Inscriptions();
-			if (!SERIALIZE)
+			//if (!SERIALIZE)
 			inscriptions.connect = new Connect();
 		}
 		return inscriptions;
@@ -278,31 +308,6 @@ public class Inscriptions implements Serializable
 			e.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static void main(String[] args) throws SQLException
-	{
-		LocalDate date = LocalDate.of(2017,Month.APRIL,10);
-		Inscriptions inscriptions = Inscriptions.getInscriptions();
-		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes", date, false);
-		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
-				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
-		flechettes.add(tony);
-		Equipe lesManouches = inscriptions.createEquipe("Les Manouches");
-		lesManouches.add(boris);
-		lesManouches.add(tony);
-		System.out.println(inscriptions);
-		lesManouches.delete();
-		System.out.println(inscriptions);
-		try
-		{
-			inscriptions.sauvegarder();
-		} 
-		catch (IOException e)
-		{
-			System.out.println("Sauvegarde impossible." + e);
-		}
-		
 	}
 	
 	

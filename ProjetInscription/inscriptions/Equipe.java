@@ -66,13 +66,13 @@ public class Equipe extends Candidat
 		return membres.remove(membre);
 	}
 
-	@Override
+	/*@Override
 	public void delete()
 	{
 		if (!SERIALIZE)
 			super.delete();
 		c.delCandidat(this.getIdCandidat());
-	}
+	}*/
 	
 	@Override
 	public String toString()

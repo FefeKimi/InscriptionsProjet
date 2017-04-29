@@ -25,14 +25,14 @@ public class Competition implements Comparable<Competition>, Serializable
 	private boolean enEquipe = false;
 	private int idCompetition;
 	private Connect connect;
-	
+	public static boolean SERIALIZE = true; 
+
 	Competition(Inscriptions inscriptions, String nom, LocalDate dateCloture, boolean enEquipe)
 	{
 		this.enEquipe = enEquipe;
 		this.inscriptions = inscriptions;
 		this.nom = nom;
 		this.dateCloture = dateCloture;
-		candidats = new TreeSet<Candidat>();
 	}
 	
 	/**
@@ -65,8 +65,10 @@ public class Competition implements Comparable<Competition>, Serializable
 	
 	public void setNom(String nom)
 	{
+		connect = new Connect();
 		this.nom = nom ;
 		connect.SetNomCompetition(this.getIdcompetition(), nom);
+		connect.close();
 	}
 	
 	/**
@@ -122,10 +124,17 @@ public class Competition implements Comparable<Competition>, Serializable
 	/**
 	 * Retourne l'ensemble des candidats inscrits.
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public Set<Candidat> getCandidats()
+	public Set<Candidat> getCandidats() throws SQLException
 	{
+		if (candidats == null){
+			connect = new Connect();
+			candidats = connect.getCandidatFromComp(
+					this.getIdcompetition());
+			connect.close();
+		}
 		return Collections.unmodifiableSet(candidats);
 	}
 	

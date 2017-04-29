@@ -91,14 +91,14 @@ public class Personne extends Candidat
 	{
 		return equipes.remove(equipe);
 	}
-	
+	/*
 	@Override
 	public void delete()
 	{
 		super.delete();
 		for (Equipe e : equipes)
 			e.remove(this);
-	}
+	}*/
 	
 	@Override
 	public String toString()

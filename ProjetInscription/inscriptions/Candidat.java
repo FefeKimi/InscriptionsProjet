@@ -80,12 +80,12 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	 * Supprime un candidat de l'application.
 	 */
 	
-	public void delete()
+	/*public void delete()
 	{
 		for (Competition c : competitions)
 			c.remove(this);
 		inscriptions.remove(this);
-	}
+	}*/
 	
 	@Override
 	public int compareTo(Candidat o)

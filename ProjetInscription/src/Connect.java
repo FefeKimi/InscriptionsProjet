@@ -30,22 +30,11 @@ import com.mysql.jdbc.CallableStatement;
 public class Connect {
 	
    private Connection conn;
-   public static void main(String[]args) throws SQLException{ 
-	   Inscriptions.SERIALIZE = true;
-	   Inscriptions i = Inscriptions.getInscriptions(); ;
-	   SortedSet<Competition> competitions = i.getCompetitions();
-	   LocalDate dateCloture = LocalDate.of(2017,Month.APRIL,10);
-	   Competition c = i.createCompetition("Tennis", dateCloture, false);
-	   competitions.add(c);
-	   for (Competition compet : competitions) {
-		   System.out.println(compet.getNom());
-	   }
-    }
     
     public Connect() {
     	try {
 			Class.forName("com.mysql.jdbc.Driver");
-        System.out.println("Driver O.K.");
+        //System.out.println("Driver O.K.");
 
         String url = "jdbc:mysql://localhost/inscription2017?useSSL=false";
         String login= "root";
@@ -77,7 +66,7 @@ public class Connect {
  
  Statement st =null;
  try {
-      System.out.println("Requête executée !"); 
+      //System.out.println("Requête executée !"); 
       st=conn.createStatement();
   
       st.executeUpdate(requete);
@@ -241,11 +230,11 @@ public class Connect {
 		String nom = rs.getString("NomCandidat");
 		Boolean equipe = rs.getBoolean("Equipe");
 		if(equipe){
-			Equipe e = i.createEquipe(nom);
+			Equipe e = i.createEquipe(id, nom);
 			e.setIdCandidat(id);
 			candidats.add(e);
 		}else {
-			Personne p = i.createPersonne(nom, null, null);
+			Personne p = i.createPersonne(id, nom, null, null);
 			p.setIdCandidat(id);
 			candidats.add(p);
 		}
@@ -263,11 +252,32 @@ public class Connect {
 		String nom = rs.getString("NomComp");
 		LocalDate date =rs.getDate("DateCloture").toLocalDate();
 		Boolean enEquipe = rs.getBoolean("EnEquipe");
-		Competition competition = i.createCompetition(nom,date, enEquipe); 
+		Competition competition = i.createCompetition(id, nom,date, enEquipe); 
 		competition.setIdcompetition(id);
 		competitions.add(competition);
 	 }
 	 return competitions;
+ }
+ 
+ public SortedSet<Candidat> getCandidatFromComp(int idComp) throws SQLException {
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 SortedSet<Candidat> candidats = new TreeSet<Candidat>();
+	 ResultSet rs = resultatRequete("call GET_CANDIDATS_FROM_COMP("+idComp+")");
+	 while(rs.next()){
+		int id = rs.getInt("NumCandidat");
+		String nom = rs.getString("NomCandidat");
+		Boolean equipe = rs.getBoolean("Equipe");
+		if(equipe){
+			Equipe e = i.createEquipe(id, nom);
+			e.setIdCandidat(id);
+			candidats.add(e);
+		}else {
+			Personne p = i.createPersonne(id, nom, null, null);
+			p.setIdCandidat(id);
+			candidats.add(p);
+		}
+	 }
+	 return candidats;
  }
  
  public void SetNomCompetition(int id,String nom){
@@ -318,27 +328,14 @@ public void delCandCompet(Candidat c, int idComp) throws SQLException{
 	   return p;
  }
  
- public Set<Personne> getPersonnes() throws SQLException{
-	 Inscriptions i = Inscriptions.getInscriptions();
-	 SortedSet<Personne> personnes = new TreeSet<Personne>();
-	 ResultSet rs = resultatRequete("call GET_PERSONNE()");
-	 while(rs.next()){
-		String nom = rs.getString("NomCandidat");
-		String prenom = rs.getString("Prenom");
-		String mail = rs.getString("Mail");
-		Personne p = i.createPersonne(nom, prenom, mail);		
-		personnes.add(p);
-	 }
-	 return personnes;
- }
- 
  public Set<Equipe> getEquipesFromPersonne(int idCandidat) throws SQLException{
 	 Inscriptions i = Inscriptions.getInscriptions();
 	 SortedSet<Equipe> equipes = new TreeSet<Equipe>();
 	 ResultSet rs = resultatRequete("call GET_EQUIPE_FROM_PERS('"+idCandidat+"')");
 	 while(rs.next()){
+		int id = rs.getInt("NumCandidat");
 		String nom = rs.getString("NomCandidat");
-		Equipe e = i.createEquipe(nom);
+		Equipe e = i.createEquipe(id, nom);
 		equipes.add(e);
 	 }
 	 return equipes;
@@ -357,8 +354,9 @@ public void delCandCompet(Candidat c, int idComp) throws SQLException{
 	 SortedSet<Equipe> equipes = new TreeSet<Equipe>();
 	 ResultSet rs = resultatRequete("call GET_EQUIPE()");
 	 while(rs.next()){
+		int idCandidat = rs.getInt("NumCandidat");
 		String nom = rs.getString("NomCandidat");
-		Equipe e = i.createEquipe(nom);		
+		Equipe e = i.createEquipe(idCandidat, nom);		
 		equipes.add(e);
 	 }
 	 return equipes;
@@ -379,10 +377,11 @@ public void delCandCompet(Candidat c, int idComp) throws SQLException{
 	 SortedSet<Personne> personnes = new TreeSet<Personne>();
 	 ResultSet rs = resultatRequete("call GET_MEMBRE_EQUIPE('"+nomEquipe+"')");
 	 while(rs.next()){
+		int id = rs.getInt("NumCandidat");
 		String nom = rs.getString("NomCandidat");
 		String prenom = rs.getString("Prenom");
 		String mail = rs.getString("Mail");
-		Personne p = i.createPersonne(nom,prenom,mail);
+		Personne p = i.createPersonne(id, nom,prenom,mail);
 		personnes.add(p);
 	 }
 	 return personnes;
