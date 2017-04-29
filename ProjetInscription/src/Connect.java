@@ -280,8 +280,8 @@ public class Connect {
 	 return candidats;
  }
  
- public void SetNomCompetition(int id,String nom){
-	 requete("call SET_NAME_COMPETITION('"+id+"','"+nom+"')");
+ public void SetCompetition(int id,String nom, LocalDate date_clot){
+	 requete("UPDATE COMPETITION SET NomComp = '"+nom+"',DateCloture = '"+date_clot+"'  WHERE NumComp = "+id+";");
  }
 	 
  public Competition add(Competition competition) throws SQLException{
@@ -296,10 +296,6 @@ public class Connect {
    return competition;
  }
  
- public void setDateComp(LocalDate newDate,int id){
-   requete("call SET_DATE_CLOTURE('"+id+"','"+newDate+"')");
- }
-
 public void addCandCompet(Personne p,int idComp) throws SQLException{
 	requete("call SET_DATE_CLOTURE('"+p.getIdCandidat()+"','"+idComp+"')");
 }

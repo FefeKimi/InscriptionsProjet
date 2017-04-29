@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.SortedSet;
@@ -61,9 +62,6 @@ public class CompetitionsOnglet extends JLayeredPane{
 					try {
 						candidats = (Set<Candidat>) c.getCandidats();
 						candidatsList.setListData(candidats.toArray());
-						/*for (Candidat cand : candidats) {
-							System.out.println(cand.getNom());
-						}*/
 					} catch (SQLException e) {
 						e.printStackTrace();
 					
@@ -71,42 +69,59 @@ public class CompetitionsOnglet extends JLayeredPane{
 				}
 			}
 		});
+		Competition premierComp = (Competition)competitionsList[0];
+		try {
+			candidatsList.setListData(premierComp.getCandidats().toArray());
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		
 		competitions.setBounds(10, 36, 76, 20);
 		this.add(competitions);
 		
 		candidatsList = new JList();
 
-		Competition premierComp = (Competition)competitionsList[0];
-		try {
-			candidatsList.setListData(premierComp.getCandidats().toArray());
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		/*Modifier Supprimer Candidat*/
+		JButton btnModifierCand= new JButton("Modifier");
+		btnModifierCand.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+
+			}
+		});
+		
+		JButton btnSupprimerCand= new JButton("Modifier");
+		btnSupprimerCand.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		
 		/*MODIFIER*/
 		JButton btnModifier= new JButton("Modifier");
 		btnModifier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Competition c = (Competition)competitions.getSelectedItem();
-				
 				JTextField nomField = new JTextField(c.getNom());
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
 				String formattedString = c.getDateCloture().format(formatter);
-			      JTextField dateField = new JTextField(formattedString);
-			      JPanel myPanel = new JPanel();
-			      myPanel.add(new JLabel("Nom:"));
-			      myPanel.add(nomField);
-			      myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-			      myPanel.add(new JLabel("Date de cloture:"));
-			      myPanel.add(dateField);
-
-			      int result = JOptionPane.showConfirmDialog(null, myPanel, 
-			               "Please Enter X and Y Values", JOptionPane.OK_CANCEL_OPTION);
+			    JTextField dateField = new JTextField(formattedString);
+			    
+			    JPanel myPanel = new JPanel();
+			    myPanel.add(new JLabel("Nom:"));
+			    myPanel.add(nomField);
+			    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+			    myPanel.add(new JLabel("Date de cloture:"));
+			    myPanel.add(dateField);
+			    
+			    int result = JOptionPane.showConfirmDialog(null, myPanel, "Modifier la compétition", JOptionPane.OK_CANCEL_OPTION);
 			      if (result == JOptionPane.OK_OPTION) {
-			         System.out.println("x value: " + nomField.getText());
-			         System.out.println("y value: " + dateField.getText());
+			        System.out.println("Nom: " + nomField.getText());
+			        System.out.println("Date de cloture: " + dateField.getText());
+					String dateClot = dateField.getText();
+					LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
+			        c.setCompetition(nomField.getText(),date_cloture);
 			      }
 
 			}

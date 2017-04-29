@@ -63,12 +63,19 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * Modifie le nom de la compÃ©tition.
 	 */
 	
-	public void setNom(String nom)
+	public void setCompetition(String nom,LocalDate dateClotureSet)
 	{
-		connect = new Connect();
-		this.nom = nom ;
-		connect.SetNomCompetition(this.getIdcompetition(), nom);
-		connect.close();
+		LocalDate dateBefore = dateCloture;
+		this.dateCloture = dateClotureSet;
+		if(dateCloture.isAfter(dateBefore)){
+			System.out.println("Erreur ! Il est impossible d'avancer la date de clôture.");
+			dateCloture = dateBefore;
+		}else {
+			connect = new Connect();
+			this.nom = nom ;
+			connect.SetCompetition(this.getIdcompetition(), nom, dateClotureSet);
+			connect.close();
+		}
 	}
 	
 	/**
@@ -110,16 +117,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * @param dateCloture
 	 */
 	
-	public void setDateCloture(LocalDate dateClotureSet)
-	{
-		// TODO vÃ©rifier que l'on avance pas la date.
-		LocalDate dateBefore = dateCloture;
-		this.dateCloture = dateClotureSet;
-		if(dateCloture.isAfter(dateBefore)){
-			System.out.println("Erreur ! Il est impossible d'avancer la date de clôture.");
-			dateCloture = dateBefore;
-		}
-	}
+	
 	
 	/**
 	 * Retourne l'ensemble des candidats inscrits.
