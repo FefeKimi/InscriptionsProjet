@@ -368,10 +368,10 @@ public void delCandCompet(Candidat c, int idComp) throws SQLException{
 	 equipe.setIdCandidat(idCandidat);
 	 return equipe;
  }
- public SortedSet<Personne> getMembreEquipe(String nomEquipe) throws SQLException{
+ public SortedSet<Personne> getMembreEquipe(int idEquipe) throws SQLException{
 	 Inscriptions i = Inscriptions.getInscriptions();
 	 SortedSet<Personne> personnes = new TreeSet<Personne>();
-	 ResultSet rs = resultatRequete("call GET_MEMBRE_EQUIPE('"+nomEquipe+"')");
+	 ResultSet rs = resultatRequete("call GET_MEMBRE_EQUIPE('"+idEquipe+"')");
 	 while(rs.next()){
 		int id = rs.getInt("NumCandidat");
 		String nom = rs.getString("NomCandidat");

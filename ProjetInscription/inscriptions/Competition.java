@@ -25,7 +25,6 @@ public class Competition implements Comparable<Competition>, Serializable
 	private boolean enEquipe = false;
 	private int idCompetition;
 	private Connect connect;
-	public static boolean SERIALIZE = true; 
 
 	Competition(Inscriptions inscriptions, String nom, LocalDate dateCloture, boolean enEquipe)
 	{

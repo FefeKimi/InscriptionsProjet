@@ -18,7 +18,7 @@ public class Equipe extends Candidat
 	private static final long serialVersionUID = 4147819927233466035L;
 	private SortedSet<Personne> membres = new TreeSet<>();
 	public static boolean SERIALIZE = false;
-	private Connect c;
+	private Connect connect;
 
 	Equipe(Inscriptions inscriptions, String nom)
 	{
@@ -32,9 +32,13 @@ public class Equipe extends Candidat
 	
 	public SortedSet<Personne> getMembres() throws SQLException
 	{
-		if (!SERIALIZE)
-			return Collections.unmodifiableSortedSet(membres);
-		return c.getMembreEquipe(this.getNom());
+		if (membres == null){
+			connect = new Connect();
+			membres = connect.getMembreEquipe(
+					this.getIdCandidat());
+			connect.close();
+		}
+		return Collections.unmodifiableSortedSet(membres);
 	}
 	
 	/**
@@ -50,7 +54,7 @@ public class Equipe extends Candidat
 			membre.add(this);
 			return membres.add(membre);
 		}else {
-			return c.addMembreEquipe(this.getIdCandidat(),membre.getIdCandidat());
+			return connect.addMembreEquipe(this.getIdCandidat(),membre.getIdCandidat());
 		}
 	}
 

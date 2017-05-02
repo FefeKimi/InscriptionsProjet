@@ -30,8 +30,9 @@ import javax.swing.JTextField;
 public class CompetitionsOnglet extends JLayeredPane{
 	
 	private JComboBox competitions;
-	private JTextField textField_3;
+	private JTextField nomCompetition;
 	private JList candidatsList;
+	private JTextField date_cloture;
 
 
 	public CompetitionsOnglet() {
@@ -52,6 +53,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		}
 		i.closeConnection();
 		
+		/*liste déroulante des compétitions*/
 		Object[] competitionsList = c.toArray();
 		competitions = new JComboBox(competitionsList);
 		competitions.addItemListener(new ItemListener() {
@@ -75,6 +77,8 @@ public class CompetitionsOnglet extends JLayeredPane{
 		this.add(competitions);
 		
 		candidatsList = new JList();
+		candidatsList.setBounds(10, 102, 166, 144);
+		this.add(candidatsList);
 		
 		Competition premierComp = (Competition)competitionsList[0];
 		try {
@@ -90,9 +94,9 @@ public class CompetitionsOnglet extends JLayeredPane{
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Inscriptions i = Inscriptions.getInscriptions();
-				ArrayList<Candidat> listCand = new ArrayList();
+				ArrayList<Integer> listCand = new ArrayList();
 				try {
-					listCand.addAll(i.getCandidats());
+				listCand.addAll(i.getCandidats().idCandidat());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -101,7 +105,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 			}
 		});
 		
-		/*MODIFIER*/
+		/*MODIFIER UNE COMPETITION*/
 		JButton btnModifier= new JButton("Modifier");
 		btnModifier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -134,7 +138,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		this.add(btnModifier);
 		btnModifier.setSize(100,20);
 		
-		/*SUPPRIMER*/
+		/*SUPPRIMER UNE COMPETITION*/
 		JButton btnSupprimer = new JButton("Supprimer");
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -150,7 +154,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		btnSupprimer.setSize(100,20);
 		this.add(btnSupprimer);
 		
-		/*FORMULAIRE COMPETITION*/
+		/*FORMULAIRE DE CREATION D'UNE COMPETITION*/
 		JLabel lblCrerUneComptition = new JLabel("Nouvelle comp\u00E9tition");
 		lblCrerUneComptition.setBackground(Color.LIGHT_GRAY);
 		lblCrerUneComptition.setBounds(199, 79, 166, 14);
@@ -158,32 +162,31 @@ public class CompetitionsOnglet extends JLayeredPane{
 		
 		JLabel nomCompetlbl = new JLabel("Nom ");
 		nomCompetlbl.setForeground(Color.DARK_GRAY);
-		nomCompetlbl.setBounds(199, 107, 24, 14);
+		nomCompetlbl.setBounds(231, 107, 38, 14);
 		this.add(nomCompetlbl);
 		
 		JLabel dateClotlbl = new JLabel("Date de cl\u00F4ture");
 		dateClotlbl.setForeground(Color.DARK_GRAY);
-		dateClotlbl.setBounds(199, 151, 99, 14);
+		dateClotlbl.setBounds(186, 151, 99, 14);
 		this.add(dateClotlbl);
 		
-		candidatsList.setBounds(10, 102, 166, 144);
-		this.add(candidatsList);
+		
 		
 		JLabel enEquipelbl = new JLabel("En \u00E9quipe ?");
 		enEquipelbl.setForeground(Color.DARK_GRAY);
-		enEquipelbl.setBounds(199, 253, 64, 14);
+		enEquipelbl.setBounds(186, 193, 77, 14);
 		this.add(enEquipelbl);
 		
 		JRadioButton rdbtnOui = new JRadioButton("Oui");
 		rdbtnOui.setBackground(Color.WHITE);
 		rdbtnOui.setForeground(Color.BLACK);
-		rdbtnOui.setBounds(269, 249, 41, 23);
+		rdbtnOui.setBounds(277, 189, 54, 23);
 		this.add(rdbtnOui);
 		
 		JRadioButton rdbtnNon = new JRadioButton("Non");
 		rdbtnNon.setBackground(Color.WHITE);
 		rdbtnNon.setForeground(Color.BLACK);
-		rdbtnNon.setBounds(312, 249, 45, 23);
+		rdbtnNon.setBounds(333, 189, 57, 23);
 		this.add(rdbtnNon);
 		
 		JLabel lblNewLabel_3 = new JLabel("Candidats :");
@@ -191,17 +194,18 @@ public class CompetitionsOnglet extends JLayeredPane{
 		this.add(lblNewLabel_3);
 		
 		JButton btnNewButton_3 = new JButton("Ajouter");
-		btnNewButton_3.setBounds(199, 278, 89, 23);
+		btnNewButton_3.setBounds(287, 223, 89, 23);
 		this.add(btnNewButton_3);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(235, 104, 86, 20);
-		this.add(textField_3);
-		textField_3.setColumns(10);
+		nomCompetition = new JTextField();
+		nomCompetition.setBounds(279, 104, 111, 20);
+		this.add(nomCompetition);
+		nomCompetition.setColumns(10);
 		
-		JLabel lblNewLabel_6 = new JLabel("New label");
-		lblNewLabel_6.setBounds(209, 172, 46, 14);
-		this.add(lblNewLabel_6);
+		date_cloture = new JTextField();
+		date_cloture.setBounds(279, 148, 111, 20);
+		add(date_cloture);
+		date_cloture.setColumns(10);
 		
 		
 	}
