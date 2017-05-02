@@ -94,14 +94,24 @@ public class CompetitionsOnglet extends JLayeredPane{
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Inscriptions i = Inscriptions.getInscriptions();
-				ArrayList<Integer> listCand = new ArrayList();
+				ArrayList<Candidat> listCand = new ArrayList();
 				try {
-				listCand.addAll(i.getCandidats().idCandidat());
+					for (Candidat cand : i.getCandidats()){
+						listCand.add(cand);
+					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				Candidat cand = listCand.get(candidatsList.getSelectedIndex());
-				System.out.println(cand);
+				Competition c = (Competition) competitions.getSelectedItem();
+				int index = candidatsList.getSelectedIndex();
+				Candidat candidatselect = listCand.get(index);
+				candidatsList.remove(index);
+				try {
+					c.remove(candidatselect);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
