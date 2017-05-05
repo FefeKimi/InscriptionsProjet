@@ -1,6 +1,7 @@
 package inscriptions;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
@@ -59,10 +60,16 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	/**
 	 * Retourne toutes les compétitions auxquelles ce candidat est inscrit.s
 	 * @return
+	 * @throws SQLException 
 	 */
 
-	public Set<Competition> getCompetitions()
+	public Set<Competition> getCompetitions() throws SQLException
 	{
+		if(competitions == null){
+			c = new Connect();
+			competitions = c.getCompFromCand(this.getIdCandidat());
+			c.close();
+		}
 		return Collections.unmodifiableSet(competitions);
 	}
 	

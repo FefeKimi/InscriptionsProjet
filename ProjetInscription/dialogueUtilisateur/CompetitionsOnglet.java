@@ -2,7 +2,9 @@ package dialogueUtilisateur;
 
 import inscriptions.Candidat;
 import inscriptions.Competition;
+import inscriptions.Equipe;
 import inscriptions.Inscriptions;
+import inscriptions.Personne;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -77,7 +79,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		this.add(competitions);
 		
 		candidatsList = new JList();
-		candidatsList.setBounds(10, 127, 166, 144);
+		candidatsList.setBounds(10, 137, 166, 144);
 		this.add(candidatsList);
 		
 		Competition premierComp = (Competition)competitionsList[0];
@@ -86,43 +88,100 @@ public class CompetitionsOnglet extends JLayeredPane{
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		
 		/*Inscrire un candidat*/
 		JButton inscrireCand = new JButton("Inscrire un candidat");
 		inscrireCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Competition c = (Competition)competitions.getSelectedItem();
-				boolean enEquipe = c.estEnEquipe();
-				System.out.println(enEquipe);
-				/*JTextField nomField = new JTextField(c.getNom());
-				
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
-				String formattedString = c.getDateCloture().format(formatter);
-			    JTextField dateField = new JTextField(formattedString);
-			    
-			    JPanel myPanel = new JPanel();
-			    myPanel.add(new JLabel("Nom:"));
-			    myPanel.add(nomField);
-			    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-			    myPanel.add(new JLabel("Date de cloture:"));
-			    myPanel.add(dateField);
-			    
-			    int result = JOptionPane.showConfirmDialog(null, myPanel, "Modifier la compétition", JOptionPane.OK_CANCEL_OPTION);
-			      if (result == JOptionPane.OK_OPTION) {
-			        System.out.println("Nom: " + nomField.getText());
-			        System.out.println("Date de cloture: " + dateField.getText());
-					String dateClot = dateField.getText();
-					LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
-			        c.setCompetition(nomField.getText(),date_cloture);
-			      }
-				*/
+				try {
+					Set<Candidat> candidatFromComp = c.getCandidats();
+					int i=0;
+					for (Candidat cand : candidatFromComp){
+						i++;
+					}
+					/*Vérifie si les inscriptions à la compétition sont complètes*/
+					if(i==2){
+						JPanel myPanel = new JPanel();
+						boxErreur("Vous ne pouvez plus ajouter de candidat.");
+					}else{
+						boolean enEquipe = c.estEnEquipe();		
+						/*Si la compétition est en équipe ou non*/
+						if(enEquipe==true){
+							JList equipesList = new JList();
+							Inscriptions ins = Inscriptions.getInscriptions();
+							Set<Equipe> equipes;
+							try {
+								equipes = ins.getEquipes();
+								equipesList.setListData(equipes.toArray());
+								JPanel myPanel = new JPanel();
+								myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+								myPanel.add(equipesList);
+								int result = JOptionPane.showConfirmDialog(null, myPanel, "Inscrire un candidat", JOptionPane.OK_CANCEL_OPTION);
+								
+								if (result == JOptionPane.OK_OPTION) {   
+									ArrayList<Equipe> listEq= new ArrayList();
+									int index = equipesList.getSelectedIndex();
+									Equipe equipeselect = listEq.get(index);
+									Set<Competition> competfromeq = equipeselect.getCompetitions();
+									for(Competition compet : competfromeq) {
+										/*vérifie si le candidat n'est pas déjà inscrit à cette compétition*/
+										if(compet == c){
+											if(compet.getDateCloture().isAfter(LocalDate.now())){
+												boxErreur("Le candidat sélectionné est déjà inscrit à la compétition.");
+											}
+										}
+									}
+								}
+								
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}else{
+							JList personneList = new JList();
+							Inscriptions ins = Inscriptions.getInscriptions();
+							Set<Personne> personnes;
+							try {
+								personnes = ins.getPersonnes();
+								personneList.setListData(personnes.toArray());
+								JPanel myPanel = new JPanel();
+								myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+								myPanel.add(personneList);
+								int result = JOptionPane.showConfirmDialog(null, myPanel, "Inscrire un candidat", JOptionPane.OK_CANCEL_OPTION);
+					
+								if (result == JOptionPane.OK_OPTION) {   
+									ArrayList<Personne> listPers= new ArrayList();
+									int index = personneList.getSelectedIndex();
+									Personne personneselect = listPers.get(index);
+									Set<Competition> competfrompers = personneselect.getCompetitions();
+									
+									for(Competition compet : competfrompers) {
+										System.out.println(compet.getNom());
+										/*vérifie si le candidat n'est pas déjà inscrit à cette compétition*/
+											/*if(compet.getDateCloture().isAfter(LocalDate.now())){
+												boxErreur("Le candidat sélectionné est déjà inscrit à la compétition.");
+											}*/
+									}
+								}
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
+					}
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+			
 			}
 		});
-		inscrireCand.setBounds(10, 93, 136, 23);
+		inscrireCand.setBounds(10, 103, 166, 23);
 		add(inscrireCand);
 		
-		/*Modifier Supprimer Candidat*/
-		JButton btnSupprCand = new JButton("Supprimer");
-		btnSupprCand.setBounds(10, 282, 99, 23);
+		/*Bannir Candidat*/
+		JButton btnSupprCand = new JButton("Bannir");
+		btnSupprCand.setBounds(10, 292, 99, 23);
 		add(btnSupprCand);
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -256,4 +315,12 @@ public class CompetitionsOnglet extends JLayeredPane{
 		
 		
 	}
+	public void boxErreur(String message){
+		JPanel myPanel = new JPanel();
+		myPanel.add(Box.createHorizontalStrut(1)); // a spacer
+		JLabel noadd = new JLabel(message);
+	    myPanel.add(noadd);
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Erreur", JOptionPane.OK_CANCEL_OPTION);
+	}
+	
 }

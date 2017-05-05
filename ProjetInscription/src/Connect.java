@@ -241,6 +241,21 @@ public class Connect {
 	 }
 	 return candidats;
 }
+ public SortedSet<Competition> getCompFromCand(int idCandidat) throws SQLException {
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 SortedSet<Competition> competitions = new TreeSet<Competition>();
+	 ResultSet rs = resultatRequete("call GET_COMP_CANDIDAT(("+idCandidat+")");
+	 while(rs.next()){
+		 int id = rs.getInt("NumComp");
+			String nom = rs.getString("NomComp");
+			LocalDate date =rs.getDate("DateCloture").toLocalDate();
+			Boolean enEquipe = rs.getBoolean("EnEquipe");
+			Competition competition = i.createCompetition(id, nom,date, enEquipe); 
+			competition.setIdcompetition(id);
+			competitions.add(competition);
+	 }
+	 return competitions;
+ }
  
  /*competition*/
  public SortedSet<Competition> getCompetitions() throws SQLException {
@@ -299,6 +314,9 @@ public class Connect {
 
 public void addCandCompet(Equipe e, int idComp) throws SQLException{
 	requete("call ADD_PARTICIPATION('"+e.getIdCandidat()+"','"+idComp+"')");
+}
+public void addCandCompet(Personne p, int idComp) throws SQLException{
+	requete("call ADD_PARTICIPATION('"+p.getIdCandidat()+"','"+idComp+"')");
 }
 public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	requete("DELETE FROM PARTICIPER  WHERE NumCandidat = "+idcandidat+" AND NumComp = "+idComp+" ");
