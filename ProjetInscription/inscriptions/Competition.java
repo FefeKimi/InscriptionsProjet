@@ -183,7 +183,9 @@ public class Competition implements Comparable<Competition>, Serializable
 	public boolean remove(Candidat candidat) throws SQLException
 	{
 		candidat.remove(this);
-		connect.delCandCompet(candidat,this.getIdcompetition());
+		connect = new Connect();
+		connect.delCandCompet(candidat.getIdCandidat(),this.getIdcompetition());
+		connect.close();
 		return candidats.remove(candidat);
 	}
 	

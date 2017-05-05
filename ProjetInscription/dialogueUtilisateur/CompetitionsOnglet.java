@@ -77,7 +77,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		this.add(competitions);
 		
 		candidatsList = new JList();
-		candidatsList.setBounds(10, 102, 166, 144);
+		candidatsList.setBounds(10, 127, 166, 144);
 		this.add(candidatsList);
 		
 		Competition premierComp = (Competition)competitionsList[0];
@@ -86,10 +86,43 @@ public class CompetitionsOnglet extends JLayeredPane{
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		/*Inscrire un candidat*/
+		JButton inscrireCand = new JButton("Inscrire un candidat");
+		inscrireCand.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Competition c = (Competition)competitions.getSelectedItem();
+				boolean enEquipe = c.estEnEquipe();
+				System.out.println(enEquipe);
+				/*JTextField nomField = new JTextField(c.getNom());
+				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+				String formattedString = c.getDateCloture().format(formatter);
+			    JTextField dateField = new JTextField(formattedString);
+			    
+			    JPanel myPanel = new JPanel();
+			    myPanel.add(new JLabel("Nom:"));
+			    myPanel.add(nomField);
+			    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+			    myPanel.add(new JLabel("Date de cloture:"));
+			    myPanel.add(dateField);
+			    
+			    int result = JOptionPane.showConfirmDialog(null, myPanel, "Modifier la compétition", JOptionPane.OK_CANCEL_OPTION);
+			      if (result == JOptionPane.OK_OPTION) {
+			        System.out.println("Nom: " + nomField.getText());
+			        System.out.println("Date de cloture: " + dateField.getText());
+					String dateClot = dateField.getText();
+					LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
+			        c.setCompetition(nomField.getText(),date_cloture);
+			      }
+				*/
+			}
+		});
+		inscrireCand.setBounds(10, 93, 136, 23);
+		add(inscrireCand);
 		
 		/*Modifier Supprimer Candidat*/
 		JButton btnSupprCand = new JButton("Supprimer");
-		btnSupprCand.setBounds(10, 257, 99, 23);
+		btnSupprCand.setBounds(10, 282, 99, 23);
 		add(btnSupprCand);
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -101,15 +134,17 @@ public class CompetitionsOnglet extends JLayeredPane{
 					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
-				}
-				Competition c = (Competition) competitions.getSelectedItem();
-				int index = candidatsList.getSelectedIndex();
-				Candidat candidatselect = listCand.get(index);
-				candidatsList.remove(index);
+				}				
 				try {
+					Competition c = (Competition) competitions.getSelectedItem();
+					int index = candidatsList.getSelectedIndex();
+					Candidat candidatselect = listCand.get(index);
+					// TODO Candidat ne veut pas se drop tout de suite de la liste
+					if (index != -1) {
+						candidatsList.remove(index);
+					}
 					c.remove(candidatselect);
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -216,6 +251,8 @@ public class CompetitionsOnglet extends JLayeredPane{
 		date_cloture.setBounds(279, 148, 111, 20);
 		add(date_cloture);
 		date_cloture.setColumns(10);
+		
+		
 		
 		
 	}

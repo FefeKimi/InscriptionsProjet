@@ -296,14 +296,12 @@ public class Connect {
    return competition;
  }
  
-public void addCandCompet(Personne p,int idComp) throws SQLException{
-	requete("call SET_DATE_CLOTURE('"+p.getIdCandidat()+"','"+idComp+"')");
-}
+
 public void addCandCompet(Equipe e, int idComp) throws SQLException{
 	requete("call ADD_PARTICIPATION('"+e.getIdCandidat()+"','"+idComp+"')");
 }
-public void delCandCompet(Candidat c, int idComp) throws SQLException{
-	requete("call DEL_PARTICIPATION('"+c.getIdCandidat()+"','"+idComp+"')");
+public void delCandCompet(int idcandidat, int idComp) throws SQLException{
+	requete("DELETE FROM PARTICIPER  WHERE NumCandidat = "+idcandidat+" AND NumComp = "+idComp+" ");
 }
 
  public boolean enEquipeComp(int id){
