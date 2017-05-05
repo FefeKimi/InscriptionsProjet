@@ -152,16 +152,23 @@ public class CompetitionsOnglet extends JLayeredPane{
 					
 								if (result == JOptionPane.OK_OPTION) {   
 									ArrayList<Personne> listPers= new ArrayList();
+									try {
+										for (Personne pers : ins.getPersonnes()){
+											listPers.add(pers);
+										}
+									} catch (SQLException e1) {
+										e1.printStackTrace();
+									}				
 									int index = personneList.getSelectedIndex();
 									Personne personneselect = listPers.get(index);
 									Set<Competition> competfrompers = personneselect.getCompetitions();
-									
 									for(Competition compet : competfrompers) {
-										System.out.println(compet.getNom());
+										if(compet==c){
 										/*vérifie si le candidat n'est pas déjà inscrit à cette compétition*/
-											/*if(compet.getDateCloture().isAfter(LocalDate.now())){
+											if(compet.getDateCloture().isAfter(LocalDate.now())){
 												boxErreur("Le candidat sélectionné est déjà inscrit à la compétition.");
-											}*/
+											}
+										}
 									}
 								}
 							} catch (SQLException e1) {
