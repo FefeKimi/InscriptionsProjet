@@ -94,101 +94,68 @@ public class CompetitionsOnglet extends JLayeredPane{
 		inscrireCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Competition c = (Competition)competitions.getSelectedItem();
-				try {
-					Set<Candidat> candidatFromComp = c.getCandidats();
-					int i=0;
-					for (Candidat cand : candidatFromComp){
-						i++;
-					}
-					/*Vérifie si les inscriptions à la compétition sont complètes*/
-					if(i==2){
-						JPanel myPanel = new JPanel();
-						boxErreur("Vous ne pouvez plus ajouter de candidat.");
-					}else{
-						boolean enEquipe = c.estEnEquipe();		
-						/*Si la compétition est en équipe ou non*/
-						if(enEquipe==true){
-							JList equipesList = new JList();
-							Inscriptions ins = Inscriptions.getInscriptions();
-							Set<Equipe> equipes;
-							try {
-								equipes = ins.getEquipes();
-								equipesList.setListData(equipes.toArray());
-								JPanel myPanel = new JPanel();
-								myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-								myPanel.add(equipesList);
-								int result = JOptionPane.showConfirmDialog(null, myPanel, "Inscrire un candidat", JOptionPane.OK_CANCEL_OPTION);
-								
-								if (result == JOptionPane.OK_OPTION) {   
-									ArrayList<Equipe> listEq= new ArrayList();
-									int index = equipesList.getSelectedIndex();
-									Equipe equipeselect = listEq.get(index);
-									Set<Competition> competfromeq = equipeselect.getCompetitions();
-									for(Competition compet : competfromeq) {
-										/*vérifie si le candidat n'est pas déjà inscrit à cette compétition*/
-										if(compet == c){
-											if(compet.getDateCloture().isAfter(LocalDate.now())){
-												boxErreur("Le candidat sélectionné est déjà inscrit à la compétition.");
-											}
-										}
-									}
-								}
-								
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						}else{
-							JList personneList = new JList();
-							Inscriptions ins = Inscriptions.getInscriptions();
-							Set<Personne> personnes;
-							try {
-								personnes = ins.getPersonnes();
-								personneList.setListData(personnes.toArray());
-								JPanel myPanel = new JPanel();
-								myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-								myPanel.add(personneList);
-								int result = JOptionPane.showConfirmDialog(null, myPanel, "Inscrire un candidat", JOptionPane.OK_CANCEL_OPTION);
-					
-								if (result == JOptionPane.OK_OPTION) {   
-									ArrayList<Personne> listPers= new ArrayList();
-									try {
-										for (Personne pers : ins.getPersonnes()){
-											listPers.add(pers);
-										}
-									} catch (SQLException e1) {
-										e1.printStackTrace();
-									}				
-									int index = personneList.getSelectedIndex();
-									Personne personneselect = listPers.get(index);
-									Set<Competition> competfrompers = personneselect.getCompetitions();
-									for(Competition compet : competfrompers) {
-										if(compet==c){
-										/*vérifie si le candidat n'est pas déjà inscrit à cette compétition*/
-											if(compet.getDateCloture().isAfter(LocalDate.now())){
-												boxErreur("Le candidat sélectionné est déjà inscrit à la compétition.");
-											}
-										}
-									}
-								}
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+					Set<Candidat> candidatFromComp;
+					try {
+						candidatFromComp = c.getCandidats();
+						int i=0;
+						for (Candidat cand : candidatFromComp){
+							i++;
 						}
+						/*Vérifie si les inscriptions à la compétition sont complètes*/
+						if(i==2){
+							JPanel myPanel = new JPanel();
+							boxErreur("Vous ne pouvez plus ajouter de candidat.");
+						}else{	
+							Set<Candidat> candiatsNonInscript;
+							try {
+								candiatsNonInscript = c.getCandidatsNotSign();
+								if(candiatsNonInscript==null) {
+									boxErreur("Aucun candidat.");
+								}else {
+									JList candidatsNonInscritList = new JList();
+									candidatsNonInscritList.setListData(candiatsNonInscript.toArray());
+									JPanel myPanel = new JPanel();
+									myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+									myPanel.add(candidatsNonInscritList);
+									int result = JOptionPane.showConfirmDialog(null, myPanel, "Inscrire un candidat", JOptionPane.OK_CANCEL_OPTION);
+									if (result == JOptionPane.OK_OPTION) {
+										Inscriptions ins = Inscriptions.getInscriptions();
+										/*Inscription du candidat à la compétition*/
+										ArrayList<Candidat> listCand = new ArrayList();
+										for (Candidat cand : candiatsNonInscript){
+											listCand.add(cand);
+										}
+										int index = candidatsNonInscritList.getSelectedIndex();
+										Candidat candidatselect = listCand.get(index);
+										if(c.estEnEquipe()==true){
+											Equipe equipe = ins.createEquipe(candidatselect.getIdCandidat(),candidatselect.getNom());
+											c.add(equipe);
+										}else {
+											Personne p = candidatselect.getPersonne() ;
+											c.add(p);
+										}
+									}
+								}
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}	
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
 					}
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-			
+					
 			}
+			
 		});
+			
 		inscrireCand.setBounds(10, 103, 166, 23);
 		add(inscrireCand);
 		
 		/*Bannir Candidat*/
 		JButton btnSupprCand = new JButton("Bannir");
-		btnSupprCand.setBounds(10, 292, 99, 23);
+		btnSupprCand.setBounds(10, 285, 99, 23);
 		add(btnSupprCand);
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

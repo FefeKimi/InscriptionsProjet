@@ -159,6 +159,11 @@ public class Inscriptions implements Serializable
 		candidats.add(personne);
 		return personne;
 	}
+	/**
+	 * Retourne un object inscriptions vide. Ne modifie pas les compétitions
+	 * et candidats déjà existants.
+	 */
+	
 	
 	/**
 	 * Créée une Candidat de type équipe. Ceci est le seul moyen, il n'y a pas

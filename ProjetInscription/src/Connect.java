@@ -212,7 +212,6 @@ public class Connect {
 
 	 } 
  /*Candidat*/
-// public List<Candidat>
  public void setNameCandidat(String prenom,int id){
    requete("call SET_NAME_CANDIDAT('"+id+"','"+prenom+"')");
  }
@@ -256,20 +255,25 @@ public class Connect {
 	 }
 	 return competitions;
  }
+
  
  /*competition*/
  public SortedSet<Competition> getCompetitions() throws SQLException {
 	 Inscriptions i = Inscriptions.getInscriptions();
 	 SortedSet<Competition> competitions = new TreeSet<Competition>();
-	 ResultSet rs = resultatRequete("call GET_COMP()");
+	 ResultSet rs = resultatRequete("select * from competition");
 	 while(rs.next()){
 		int id = rs.getInt("NumComp");
 		String nom = rs.getString("NomComp");
 		LocalDate date =rs.getDate("DateCloture").toLocalDate();
 		Boolean enEquipe = rs.getBoolean("EnEquipe");
-		Competition competition = i.createCompetition(id, nom,date, enEquipe); 
-		competition.setIdcompetition(id);
-		competitions.add(competition);
+		if(date.isBefore(LocalDate.now())){
+			ResultSet rs2 = resultatRequete("call DEL_COMP ("+id+")");
+		}else {
+			Competition competition = i.createCompetition(id, nom,date, enEquipe); 
+			competition.setIdcompetition(id);
+			competitions.add(competition);
+		}
 	 }
 	 return competitions;
  }
@@ -294,7 +298,26 @@ public class Connect {
 	 }
 	 return candidats;
  }
- 
+ public SortedSet<Candidat> getCandNotSign(int NumCompet, boolean enEquipe) throws SQLException {
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 SortedSet<Candidat> candidats = new TreeSet<Candidat>();
+	 ResultSet rs = resultatRequete("call GET_CANDIDATS_NOT_SIGN("+NumCompet+","+enEquipe+")");
+	 while(rs.next()){
+			int id = rs.getInt("NumCandidat");
+			String nom = rs.getString("NomCandidat");
+			Boolean equipe = rs.getBoolean("Equipe");
+			if(equipe){
+				Equipe e = i.createEquipe(id, nom);
+				e.setIdCandidat(id);
+				candidats.add(e);
+			}else {
+				Personne p = i.createPersonne(id, nom, null, null);
+				p.setIdCandidat(id);
+				candidats.add(p);
+			}
+		 }
+		 return candidats;
+ }
  public void SetCompetition(int id,String nom, LocalDate date_clot){
 	 requete("UPDATE COMPETITION SET NomComp = '"+nom+"',DateCloture = '"+date_clot+"'  WHERE NumComp = "+id+";");
  }
@@ -340,6 +363,19 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	   return p;
  }
  
+ public Personne getPersonne(int idCandidat) throws SQLException{
+	 Inscriptions i = Inscriptions.getInscriptions();
+	 Personne p = null ;
+	 ResultSet rs = resultatRequete("SELECT * FROM PERSONNE WHERE NumCandidat = "+idCandidat+")");
+	 while(rs.next()){
+		int id = rs.getInt("NumCandidat");
+		String nom = rs.getString("NomCandidat");
+		String prenom = rs.getString("Prenom");
+		String mail = rs.getString("Mail");
+		p = i.createPersonne(id, nom,prenom,mail);
+	 }
+	 return p;
+ }
  public Set<Equipe> getEquipesFromPersonne(int idCandidat) throws SQLException{
 	 Inscriptions i = Inscriptions.getInscriptions();
 	 SortedSet<Equipe> equipes = new TreeSet<Equipe>();

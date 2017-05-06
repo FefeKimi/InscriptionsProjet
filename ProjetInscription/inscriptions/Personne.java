@@ -86,7 +86,7 @@ public class Personne extends Candidat
 	{
 		return equipes.add(equipe);
 	}
-
+	
 	boolean remove(Equipe equipe)
 	{
 		return equipes.remove(equipe);

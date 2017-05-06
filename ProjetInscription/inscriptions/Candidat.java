@@ -57,6 +57,12 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	public void setIdCandidat(int id){
 		 this.idCandidat= id;
 	}
+	
+	/*Recup Personne ‡ partir d'un candidat*/
+	public Personne getPersonne() throws SQLException{
+		c = new Connect();
+		return c.getPersonne(this.getIdCandidat());
+	}
 	/**
 	 * Retourne toutes les comp√©titions auxquelles ce candidat est inscrit.s
 	 * @return

@@ -21,6 +21,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	private Inscriptions inscriptions;
 	private String nom;
 	private Set<Candidat> candidats;
+	private Set<Candidat> candidatsNotSign;
 	private LocalDate dateCloture;
 	private boolean enEquipe = false;
 	private int idCompetition;
@@ -135,6 +136,22 @@ public class Competition implements Comparable<Competition>, Serializable
 		return Collections.unmodifiableSet(candidats);
 	}
 	
+	/**
+	 * Retourne l'ensemble des candidats non inscrits.
+	 * @return
+	 * @throws SQLException 
+	 */
+	
+	public Set<Candidat> getCandidatsNotSign() throws SQLException
+	{
+		if (candidatsNotSign == null){
+			connect = new Connect();
+			candidatsNotSign = connect.getCandNotSign(this.getIdcompetition(),
+					this.estEnEquipe());
+			connect.close();
+		}
+		return Collections.unmodifiableSet(candidatsNotSign);
+	}
 	/**
 	 * Inscrit un candidat de type Personne à la compétition. Provoque une
 	 * exception si la compétition est réservée aux équipes ou que les 
