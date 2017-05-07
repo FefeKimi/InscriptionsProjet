@@ -151,6 +151,7 @@ public class Inscriptions implements Serializable
 		Personne personne = new Personne(this, nom, prenom, mail);
 		personne.setIdCandidat(idPersonne);
 		if(personne.getIdCandidat() == 0){
+			this.openConnection();
 			connect.add(personne);
 			this.closeConnection();
 		}

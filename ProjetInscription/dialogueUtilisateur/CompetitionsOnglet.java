@@ -170,7 +170,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		
 		/*Bannir Candidat*/
 		JButton btnSupprCand = new JButton("Bannir");
-		btnSupprCand.setBounds(10, 285, 99, 23);
+		btnSupprCand.setBounds(41, 292, 99, 23);
 		add(btnSupprCand);
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

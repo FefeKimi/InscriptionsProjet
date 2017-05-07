@@ -390,12 +390,10 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	 return equipes;
  }
  
- public void setPrenomPersonne(int id,String prenom){
-   requete("call SET_PRENOM_PERSONNE('"+id+"','"+prenom+"')");
+ public void setPersonne(int id, String nom,String prenom,String mail){
+   requete("call SET_MAIL("+id+", '"+nom+"', '"+prenom+"', '"+mail+"')");
  }
- public void setMailPersonne(int id,String mail){
-   requete("call SET_MAIL_PERSONNE('"+id+"','"+mail+"')");
- }
+
  
  /*Equipe*/
  public Set<Equipe> getEquipes() throws SQLException{

@@ -30,31 +30,34 @@ public class Personne extends Candidat
 	/**
 	 * Retourne le prénom de la personne.
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public String getPrenom()
+	public String getPrenom() throws SQLException
 	{
+		if(prenom == null) {
+			c = new Connect();
+			Personne p = c.getPersonne(this.getIdCandidat());
+			return p.getPrenom();
+		}
 		return prenom;
 	}
 
-	/**
-	 * Modifie le prénom de la personne.
-	 * @param prenom
-	 */
-	
-	public void setPrenom(String prenom)
-	{
-		this.prenom=prenom;
-		c.setPrenomPersonne(this.getIdCandidat(),prenom);
-	}
+
 
 	/**
 	 * Retourne l'adresse électronique de la personne.
 	 * @return
+	 * @throws SQLException 
 	 */
 	
-	public String getMail()
+	public String getMail() throws SQLException
 	{
+		if(mail == null) {
+			c = new Connect();
+			Personne p = c.getPersonne(this.getIdCandidat());
+			return p.getMail();
+		}
 		return mail;
 	}
 
@@ -63,10 +66,13 @@ public class Personne extends Candidat
 	 * @param mail
 	 */
 	
-	public void setMail(String mail)
+	public void setPersonne(String nom,String prenom,String mail)
 	{
+		c = new Connect();
+		this.setNom(nom);
+		this.prenom = prenom;
 		this.mail = mail;
-		c.setMailPersonne(this.getIdCandidat(),mail);
+		c.setPersonne(this.getIdCandidat(),nom,prenom,mail);
 	}
 
 	/**
