@@ -77,9 +77,11 @@ public class Personne extends Candidat
 	
 	public Set<Equipe> getEquipes() throws SQLException
 	{
-		if (!SERIALIZE)
-			return Collections.unmodifiableSet(equipes);
-		return c.getEquipesFromPersonne(this.getIdCandidat());
+		if (equipes.size() == 0){
+			c = new Connect();
+			return c.getEquipesFromPersonne(this.getIdCandidat());
+		}
+		return Collections.unmodifiableSet(equipes);
 	}
 	
 	boolean add(Equipe equipe)

@@ -66,8 +66,9 @@ public class Equipe extends Candidat
 	
 	public boolean remove(Personne membre)
 	{
-		connect = new Connect();
 		membre.remove(this);
+		connect = new Connect();
+		connect.delMembreEquipe(this.getIdCandidat(),membre.getIdCandidat());
 		connect.close();
 		return membres.remove(membre);
 	}
