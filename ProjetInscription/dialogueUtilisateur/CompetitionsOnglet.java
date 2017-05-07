@@ -20,6 +20,7 @@ import java.util.SortedSet;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -77,6 +78,11 @@ public class CompetitionsOnglet extends JLayeredPane{
 		
 		competitions.setBounds(10, 36, 99, 20);
 		this.add(competitions);
+		
+		/*candidat de la compétition*/
+		JLabel lblCandidat = new JLabel("Candidats :");
+		lblCandidat.setBounds(10, 79, 64, 14);
+		this.add(lblCandidat);
 		
 		candidatsList = new JList();
 		candidatsList.setBounds(10, 137, 166, 144);
@@ -213,11 +219,19 @@ public class CompetitionsOnglet extends JLayeredPane{
 			    
 			    int result = JOptionPane.showConfirmDialog(null, myPanel, "Modifier la compétition", JOptionPane.OK_CANCEL_OPTION);
 			      if (result == JOptionPane.OK_OPTION) {
-			        System.out.println("Nom: " + nomField.getText());
-			        System.out.println("Date de cloture: " + dateField.getText());
+			    	String newName = nomField.getText();
 					String dateClot = dateField.getText();
-					LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
-			        c.setCompetition(nomField.getText(),date_cloture);
+					if(newName.length()==0 || dateClot.length()==0){
+						boxErreur("Vous devez remplir tous les champs");
+					}else {
+						try {
+							LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
+							c.setCompetition(newName,date_cloture);
+							/*TODO Mise à jour Jcombox*/
+						}catch(Exception e1){
+							boxErreur("Vous n'avez pas respecté le bon format de la date (jj/mm/aaaa)");
+						}
+					}
 			      }
 
 			}
@@ -242,58 +256,84 @@ public class CompetitionsOnglet extends JLayeredPane{
 		btnSupprimer.setSize(100,20);
 		this.add(btnSupprimer);
 		
-		/*FORMULAIRE DE CREATION D'UNE COMPETITION*/
+		/*NOUVELLE COMPETITION*/
+		
+		/*title*/
 		JLabel lblCrerUneComptition = new JLabel("Nouvelle comp\u00E9tition");
 		lblCrerUneComptition.setBackground(Color.LIGHT_GRAY);
-		lblCrerUneComptition.setBounds(199, 79, 166, 14);
+		lblCrerUneComptition.setBounds(186, 79, 166, 14);
 		this.add(lblCrerUneComptition);
+		
+		/*Nom de la compétition*/
+		nomCompetition = new JTextField();
+		nomCompetition.setBounds(279, 104, 111, 20);
+		this.add(nomCompetition);
+		nomCompetition.setColumns(10);
 		
 		JLabel nomCompetlbl = new JLabel("Nom ");
 		nomCompetlbl.setForeground(Color.DARK_GRAY);
 		nomCompetlbl.setBounds(231, 107, 38, 14);
 		this.add(nomCompetlbl);
 		
+		/*Date cloture*/
 		JLabel dateClotlbl = new JLabel("Date de cl\u00F4ture");
 		dateClotlbl.setForeground(Color.DARK_GRAY);
-		dateClotlbl.setBounds(186, 151, 99, 14);
+		dateClotlbl.setBounds(181, 151, 99, 14);
 		this.add(dateClotlbl);
-		
-		
-		
-		JLabel enEquipelbl = new JLabel("En \u00E9quipe ?");
-		enEquipelbl.setForeground(Color.DARK_GRAY);
-		enEquipelbl.setBounds(186, 193, 77, 14);
-		this.add(enEquipelbl);
-		
-		JRadioButton rdbtnOui = new JRadioButton("Oui");
-		rdbtnOui.setBackground(Color.WHITE);
-		rdbtnOui.setForeground(Color.BLACK);
-		rdbtnOui.setBounds(277, 189, 54, 23);
-		this.add(rdbtnOui);
-		
-		JRadioButton rdbtnNon = new JRadioButton("Non");
-		rdbtnNon.setBackground(Color.WHITE);
-		rdbtnNon.setForeground(Color.BLACK);
-		rdbtnNon.setBounds(333, 189, 57, 23);
-		this.add(rdbtnNon);
-		
-		JLabel lblNewLabel_3 = new JLabel("Candidats :");
-		lblNewLabel_3.setBounds(10, 79, 64, 14);
-		this.add(lblNewLabel_3);
-		
-		JButton btnNewButton_3 = new JButton("Ajouter");
-		btnNewButton_3.setBounds(287, 223, 89, 23);
-		this.add(btnNewButton_3);
-		
-		nomCompetition = new JTextField();
-		nomCompetition.setBounds(279, 104, 111, 20);
-		this.add(nomCompetition);
-		nomCompetition.setColumns(10);
 		
 		date_cloture = new JTextField();
 		date_cloture.setBounds(279, 148, 111, 20);
 		add(date_cloture);
 		date_cloture.setColumns(10);
+		
+		/*En Equipe*/
+		final JCheckBox rdbtnEnEq = new JCheckBox("En Equipe");
+		rdbtnEnEq.setSelected(false);
+		rdbtnEnEq.setBackground(Color.WHITE);
+		rdbtnEnEq.setForeground(Color.BLACK);
+		rdbtnEnEq.setBounds(279, 187, 111, 23);
+		this.add(rdbtnEnEq);
+		
+		
+		/*Button*/
+		JButton btnAjouterCompetition = new JButton("Ajouter");
+		btnAjouterCompetition.setBounds(279, 227, 89, 23);
+		this.add(btnAjouterCompetition);
+		
+		JLabel lblJjmmaaaa = new JLabel("jj/mm/aaaa");
+		lblJjmmaaaa.setForeground(Color.GRAY);
+		lblJjmmaaaa.setBounds(181, 163, 67, 14);
+		add(lblJjmmaaaa);
+		btnAjouterCompetition.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/*récupération des champs*/
+				String nomCompet = nomCompetition.getText();
+				String dateClot = date_cloture.getText();
+				boolean enEquipe = rdbtnEnEq.isSelected();
+
+				if(nomCompet.length()==0 || dateClot.length()==0){
+					boxErreur("Vous devez remplir tous les champs");
+				}else{
+					/*conversion date*/
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
+					try {
+						LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
+						if(date_cloture.isBefore(LocalDate.now())){
+							boxErreur("Date incorrecte.");
+						}else{
+							Inscriptions insc = Inscriptions.getInscriptions();
+							Competition newCompetition = insc.createCompetition(0,nomCompet,date_cloture,enEquipe);
+							/*Mise à jour de la liste*/
+						}
+					}catch(Exception e1){
+						boxErreur("Vous n'avez pas respecté le bon format de la date (jj/mm/aaaa)");
+					}
+					
+					
+				}
+			}
+		});
+		
 		
 		
 		
@@ -306,5 +346,4 @@ public class CompetitionsOnglet extends JLayeredPane{
 	    myPanel.add(noadd);
 	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Erreur", JOptionPane.OK_CANCEL_OPTION);
 	}
-	
 }

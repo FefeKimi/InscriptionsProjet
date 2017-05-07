@@ -326,6 +326,7 @@ public class Connect {
    int idComp=0;
    requete("call ADD_COMP('"+competition.getNom()+"','"+
 		   competition.getDateCloture()+"',"+competition.estEnEquipe()+")");
+ 
    ResultSet rs = resultatRequete("SELECT MAX(NumComp) AS Numcomp FROM COMPETITION");
    while(rs.next()){
 	   idComp = rs.getInt("NumComp");
@@ -425,15 +426,13 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	 SortedSet<Personne> personnes = new TreeSet<Personne>();
 	 ResultSet rs = resultatRequete("call GET_MEMBRE_EQUIPE('"+idEquipe+"')");
 	 while(rs.next()){
-		int id = rs.getInt("NumCandidat");
-		String nom = rs.getString("NomCandidat");
-		String prenom = rs.getString("Prenom");
-		String mail = rs.getString("Mail");
-		Personne p = i.createPersonne(id, nom,prenom,mail);
+		int id = rs.getInt("NumCandidatPers");
+		Personne p = getPersonne(id);
 		personnes.add(p);
 	 }
 	 return personnes;
  }
+ 
  public boolean addMembreEquipe(int idEquipe,int idPersonne) throws SQLException{
 	 boolean add=true;
 	 int idCandidat=0;

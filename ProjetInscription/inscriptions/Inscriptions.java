@@ -124,6 +124,7 @@ public class Inscriptions implements Serializable
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
 		competition.setIdcompetition(idCompetition);
 		if(competition.getIdcompetition() == 0){
+			this.openConnection();
 			connect.add(competition);
 			this.closeConnection();
 		}
@@ -180,6 +181,7 @@ public class Inscriptions implements Serializable
 		Equipe equipe = new Equipe(this, nom);
 		equipe.setIdCandidat(id);
 		if(equipe.getIdCandidat() == 0){
+			this.openConnection();
 			connect.add(equipe);
 			this.closeConnection();
 		}

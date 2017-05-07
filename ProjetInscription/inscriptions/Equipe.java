@@ -32,7 +32,7 @@ public class Equipe extends Candidat
 	
 	public SortedSet<Personne> getMembres() throws SQLException
 	{
-		if (membres == null){
+		if (membres.size() == 0){
 			connect = new Connect();
 			membres = connect.getMembreEquipe(
 					this.getIdCandidat());
@@ -66,7 +66,9 @@ public class Equipe extends Candidat
 	
 	public boolean remove(Personne membre)
 	{
+		connect = new Connect();
 		membre.remove(this);
+		connect.close();
 		return membres.remove(membre);
 	}
 
@@ -81,6 +83,6 @@ public class Equipe extends Candidat
 	@Override
 	public String toString()
 	{
-		return "Equipe " + super.toString();
+		return super.toString();
 	}
 }

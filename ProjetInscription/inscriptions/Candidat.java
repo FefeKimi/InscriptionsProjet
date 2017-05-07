@@ -45,8 +45,10 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 
 	public void setNom(String nom)
 	{
+		c = new Connect();
 		this.nom=nom;
 		c.setNameCandidat(nom,idCandidat);
+		c.close();
 	}
 	
 	/*idCandidat*/
