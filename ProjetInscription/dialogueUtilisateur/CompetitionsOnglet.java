@@ -75,7 +75,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		});
 	
 		
-		competitions.setBounds(10, 36, 76, 20);
+		competitions.setBounds(10, 36, 99, 20);
 		this.add(competitions);
 		
 		candidatsList = new JList();
@@ -130,10 +130,19 @@ public class CompetitionsOnglet extends JLayeredPane{
 										if(c.estEnEquipe()==true){
 											Equipe equipe = ins.createEquipe(candidatselect.getIdCandidat(),candidatselect.getNom());
 											c.add(equipe);
+											candidatsNonInscritList.remove(index);
 										}else {
 											Personne p = candidatselect.getPersonne() ;
 											c.add(p);
+											candidatsNonInscritList.remove(index);
 										}
+										/*Mise à jour des candidats non inscrit*/
+										Set<Candidat> candiatsNoTSign = c.getCandidatsNotSign();
+										candidatsNonInscritList.setListData(candiatsNoTSign.toArray());
+
+										/*Mise à jour des candidats de la compétition*/
+										Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
+										candidatsList.setListData(candidats.toArray());
 									}
 								}
 							} catch (SQLException e1) {
@@ -159,25 +168,26 @@ public class CompetitionsOnglet extends JLayeredPane{
 		add(btnSupprCand);
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Inscriptions i = Inscriptions.getInscriptions();
+				Competition c = (Competition) competitions.getSelectedItem();
 				ArrayList<Candidat> listCand = new ArrayList();
 				try {
-					for (Candidat cand : i.getCandidats()){
+					for (Candidat cand : c.getCandidats()){
 						listCand.add(cand);
 					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}				
+				int index = candidatsList.getSelectedIndex();
+				Candidat candidatbanni = listCand.get(index);
+				// TODO Candidat ne veut pas se drop tout de suite de la liste
+				candidatsList.remove(index);
 				try {
-					Competition c = (Competition) competitions.getSelectedItem();
-					int index = candidatsList.getSelectedIndex();
-					Candidat candidatselect = listCand.get(index);
-					// TODO Candidat ne veut pas se drop tout de suite de la liste
-					if (index != -1) {
-						candidatsList.remove(index);
-					}
-					c.remove(candidatselect);
+					c.remove(candidatbanni);
+					/*Mise à jour*/
+					Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
+					candidatsList.setListData(candidats.toArray());
 				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -212,7 +222,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 
 			}
 		});
-		btnModifier.setBounds(127, 35, 89, 23);
+		btnModifier.setBounds(139, 36, 100, 32);
 		this.add(btnModifier);
 		btnModifier.setSize(100,20);
 		
@@ -228,7 +238,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 				i.closeConnection();
 			}
 		});
-		btnSupprimer.setBounds(250, 35, 89, 23);
+		btnSupprimer.setBounds(249, 36, 100, 20);
 		btnSupprimer.setSize(100,20);
 		this.add(btnSupprimer);
 		

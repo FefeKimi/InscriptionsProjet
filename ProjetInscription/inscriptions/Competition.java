@@ -164,9 +164,10 @@ public class Competition implements Comparable<Competition>, Serializable
 	public boolean add(Personne personne) throws SQLException
 	{
 		// TODO vérifier que la date de clôture n'est pas passée
-		if (enEquipe || this.inscriptionsOuvertes()==true)
+		if (enEquipe || this.inscriptionsOuvertes()==false)
 			throw new RuntimeException();
 		personne.add(this);
+		connect = new Connect();
 		connect.addCandCompet(personne, this.getIdcompetition());
 		return candidats.add(personne);
 	}
@@ -183,9 +184,10 @@ public class Competition implements Comparable<Competition>, Serializable
 	public boolean add(Equipe equipe) throws SQLException
 	{
 		// TODO vérifier que la date de clôture n'est pas passée
-		if (!enEquipe || this.inscriptionsOuvertes()==true)
+		if (!enEquipe || this.inscriptionsOuvertes()==false)
 			throw new RuntimeException();
 		equipe.add(this);
+		connect = new Connect();
 		connect.addCandCompet(equipe, this.getIdcompetition());
 		return candidats.add(equipe);
 	}

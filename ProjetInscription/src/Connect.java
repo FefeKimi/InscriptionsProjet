@@ -366,13 +366,13 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
  public Personne getPersonne(int idCandidat) throws SQLException{
 	 Inscriptions i = Inscriptions.getInscriptions();
 	 Personne p = null ;
-	 ResultSet rs = resultatRequete("SELECT * FROM PERSONNE WHERE NumCandidat = "+idCandidat+")");
+	 ResultSet rs = resultatRequete("SELECT * FROM PERSONNE p, CANDIDAT c WHERE p.NumCandidat = c.NumCandidat AND p.NumCandidat = "+idCandidat+" ");
 	 while(rs.next()){
 		int id = rs.getInt("NumCandidat");
 		String nom = rs.getString("NomCandidat");
 		String prenom = rs.getString("Prenom");
 		String mail = rs.getString("Mail");
-		p = i.createPersonne(id, nom,prenom,mail);
+		p = i.createPersonne(idCandidat, nom,prenom,mail);
 	 }
 	 return p;
  }
