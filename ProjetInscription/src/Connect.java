@@ -26,7 +26,7 @@ import java.util.TreeSet;
 
 import com.mysql.jdbc.CallableStatement;
 //
-//CTRL + SHIFT + O pour générer les imports
+//CTRL + SHIFT + O pour gÃ©nÃ©rer les imports
 public class Connect {
 	
    private Connection conn;
@@ -66,7 +66,7 @@ public class Connect {
  
  Statement st =null;
  try {
-      //System.out.println("Requête executée !"); 
+      //System.out.println("RequÃªte executÃ©e !"); 
       st=conn.createStatement();
   
       st.executeUpdate(requete);
@@ -78,7 +78,7 @@ public class Connect {
  }
  public static boolean requeteBoolean(String requete, String nomChamp) {
 
-	  // Information d'accès à la base de données
+	  // Information d'accÃ¨s Ã  la base de donnÃ©es
 	  Boolean Resultat = null;  
 	  Connection cn = null;
 	  Statement st = null;
@@ -92,15 +92,15 @@ public class Connect {
 	   // Etape 1 : Chargement du driver
 	   Class.forName("com.mysql.jdbc.Driver");
 
-	   // Etape 2 : récupération de la connexion
+	   // Etape 2 : rÃ©cupÃ©ration de la connexion
 	   cn = DriverManager.getConnection(url, login, passwd);
 
-	   // Etape 3 : Création d'un statement
+	   // Etape 3 : CrÃ©ation d'un statement
 	   st = cn.createStatement();
 
 	   String sql = requete;
 
-	   // Etape 4 : exécution requête
+	   // Etape 4 : exÃ©cution requÃªte
 	   rs = st.executeQuery(sql);
 
 	   if(rs.first()){
@@ -126,7 +126,7 @@ public class Connect {
 	 }
  public static String readBDD(String requete, String nomChamp) {
 
-  // Information d'accès à la base de données
+  // Information d'accÃ¨s Ã  la base de donnÃ©es
   String Resultat = null;  
   Connection cn = null;
   Statement st = null;
@@ -140,15 +140,15 @@ public class Connect {
    // Etape 1 : Chargement du driver
    Class.forName("com.mysql.jdbc.Driver");
 
-   // Etape 2 : récupération de la connexion
+   // Etape 2 : rÃ©cupÃ©ration de la connexion
    cn = DriverManager.getConnection(url, login, passwd);
 
-   // Etape 3 : Création d'un statement
+   // Etape 3 : CrÃ©ation d'un statement
    st = cn.createStatement();
 
    String sql = requete;
 
-   // Etape 4 : exécution requête
+   // Etape 4 : exÃ©cution requÃªte
    rs = st.executeQuery(sql);
 
    if(rs.first()){
@@ -174,7 +174,7 @@ public class Connect {
  }
  public ResultSet resultatRequete(String requete) {
 
-	  // Information d'accès à la base de données
+	  // Information d'accÃ¨s Ã  la base de donnÃ©es
 
 	  Connection cn = null;
 	  Statement st = null;
@@ -188,15 +188,15 @@ public class Connect {
 	   // Etape 1 : Chargement du driver
 	   Class.forName("com.mysql.jdbc.Driver");
 
-	   // Etape 2 : récupération de la connexion
+	   // Etape 2 : rÃ©cupÃ©ration de la connexion
 	   cn = DriverManager.getConnection(url, login, passwd);
 
-	   // Etape 3 : Création d'un statement
+	   // Etape 3 : CrÃ©ation d'un statement
 	   st = cn.createStatement();
 
 	   String sql = requete;
 
-	   // Etape 4 : exécution requête
+	   // Etape 4 : exÃ©cution requÃªte
 	   rs = st.executeQuery(sql);
 
 
@@ -346,9 +346,6 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	requete("DELETE FROM PARTICIPER  WHERE NumCandidat = "+idcandidat+" AND NumComp = "+idComp+" ");
 }
 
- public boolean enEquipeComp(int id){
-	   return Connect.requeteBoolean("call EN_EQUIPE_COMP('"+id+"')","EnEquipe");
- }
  public void delComp(int id){
 	   requete("call DEL_COMP('"+id+"')");
  }
@@ -391,7 +388,7 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
  }
  
  public void setPersonne(int id, String nom,String prenom,String mail){
-   requete("call SET_MAIL("+id+", '"+nom+"', '"+prenom+"', '"+mail+"')");
+   requete("call SET("+id+", '"+nom+"', '"+prenom+"', '"+mail+"')");
  }
 
  
@@ -434,7 +431,7 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
  public boolean addMembreEquipe(int idEquipe,int idPersonne) throws SQLException{
 	 boolean add=true;
 	 int idCandidat=0;
-	 requete("call ADD_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
+	 requete("insert into ETRE_DANS(NumCandidatEquipe,NumCandidatPers) VALUES ('"+idEquipe+"','"+idPersonne+"');");
 	 ResultSet rs = resultatRequete("SELECT NumCandidatPers FROM ETRE_DANS WHERE NumCandidatEquipe ='"+idEquipe+"' AND NumCandidatPers='"+idPersonne+"'");
 	 while(rs.next()){
 		idCandidat = rs.getInt("NumCandidat");
@@ -445,13 +442,13 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	 return add;
  }
  public void delMembreEquipe(int idEquipe,int idPersonne){
-	   requete("call DEL_MEMBRE('"+idEquipe+"','"+idPersonne+"')");
+	   requete("DELETE FROM ETRE_DANS WHERE NumCandidatEquipe ='"+idEquipe+"' AND  NumCandidatPers='"+idPersonne+"'; ");
  }
  /*Participation*/
 public void addParticipation(int idCandidat, int idComp){
-	   requete("call ADD_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
+	   requete("INSERT INTO PARTICIPER(NumCandidat, NumComp) VALUES ('"+idCandidat+"', '"+idCandidat+"');");
  }
  public void delParticipation(int idCandidat, int idComp){
-	   requete("call DEL_PARTICIPATION('"+idCandidat+"','"+idComp+"')");
+	   requete("DELETE FROM PARTICIPER  WHERE NumCandidat="+idCandidat+" AND NumComp = "+idComp+";");
 } 
 }
