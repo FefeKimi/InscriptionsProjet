@@ -211,11 +211,7 @@ public class PersonnesOnglet extends JLayeredPane{
 			      
 		});
 		btnAjouter.setBounds(259, 240, 89, 23);
-		this.add(btnAjouter);
-		
-		
-		
-		
+		this.add(btnAjouter);	
 	}
 	
 	public void boxErreur(String message){

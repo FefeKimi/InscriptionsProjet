@@ -79,6 +79,10 @@ public class Equipe extends Candidat
 		c.delCandidat(this.getIdCandidat());
 	}*/
 	
+	public SortedSet<Personne> getPersSansEquipe() throws SQLException{
+		connect = new Connect();
+		return connect.getPersSansEquipe();
+	}
 	@Override
 	public String toString()
 	{

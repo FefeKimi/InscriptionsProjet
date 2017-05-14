@@ -427,6 +427,16 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	 }
 	 return personnes;
  }
+ public SortedSet<Personne> getPersSansEquipe() throws SQLException{
+	 SortedSet<Personne> personnes = new TreeSet<Personne>();
+	 ResultSet rs = resultatRequete("call GET_PERSONNE_SANS_EQUIPE()");
+	 while(rs.next()){
+		int id = rs.getInt("NumCandidat");
+		Personne p = getPersonne(id);
+		personnes.add(p);
+	 }
+	 return personnes;
+ }
  
  public void addMembreEquipe(int idEquipe,int idPersonne) throws SQLException{
 	 int idCandidat=0;

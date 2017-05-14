@@ -43,7 +43,7 @@ public class Personne extends Candidat
 		return prenom;
 	}
 
-
+	
 
 	/**
 	 * Retourne l'adresse électronique de la personne.

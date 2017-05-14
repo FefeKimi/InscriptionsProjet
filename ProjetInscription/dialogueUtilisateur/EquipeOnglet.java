@@ -100,50 +100,43 @@ public class EquipeOnglet extends JLayeredPane{
 		btnAjouterMembre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Equipe equipe = (Equipe) equipes.getSelectedItem();
-				Set<Personne> personnes;
-				Inscriptions ins = Inscriptions.getInscriptions();
+				SortedSet<Personne> personneSansEquipe;
 				try {
-					personnes = ins.getPersonnes();
-					if(personnes==null) {
+					personneSansEquipe = equipe.getPersSansEquipe(); 
+					JList<Personne> personneSansEquipeList = new JList<>();
+					DefaultListModel<Personne> personneModel = new DefaultListModel<>();
+					for(Personne pers : personneSansEquipe){
+						personneModel.addElement(pers);
+					}
+					personneSansEquipeList.setModel(personneModel);
+					Set<Personne> membresList = equipe.getMembres();
+					if(personneSansEquipe.size() == 0) {
 						boxErreur("Aucun candidat.");
 					}else {
-						for(Personne p : personnes){
-							/*for(){
-								
-							}*/
-						}
-						JList personneList = new JList();
-						DefaultListModel<Personne> personneModel = new DefaultListModel<>();
-						for(Personne cand : personnes){
-							personneModel.addElement(cand);
-							
-						}
-						personneList.setModel(personneModel);
 						JPanel myPanel = new JPanel();
 						myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-						myPanel.add(personneList);
+						myPanel.add(personneSansEquipeList);
 						int result = JOptionPane.showConfirmDialog(null, myPanel, "Ajouter un membre", JOptionPane.OK_CANCEL_OPTION);
 						if (result == JOptionPane.OK_OPTION) {
 							/*Ajout d'un membre*/
 					
 							try {
-								int index = personneList.getSelectedIndex();
-								Personne personneselect = (Personne) personneList.getSelectedValue();	
+								int ind = personneSansEquipeList.getSelectedIndex();
+								Personne personneselect = (Personne) personneSansEquipeList.getSelectedValue();	
 								equipe.add(personneselect);
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							
-						
+		
 							/*Mise à jour des candidats non inscrit*/
-							Set<Personne> personnesAjour = ins.getPersonnes();
+							Set<Personne> personnesAjour = equipe.getPersSansEquipe(); 
 							DefaultListModel<Personne> personneModelAjour = new DefaultListModel<>();
 							for(Personne cand : personnesAjour){
 								personneModelAjour.addElement(cand);
 								
 							}
-							personneList.setModel(personneModelAjour);
+							personneSansEquipeList.setModel(personneModelAjour);
 
 							/*Mise à jour des candidats de la compétition*/
 							Set<Personne> membres = (Set<Personne>) equipe.getMembres();
