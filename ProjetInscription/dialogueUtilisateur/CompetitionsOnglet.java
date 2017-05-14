@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import javax.swing.Box;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -27,8 +28,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 
 public class CompetitionsOnglet extends JLayeredPane{
 	
@@ -103,23 +104,23 @@ public class CompetitionsOnglet extends JLayeredPane{
 					Set<Candidat> candidatFromComp;
 					try {
 						candidatFromComp = c.getCandidats();
-						int i=0;
-						for (Candidat cand : candidatFromComp){
-							i++;
-						}
 						/*Vérifie si les inscriptions à la compétition sont complètes*/
-						if(i==2){
+						if(candidatFromComp.size()==2){
 							JPanel myPanel = new JPanel();
 							boxErreur("Vous ne pouvez plus ajouter de candidat.");
 						}else{	
 							Set<Candidat> candiatsNonInscript;
 							try {
 								candiatsNonInscript = c.getCandidatsNotSign();
-								if(candiatsNonInscript==null) {
+								if(candiatsNonInscript.size()==0) {
 									boxErreur("Aucun candidat.");
 								}else {
-									JList candidatsNonInscritList = new JList();
-									candidatsNonInscritList.setListData(candiatsNonInscript.toArray());
+									JList<Candidat> candidatsNonInscritList = new JList<>();
+									DefaultListModel<Candidat> candidatsModel = new DefaultListModel<>();
+									for(Candidat cand : candiatsNonInscript){
+										candidatsModel.addElement(cand);
+									}
+									candidatsNonInscritList.setModel(candidatsModel);
 									JPanel myPanel = new JPanel();
 									myPanel.add(Box.createHorizontalStrut(15)); // a spacer
 									myPanel.add(candidatsNonInscritList);
@@ -127,24 +128,24 @@ public class CompetitionsOnglet extends JLayeredPane{
 									if (result == JOptionPane.OK_OPTION) {
 										Inscriptions ins = Inscriptions.getInscriptions();
 										/*Inscription du candidat à la compétition*/
-										ArrayList<Candidat> listCand = new ArrayList();
-										for (Candidat cand : candiatsNonInscript){
-											listCand.add(cand);
-										}
 										int index = candidatsNonInscritList.getSelectedIndex();
-										Candidat candidatselect = listCand.get(index);
+										Candidat candidatselect = (Candidat) candidatsNonInscritList.getSelectedValue();
 										if(c.estEnEquipe()==true){
 											Equipe equipe = ins.createEquipe(candidatselect.getIdCandidat(),candidatselect.getNom());
 											c.add(equipe);
-											candidatsNonInscritList.remove(index);
+											((DefaultListModel<Candidat>) candidatsNonInscritList.getModel()).remove(index);
 										}else {
 											Personne p = candidatselect.getPersonne() ;
 											c.add(p);
-											candidatsNonInscritList.remove(index);
+											((DefaultListModel<Candidat>) candidatsNonInscritList.getModel()).remove(index);
 										}
 										/*Mise à jour des candidats non inscrit*/
 										Set<Candidat> candiatsNoTSign = c.getCandidatsNotSign();
-										candidatsNonInscritList.setListData(candiatsNoTSign.toArray());
+										DefaultListModel<Candidat> candiatsNoTModel = new DefaultListModel<>();
+										for(Candidat cand : candiatsNoTSign){
+											candiatsNoTModel.addElement(cand);
+										}
+										candidatsNonInscritList.setModel(candiatsNoTModel);
 
 										/*Mise à jour des candidats de la compétition*/
 										Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
@@ -168,27 +169,20 @@ public class CompetitionsOnglet extends JLayeredPane{
 		inscrireCand.setBounds(10, 103, 166, 23);
 		add(inscrireCand);
 		
-		/*Bannir Candidat*/
-		JButton btnSupprCand = new JButton("Bannir");
-		btnSupprCand.setBounds(41, 292, 99, 23);
+		/*Désinscrire Candidat*/
+		JButton btnSupprCand = new JButton("Désinscrire");
+		btnSupprCand.setBounds(10, 288, 166, 23);
 		add(btnSupprCand);
 		btnSupprCand.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Competition c = (Competition) competitions.getSelectedItem();
-				ArrayList<Candidat> listCand = new ArrayList();
-				try {
-					for (Candidat cand : c.getCandidats()){
-						listCand.add(cand);
-					}
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}				
+				Competition c = (Competition) competitions.getSelectedItem();	
+				Candidat candidatselect = (Candidat) candidatsList.getSelectedValue();
+
 				int index = candidatsList.getSelectedIndex();
-				Candidat candidatbanni = listCand.get(index);
+				//Candidat candidatbanni = listCand.get(index);
 				// TODO Candidat ne veut pas se drop tout de suite de la liste
-				candidatsList.remove(index);
 				try {
-					c.remove(candidatbanni);
+					c.remove(candidatselect);
 					/*Mise à jour*/
 					Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
 					candidatsList.setListData(candidats.toArray());
@@ -295,7 +289,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		this.add(rdbtnEnEq);
 		
 		
-		/*Button*/
+		/*Ajouter une compétition*/
 		JButton btnAjouterCompetition = new JButton("Ajouter");
 		btnAjouterCompetition.setBounds(279, 227, 89, 23);
 		this.add(btnAjouterCompetition);
@@ -317,13 +311,17 @@ public class CompetitionsOnglet extends JLayeredPane{
 					/*conversion date*/
 					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy");
 					try {
-						LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
-						if(date_cloture.isBefore(LocalDate.now())){
+						LocalDate date_cloture_convert = LocalDate.parse(dateClot, formatter);
+						if(date_cloture_convert.isBefore(LocalDate.now())){
 							boxErreur("Date incorrecte.");
 						}else{
 							Inscriptions insc = Inscriptions.getInscriptions();
-							Competition newCompetition = insc.createCompetition(0,nomCompet,date_cloture,enEquipe);
+							Competition newCompetition = insc.createCompetition(0,nomCompet,date_cloture_convert,enEquipe);
+							nomCompetition.setText("");
+							date_cloture.setText("");
+							rdbtnEnEq.setSelected(false);
 							/*Mise à jour de la liste*/
+							competitions.addItem(newCompetition);
 						}
 					}catch(Exception e1){
 						boxErreur("Vous n'avez pas respecté le bon format de la date (jj/mm/aaaa)");

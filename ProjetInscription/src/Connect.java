@@ -388,7 +388,7 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
  }
  
  public void setPersonne(int id, String nom,String prenom,String mail){
-   requete("call SET("+id+", '"+nom+"', '"+prenom+"', '"+mail+"')");
+   requete("call SET_PERSONNE("+id+", '"+nom+"', '"+prenom+"', '"+mail+"')");
  }
 
  

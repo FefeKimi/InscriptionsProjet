@@ -169,6 +169,7 @@ public class Competition implements Comparable<Competition>, Serializable
 		personne.add(this);
 		connect = new Connect();
 		connect.addCandCompet(personne, this.getIdcompetition());
+		candidatsNotSign.remove(personne);
 		return candidats.add(personne);
 	}
 
@@ -189,6 +190,7 @@ public class Competition implements Comparable<Competition>, Serializable
 		equipe.add(this);
 		connect = new Connect();
 		connect.addCandCompet(equipe, this.getIdcompetition());
+		candidatsNotSign.remove(equipe);
 		return candidats.add(equipe);
 	}
 
@@ -205,6 +207,7 @@ public class Competition implements Comparable<Competition>, Serializable
 		connect = new Connect();
 		connect.delCandCompet(candidat.getIdCandidat(),this.getIdcompetition());
 		connect.close();
+		candidatsNotSign.add(candidat);
 		return candidats.remove(candidat);
 	}
 	

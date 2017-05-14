@@ -1,11 +1,15 @@
 package dialogueUtilisateur;
 
+import inscriptions.Candidat;
+import inscriptions.Competition;
 import inscriptions.Equipe;
 import inscriptions.Inscriptions;
 import inscriptions.Personne;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
@@ -20,12 +24,15 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import java.awt.BorderLayout;
 
 public class PersonnesOnglet extends JLayeredPane{
 	private JComboBox personnes;
 
 
-	public PersonnesOnglet() {
+	public PersonnesOnglet() throws SQLException{
 		super();
 		JLabel lblNewLabel = new JLabel("Personne");
 		lblNewLabel.setBounds(10, 11, 46, 14);
@@ -47,9 +54,44 @@ public class PersonnesOnglet extends JLayeredPane{
 		/*liste déroulante des personnes*/
 		Object[] personnesList = p.toArray();
 		personnes = new JComboBox(personnesList);
-		
 		personnes.setBounds(10, 35, 101, 20);
 		this.add(personnes);
+		
+		Personne premierPersonne = (Personne)personnesList[0];
+
+		JPanel panel = new JPanel();
+		panel.setBounds(10, 80, 205, 182);
+		this.add(panel);
+		panel.setLayout(null);
+		
+		final JLabel nomLbl = new JLabel("Nom : "+premierPersonne.getNom());
+		nomLbl.setBounds(10, 23, 155, 14);
+		nomLbl.setVerticalAlignment(SwingConstants.TOP);
+		nomLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		panel.add(nomLbl);
+		
+		final JLabel prenomLbl = new JLabel("Prénom : "+premierPersonne.getPrenom());
+		prenomLbl.setVerticalAlignment(SwingConstants.TOP);
+		prenomLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		prenomLbl.setBounds(10, 48, 155, 14);
+		panel.add(prenomLbl);
+		
+		final JLabel emailLbl = new JLabel("Email :"+premierPersonne.getMail());
+		emailLbl.setVerticalAlignment(SwingConstants.TOP);
+		emailLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		emailLbl.setBounds(10, 73, 155, 14);
+		panel.add(emailLbl);
+		
+		
+		
+		personnes.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent arg0) {
+				Personne personne = (Personne) personnes.getSelectedItem();
+				updatePersonneInfoLabel(nomLbl, prenomLbl, emailLbl, personne);
+			}
+		});
+		
 		
 		/*Modifier Personne*/
 		JButton btnModifier = new JButton("Modifier");
@@ -82,6 +124,9 @@ public class PersonnesOnglet extends JLayeredPane{
 							personne.setPersonne(newName,newFirtsName,newMail);
 							/*TODO Mise à jour Jcombox*/
 						}
+						
+						updatePersonneInfoLabel(nomLbl, prenomLbl, emailLbl, personne);
+
 				      }
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -97,6 +142,16 @@ public class PersonnesOnglet extends JLayeredPane{
 		
 		/*Modifier Personne*/
 		JButton btnSupprimer = new JButton("Supprimer");
+		btnSupprimer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Personne pers = (Personne)personnes.getSelectedItem();
+				Inscriptions i = Inscriptions.getInscriptions();
+				i.openConnection();
+				i.remove(pers);
+				personnes.removeItem(pers);
+				i.closeConnection();
+			}
+		});
 		btnSupprimer.setBounds(253, 34, 109, 23);
 		this.add(btnSupprimer);
 		
@@ -143,7 +198,11 @@ public class PersonnesOnglet extends JLayeredPane{
 				}else {
 						Inscriptions ins = Inscriptions.getInscriptions();
 						try {
-							Personne personne = ins.createPersonne(0,nomPers,nomPers,mail);
+							Personne personne = ins.createPersonne(0,nomPers,prenomPers,mail);
+							nom.setText("");
+							prenom.setText("");
+							email.setText("");
+							personnes.addItem(personne);
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
@@ -155,13 +214,9 @@ public class PersonnesOnglet extends JLayeredPane{
 		btnAjouter.setBounds(259, 240, 89, 23);
 		this.add(btnAjouter);
 		
-		JLabel lblNewLabel_2 = new JLabel("Participe \u00E0 :");
-		lblNewLabel_2.setBounds(10, 80, 75, 14);
-		this.add(lblNewLabel_2);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(10, 101, 205, 182);
-		this.add(panel);
+		
+		
 	}
 	
 	public void boxErreur(String message){
@@ -170,5 +225,18 @@ public class PersonnesOnglet extends JLayeredPane{
 		JLabel noadd = new JLabel(message);
 	    myPanel.add(noadd);
 	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Erreur", JOptionPane.OK_CANCEL_OPTION);
+	}
+	
+	private void updatePersonneInfoLabel(final JLabel nomLbl,
+			final JLabel prenomLbl, final JLabel emailLbl,
+			Personne personne) {
+		nomLbl.setText("Nom : "+personne.getNom());
+		try {
+			prenomLbl.setText("Prénom : "+personne.getPrenom());
+			emailLbl.setText("Email : "+personne.getMail());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

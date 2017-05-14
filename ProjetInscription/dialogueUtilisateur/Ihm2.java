@@ -54,15 +54,17 @@ public class Ihm2 {
 
 	/**
 	 * Create the application.
+	 * @throws SQLException 
 	 */
-	public Ihm2() {
+	public Ihm2() throws SQLException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws SQLException 
 	 */
-	private void initialize() {
+	private void initialize() throws SQLException {
 		/*fenêtre*/
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
