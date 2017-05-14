@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import javax.swing.Box;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -99,36 +100,36 @@ public class EquipeOnglet extends JLayeredPane{
 		btnAjouterMembre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Equipe equipe = (Equipe) equipes.getSelectedItem();
-				Set<Personne> candidats;
+				Set<Personne> personnes;
 				Inscriptions ins = Inscriptions.getInscriptions();
 				try {
-					candidats = ins.getPersonnes();
-					if(candidats==null) {
+					personnes = ins.getPersonnes();
+					if(personnes==null) {
 						boxErreur("Aucun candidat.");
 					}else {
-						JList candidatsList = new JList();
-						candidatsList.setListData(candidats.toArray());
+						for(Personne p : personnes){
+							/*for(){
+								
+							}*/
+						}
+						JList personneList = new JList();
+						DefaultListModel<Personne> personneModel = new DefaultListModel<>();
+						for(Personne cand : personnes){
+							personneModel.addElement(cand);
+							
+						}
+						personneList.setModel(personneModel);
 						JPanel myPanel = new JPanel();
 						myPanel.add(Box.createHorizontalStrut(15)); // a spacer
-						myPanel.add(candidatsList);
+						myPanel.add(personneList);
 						int result = JOptionPane.showConfirmDialog(null, myPanel, "Ajouter un membre", JOptionPane.OK_CANCEL_OPTION);
 						if (result == JOptionPane.OK_OPTION) {
 							/*Ajout d'un membre*/
-							ArrayList<Personne> listPers = new ArrayList();
-							for (Personne pers : candidats){
-								listPers.add(pers);
-								/*for(Personne personne : equipe.getMembres()){
-									System.out.println(personne.getIdCandidat());
-									if(personne.getIdCandidat()==pers.getIdCandidat())
-										listPers.remove(pers);
-								}*/
-							}
-							int index = candidatsList.getSelectedIndex();
-							Personne personneselect = listPers.get(index);
-							Personne p;
+					
 							try {
-								p = personneselect.getPersonne();
-								equipe.add(p);
+								int index = personneList.getSelectedIndex();
+								Personne personneselect = (Personne) personneList.getSelectedValue();	
+								equipe.add(personneselect);
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -136,18 +137,17 @@ public class EquipeOnglet extends JLayeredPane{
 							
 						
 							/*Mise à jour des candidats non inscrit*/
-							Set<Personne> candiatsNoTSign = ins.getPersonnes();
-							candidatsList.setListData(candiatsNoTSign.toArray());
+							Set<Personne> personnesAjour = ins.getPersonnes();
+							DefaultListModel<Personne> personneModelAjour = new DefaultListModel<>();
+							for(Personne cand : personnesAjour){
+								personneModelAjour.addElement(cand);
+								
+							}
+							personneList.setModel(personneModelAjour);
 
 							/*Mise à jour des candidats de la compétition*/
-							Set<Personne> personnes;
-							try {
-								personnes = equipe.getMembres();
-								candidatsList.setListData(personnes.toArray());
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+							Set<Personne> membres = (Set<Personne>) equipe.getMembres();
+							membreList.setListData(membres.toArray());
 						}
 					}
 				} catch (SQLException e2) {
@@ -164,22 +164,15 @@ public class EquipeOnglet extends JLayeredPane{
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Equipe equipe = (Equipe) equipes.getSelectedItem();
-				ArrayList<Personne> listPers= new ArrayList();
-				try {
-					for (Personne pers : equipe.getMembres()){
-						listPers.add(pers);
-					}
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}				
+				Personne personneselect = (Personne) membreList.getSelectedValue();
+
 				int index = membreList.getSelectedIndex();
-				Personne membresuppr = listPers.get(index);
+				//Candidat candidatbanni = listCand.get(index);
 				// TODO Candidat ne veut pas se drop tout de suite de la liste
 				try {
-					equipe.remove(membresuppr);
-					membreList.remove(index);
+					equipe.remove(personneselect);
 					/*Mise à jour*/
-					Set<Personne> membres = equipe.getMembres();
+					Set<Personne> membres = (Set<Personne>) equipe.getMembres();
 					membreList.setListData(membres.toArray());
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -209,8 +202,7 @@ public class EquipeOnglet extends JLayeredPane{
 					if(newName.length()==0 ){
 						boxErreur("Vous devez remplir tous les champs");
 					}else {
-						equipe.setNom(newName);
-						/*TODO Mise à jour Jcombox*/
+						equipe.setNom(newName);						
 					}
 			      }
 
@@ -259,10 +251,11 @@ public class EquipeOnglet extends JLayeredPane{
 						Inscriptions ins = Inscriptions.getInscriptions();
 						try {
 							Equipe equipe = ins.createEquipe(0,nomEquipe);
+							nom.setText("");
+							equipes.addItem(equipe);
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
-					/*TODO Mise à jour Jcombox*/
 				}
 			}
 			      

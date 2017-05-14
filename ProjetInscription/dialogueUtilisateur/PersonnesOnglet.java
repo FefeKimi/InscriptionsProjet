@@ -140,7 +140,7 @@ public class PersonnesOnglet extends JLayeredPane{
 		btnModifier.setBounds(134, 34, 109, 23);
 		this.add(btnModifier);
 		
-		/*Modifier Personne*/
+		/*Supprimer Personne*/
 		JButton btnSupprimer = new JButton("Supprimer");
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -206,7 +206,6 @@ public class PersonnesOnglet extends JLayeredPane{
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
-					/*TODO Mise à jour Jcombox*/
 				}
 			}
 			      
