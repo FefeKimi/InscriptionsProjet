@@ -428,18 +428,9 @@ public void delCandCompet(int idcandidat, int idComp) throws SQLException{
 	 return personnes;
  }
  
- public boolean addMembreEquipe(int idEquipe,int idPersonne) throws SQLException{
-	 boolean add=true;
+ public void addMembreEquipe(int idEquipe,int idPersonne) throws SQLException{
 	 int idCandidat=0;
 	 requete("insert into ETRE_DANS(NumCandidatEquipe,NumCandidatPers) VALUES ('"+idEquipe+"','"+idPersonne+"');");
-	 ResultSet rs = resultatRequete("SELECT NumCandidatPers FROM ETRE_DANS WHERE NumCandidatEquipe ='"+idEquipe+"' AND NumCandidatPers='"+idPersonne+"'");
-	 while(rs.next()){
-		idCandidat = rs.getInt("NumCandidat");
-	 }
-	 if(idCandidat==0){
-		 add=false;
-	 }
-	 return add;
  }
  public void delMembreEquipe(int idEquipe,int idPersonne){
 	   requete("DELETE FROM ETRE_DANS WHERE NumCandidatEquipe ='"+idEquipe+"' AND  NumCandidatPers='"+idPersonne+"'; ");

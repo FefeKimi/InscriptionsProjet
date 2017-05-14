@@ -50,12 +50,10 @@ public class Equipe extends Candidat
 
 	public boolean add(Personne membre) throws SQLException
 	{
-		if (!SERIALIZE){
-			membre.add(this);
-			return membres.add(membre);
-		}else {
-			return connect.addMembreEquipe(this.getIdCandidat(),membre.getIdCandidat());
-		}
+		connect = new Connect();
+		membre.add(this);
+		connect.addMembreEquipe(this.getIdCandidat(),membre.getIdCandidat());
+		return membres.add(membre);
 	}
 
 	/**
