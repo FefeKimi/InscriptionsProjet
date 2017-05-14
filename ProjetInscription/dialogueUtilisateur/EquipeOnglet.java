@@ -158,18 +158,21 @@ public class EquipeOnglet extends JLayeredPane{
 			public void actionPerformed(ActionEvent e) {
 				Equipe equipe = (Equipe) equipes.getSelectedItem();
 				Personne personneselect = (Personne) membreList.getSelectedValue();
-
-				int index = membreList.getSelectedIndex();
-				//Candidat candidatbanni = listCand.get(index);
-				// TODO Candidat ne veut pas se drop tout de suite de la liste
-				try {
-					equipe.remove(personneselect);
-					/*Mise à jour*/
-					Set<Personne> membres = (Set<Personne>) equipe.getMembres();
-					membreList.setListData(membres.toArray());
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(personneselect==null){
+					boxErreur("Veuillez sélectionner un membre.");
+				}else {
+					int index = membreList.getSelectedIndex();
+					//Candidat candidatbanni = listCand.get(index);
+					// TODO Candidat ne veut pas se drop tout de suite de la liste
+					try {
+						equipe.remove(personneselect);
+						/*Mise à jour*/
+						Set<Personne> membres = (Set<Personne>) equipe.getMembres();
+						membreList.setListData(membres.toArray());
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

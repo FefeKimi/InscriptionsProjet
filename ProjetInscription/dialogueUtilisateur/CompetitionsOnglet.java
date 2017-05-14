@@ -130,26 +130,30 @@ public class CompetitionsOnglet extends JLayeredPane{
 										/*Inscription du candidat à la compétition*/
 										int index = candidatsNonInscritList.getSelectedIndex();
 										Candidat candidatselect = (Candidat) candidatsNonInscritList.getSelectedValue();
-										if(c.estEnEquipe()==true){
-											Equipe equipe = ins.createEquipe(candidatselect.getIdCandidat(),candidatselect.getNom());
-											c.add(equipe);
-											((DefaultListModel<Candidat>) candidatsNonInscritList.getModel()).remove(index);
-										}else {
-											Personne p = candidatselect.getPersonne() ;
-											c.add(p);
-											((DefaultListModel<Candidat>) candidatsNonInscritList.getModel()).remove(index);
-										}
-										/*Mise à jour des candidats non inscrit*/
-										Set<Candidat> candiatsNoTSign = c.getCandidatsNotSign();
-										DefaultListModel<Candidat> candiatsNoTModel = new DefaultListModel<>();
-										for(Candidat cand : candiatsNoTSign){
-											candiatsNoTModel.addElement(cand);
-										}
-										candidatsNonInscritList.setModel(candiatsNoTModel);
-
-										/*Mise à jour des candidats de la compétition*/
-										Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
-										candidatsList.setListData(candidats.toArray());
+											if(candidatselect==null){
+												boxErreur("Echec d'inscription. Veuillez sélectionner un candidat.");
+											}else{
+												if(c.estEnEquipe()==true){
+													Equipe equipe = ins.createEquipe(candidatselect.getIdCandidat(),candidatselect.getNom());
+													c.add(equipe);
+													((DefaultListModel<Candidat>) candidatsNonInscritList.getModel()).remove(index);
+												}else {
+													Personne p = candidatselect.getPersonne() ;
+													c.add(p);
+													((DefaultListModel<Candidat>) candidatsNonInscritList.getModel()).remove(index);
+												}
+												/*Mise à jour des candidats non inscrit*/
+												Set<Candidat> candiatsNoTSign = c.getCandidatsNotSign();
+												DefaultListModel<Candidat> candiatsNoTModel = new DefaultListModel<>();
+												for(Candidat cand : candiatsNoTSign){
+													candiatsNoTModel.addElement(cand);
+												}
+												candidatsNonInscritList.setModel(candiatsNoTModel);
+		
+												/*Mise à jour des candidats de la compétition*/
+												Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
+												candidatsList.setListData(candidats.toArray());
+											}
 									}
 								}
 							} catch (SQLException e1) {
@@ -177,18 +181,20 @@ public class CompetitionsOnglet extends JLayeredPane{
 			public void actionPerformed(ActionEvent e) {
 				Competition c = (Competition) competitions.getSelectedItem();	
 				Candidat candidatselect = (Candidat) candidatsList.getSelectedValue();
-
-				int index = candidatsList.getSelectedIndex();
-				//Candidat candidatbanni = listCand.get(index);
-				// TODO Candidat ne veut pas se drop tout de suite de la liste
-				try {
-					c.remove(candidatselect);
-					/*Mise à jour*/
-					Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
-					candidatsList.setListData(candidats.toArray());
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(candidatselect==null){
+					boxErreur("Veuillez sélectionner un candidat");
+				}else {
+					//Candidat candidatbanni = listCand.get(index);
+					// TODO Candidat ne veut pas se drop tout de suite de la liste
+					try {
+						c.remove(candidatselect);
+						/*Mise à jour*/
+						Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
+						candidatsList.setListData(candidats.toArray());
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
