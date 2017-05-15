@@ -34,9 +34,9 @@ public class PersonnesOnglet extends JLayeredPane{
 
 	public PersonnesOnglet() throws SQLException{
 		super();
-		JLabel lblNewLabel = new JLabel("Personne");
-		lblNewLabel.setBounds(10, 11, 46, 14);
-		this.add(lblNewLabel);
+		JLabel lblTitle = new JLabel("S\u00E9lectionner une personne");
+		lblTitle.setBounds(10, 11, 200, 14);
+		this.add(lblTitle);
 		
 		Inscriptions i = Inscriptions.getInscriptions();
 
@@ -60,7 +60,7 @@ public class PersonnesOnglet extends JLayeredPane{
 		Personne premierPersonne = (Personne)personnesList[0];
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 80, 205, 182);
+		panel.setBounds(10, 66, 219, 182);
 		this.add(panel);
 		panel.setLayout(null);
 		
@@ -76,7 +76,7 @@ public class PersonnesOnglet extends JLayeredPane{
 		prenomLbl.setBounds(10, 48, 155, 14);
 		panel.add(prenomLbl);
 		
-		final JLabel emailLbl = new JLabel("Email :"+premierPersonne.getMail());
+		final JLabel emailLbl = new JLabel("Email : "+premierPersonne.getMail());
 		emailLbl.setVerticalAlignment(SwingConstants.TOP);
 		emailLbl.setHorizontalAlignment(SwingConstants.LEFT);
 		emailLbl.setBounds(10, 73, 155, 14);
@@ -104,11 +104,11 @@ public class PersonnesOnglet extends JLayeredPane{
 					prenomPers = new JTextField(personne.getPrenom());
 					JTextField mail= new JTextField(personne.getMail());
 					JPanel myPanel = new JPanel();
-				    myPanel.add(new JLabel("Nom :"));
+				    myPanel.add(new JLabel("Nom : "));
 				    myPanel.add(nomPers);
-				    myPanel.add(new JLabel("Prénom :"));
+				    myPanel.add(new JLabel("Prénom : "));
 				    myPanel.add(prenomPers);
-				    myPanel.add(new JLabel("Mail :"));
+				    myPanel.add(new JLabel("Email : "));
 				    myPanel.add(mail);
 				    myPanel.add(Box.createHorizontalStrut(15)); // a spacer
 				   
@@ -137,7 +137,7 @@ public class PersonnesOnglet extends JLayeredPane{
 
 			}
 		});
-		btnModifier.setBounds(134, 34, 109, 23);
+		btnModifier.setBounds(10, 259, 109, 23);
 		this.add(btnModifier);
 		
 		/*Supprimer Personne*/
@@ -145,23 +145,36 @@ public class PersonnesOnglet extends JLayeredPane{
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Personne pers = (Personne)personnes.getSelectedItem();
-				Inscriptions i = Inscriptions.getInscriptions();
-				i.openConnection();
-				i.remove(pers);
-				personnes.removeItem(pers);
-				i.closeConnection();
+				JPanel myPanel = new JPanel();
+				myPanel.add(Box.createHorizontalStrut(1)); // a spacer
+				JLabel noadd;
+				try {
+					noadd = new JLabel("Êtes-vous sûr(e) de vouloir supprimer "+pers.getPrenom()+"?");
+					myPanel.add(noadd);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			    int result = JOptionPane.showConfirmDialog(null, myPanel, "Alert", JOptionPane.OK_CANCEL_OPTION);
+				if (result == JOptionPane.OK_OPTION) {
+					Inscriptions i = Inscriptions.getInscriptions();
+					i.openConnection();
+					i.remove(pers);
+					personnes.removeItem(pers);
+					i.closeConnection();
+				}
 			}
 		});
-		btnSupprimer.setBounds(253, 34, 109, 23);
+		btnSupprimer.setBounds(120, 259, 109, 23);
 		this.add(btnSupprimer);
 		
 		/*Ajouter une personne*/
 		JLabel lblAdd = new JLabel("Ajouter une personne");
-		lblAdd.setBounds(225, 80, 123, 14);
+		lblAdd.setBounds(236, 66, 123, 14);
 		this.add(lblAdd);
 		
 		JLabel lblNom = new JLabel("Nom");
-		lblNom.setBounds(225, 105, 60, 14);
+		lblNom.setBounds(239, 105, 60, 14);
 		this.add(lblNom);
 		
 		final JTextField nom = new JTextField();
@@ -170,7 +183,7 @@ public class PersonnesOnglet extends JLayeredPane{
 		nom.setColumns(10);
 		
 		JLabel lblPrenom = new JLabel("Pr\u00E9nom");
-		lblPrenom.setBounds(225, 143, 60, 14);
+		lblPrenom.setBounds(236, 143, 60, 14);
 		this.add(lblPrenom);
 		
 		final JTextField prenom = new JTextField();
@@ -179,7 +192,7 @@ public class PersonnesOnglet extends JLayeredPane{
 		prenom.setColumns(10);
 		
 		JLabel lblEmail = new JLabel("Email");
-		lblEmail.setBounds(225, 189, 60, 14);
+		lblEmail.setBounds(236, 189, 60, 14);
 		this.add(lblEmail);
 		
 		final JTextField email = new JTextField();
@@ -210,7 +223,7 @@ public class PersonnesOnglet extends JLayeredPane{
 			}
 			      
 		});
-		btnAjouter.setBounds(259, 240, 89, 23);
+		btnAjouter.setBounds(295, 225, 109, 23);
 		this.add(btnAjouter);	
 	}
 	

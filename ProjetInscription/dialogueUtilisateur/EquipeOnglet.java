@@ -36,8 +36,8 @@ public class EquipeOnglet extends JLayeredPane{
 
 	public EquipeOnglet(){
 		super();
-		JLabel lblEquipes = new JLabel("Equipes");
-		lblEquipes.setBounds(10, 11, 46, 14);
+		JLabel lblEquipes = new JLabel("S\u00E9l\u00E9ctionner une \u00E9quipe");
+		lblEquipes.setBounds(10, 11, 212, 14);
 		this.add(lblEquipes);
 		
 		Inscriptions i = Inscriptions.getInscriptions();
@@ -123,7 +123,11 @@ public class EquipeOnglet extends JLayeredPane{
 							try {
 								int ind = personneSansEquipeList.getSelectedIndex();
 								Personne personneselect = (Personne) personneSansEquipeList.getSelectedValue();	
-								equipe.add(personneselect);
+								if(personneselect==null){
+									boxErreur("Échec d'ajout. Vous devez sélectionner une personne.");
+								}else {
+									equipe.add(personneselect);
+								}
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -153,7 +157,7 @@ public class EquipeOnglet extends JLayeredPane{
 		add(btnAjouterMembre);
 		
 		/*Supprimer membre*/
-		JButton btnSupprimer = new JButton("Supprimer");
+		JButton btnSupprimer = new JButton("Supprimer le membre");
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Equipe equipe = (Equipe) equipes.getSelectedItem();
@@ -161,22 +165,35 @@ public class EquipeOnglet extends JLayeredPane{
 				if(personneselect==null){
 					boxErreur("Veuillez sélectionner un membre.");
 				}else {
-					int index = membreList.getSelectedIndex();
-					//Candidat candidatbanni = listCand.get(index);
-					// TODO Candidat ne veut pas se drop tout de suite de la liste
+					JPanel myPanel = new JPanel();
+					myPanel.add(Box.createHorizontalStrut(1)); // a spacer
+					JLabel noadd;
 					try {
-						equipe.remove(personneselect);
-						/*Mise à jour*/
-						Set<Personne> membres = (Set<Personne>) equipe.getMembres();
-						membreList.setListData(membres.toArray());
-					} catch (SQLException e1) {
+						noadd = new JLabel("Êtes-vous sûr(e) de vouloir supprimer "+personneselect.getPrenom()+" de l'équipe "+equipe.getNom()+"?");
+						myPanel.add(noadd);
+					} catch (SQLException e2) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						e2.printStackTrace();
+					}
+				    int result = JOptionPane.showConfirmDialog(null, myPanel, "Alert", JOptionPane.OK_CANCEL_OPTION);
+					if (result == JOptionPane.OK_OPTION) {
+						int index = membreList.getSelectedIndex();
+						//Candidat candidatbanni = listCand.get(index);
+						// TODO Candidat ne veut pas se drop tout de suite de la liste
+						try {
+							equipe.remove(personneselect);
+							/*Mise à jour*/
+							Set<Personne> membres = (Set<Personne>) equipe.getMembres();
+							membreList.setListData(membres.toArray());
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
 		});
-		btnSupprimer.setBounds(37, 266, 110, 23);
+		btnSupprimer.setBounds(10, 266, 166, 23);
 		add(btnSupprimer);
 		
 		/*MODIFIER UNE EQUIPE*/
@@ -196,7 +213,7 @@ public class EquipeOnglet extends JLayeredPane{
 			      if (result == JOptionPane.OK_OPTION) {
 			    	String newName = nomEquipe.getText();
 					if(newName.length()==0 ){
-						boxErreur("Vous devez remplir tous les champs");
+						boxErreur("Échec de modification. Vous devez saisir le nom de l'équipe");
 					}else {
 						equipe.setNom(newName);						
 					}
@@ -213,11 +230,18 @@ public class EquipeOnglet extends JLayeredPane{
 		supprimerEquipe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Equipe equipe = (Equipe) equipes.getSelectedItem();
-				Inscriptions i = Inscriptions.getInscriptions();
-				i.openConnection();
-				i.remove(equipe);
-				equipes.removeItem(equipe);
-				i.closeConnection();
+				JPanel myPanel = new JPanel();
+				myPanel.add(Box.createHorizontalStrut(1)); // a spacer
+				JLabel noadd = new JLabel("Êtes-vous sûr(e) de vouloir supprimer l'équipe "+equipe.getNom()+"?");
+			    myPanel.add(noadd);
+			    int result = JOptionPane.showConfirmDialog(null, myPanel, "Alert", JOptionPane.OK_CANCEL_OPTION);
+				if (result == JOptionPane.OK_OPTION) {
+					Inscriptions i = Inscriptions.getInscriptions();
+					i.openConnection();
+					i.remove(equipe);
+					equipes.removeItem(equipe);
+					i.closeConnection();
+				}
 			}
 		});
 		supprimerEquipe.setBounds(232, 35, 96, 23);
@@ -242,7 +266,7 @@ public class EquipeOnglet extends JLayeredPane{
 			public void actionPerformed(ActionEvent e) {
 			    String nomEquipe = nom.getText();
 				if(nomEquipe.length()==0 ){
-					boxErreur("Vous devez remplir tous les champs");
+					boxErreur("Veuillez saisir le nom de l'équipe");
 				}else {
 						Inscriptions ins = Inscriptions.getInscriptions();
 						try {
@@ -256,7 +280,7 @@ public class EquipeOnglet extends JLayeredPane{
 			}
 			      
 		});
-		btnAjouter.setBounds(266, 153, 89, 23);
+		btnAjouter.setBounds(273, 154, 109, 23);
 		this.add(btnAjouter);
 		
 		

@@ -187,10 +187,17 @@ public class CompetitionsOnglet extends JLayeredPane{
 					//Candidat candidatbanni = listCand.get(index);
 					// TODO Candidat ne veut pas se drop tout de suite de la liste
 					try {
-						c.remove(candidatselect);
-						/*Mise à jour*/
-						Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
-						candidatsList.setListData(candidats.toArray());
+						JPanel myPanel = new JPanel();
+						myPanel.add(Box.createHorizontalStrut(1)); // a spacer
+						JLabel noadd = new JLabel("Êtes-vous sûr(e) de vouloir désinscrire ce candidat?");
+					    myPanel.add(noadd);
+					    int result = JOptionPane.showConfirmDialog(null, myPanel, "Alert", JOptionPane.OK_CANCEL_OPTION);
+						if (result == JOptionPane.OK_OPTION) {
+							c.remove(candidatselect);
+							/*Mise à jour*/
+							Set<Candidat> candidats = (Set<Candidat>) c.getCandidats();
+							candidatsList.setListData(candidats.toArray());
+						}
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -222,14 +229,14 @@ public class CompetitionsOnglet extends JLayeredPane{
 			    	String newName = nomField.getText();
 					String dateClot = dateField.getText();
 					if(newName.length()==0 || dateClot.length()==0){
-						boxErreur("Vous devez remplir tous les champs");
+						boxErreur("Échec de modification. Vous devez remplir tous les champs.");
 					}else {
 						try {
 							LocalDate date_cloture = LocalDate.parse(dateClot, formatter);
 							c.setCompetition(newName,date_cloture);
 							/*TODO Mise à jour Jcombox*/
 						}catch(Exception e1){
-							boxErreur("Vous n'avez pas respecté le bon format de la date (jj/mm/aaaa)");
+							boxErreur("Échec de modification. Vous n'avez pas respecté le bon format de la date (jj/mm/aaaa)");
 						}
 					}
 			      }
@@ -244,12 +251,19 @@ public class CompetitionsOnglet extends JLayeredPane{
 		JButton btnSupprimer = new JButton("Supprimer");
 		btnSupprimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Competition c = (Competition)competitions.getSelectedItem();
-				Inscriptions i = Inscriptions.getInscriptions();
-				i.openConnection();
-				i.remove(c);
-				competitions.removeItem(c);
-				i.closeConnection();
+				JPanel myPanel = new JPanel();
+				myPanel.add(Box.createHorizontalStrut(1)); // a spacer
+				JLabel noadd = new JLabel("Êtes-vous sûr(e) de vouloir supprimer la compétition ?");
+			    myPanel.add(noadd);
+			    int result = JOptionPane.showConfirmDialog(null, myPanel, "Alert", JOptionPane.OK_CANCEL_OPTION);
+				if (result == JOptionPane.OK_OPTION) {
+					Competition c = (Competition)competitions.getSelectedItem();
+					Inscriptions i = Inscriptions.getInscriptions();
+					i.openConnection();
+					i.remove(c);
+					competitions.removeItem(c);
+					i.closeConnection();
+				}
 			}
 		});
 		btnSupprimer.setBounds(249, 36, 100, 20);
@@ -348,6 +362,6 @@ public class CompetitionsOnglet extends JLayeredPane{
 		myPanel.add(Box.createHorizontalStrut(1)); // a spacer
 		JLabel noadd = new JLabel(message);
 	    myPanel.add(noadd);
-	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Erreur", JOptionPane.OK_CANCEL_OPTION);
+	    int result = JOptionPane.showConfirmDialog(null, myPanel, "Alert", JOptionPane.OK_CANCEL_OPTION);
 	}
 }
