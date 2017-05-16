@@ -311,7 +311,7 @@ public class CompetitionsOnglet extends JLayeredPane{
 		
 		/*Ajouter une compétition*/
 		JButton btnAjouterCompetition = new JButton("Ajouter");
-		btnAjouterCompetition.setBounds(279, 227, 89, 23);
+		btnAjouterCompetition.setBounds(279, 227, 111, 23);
 		this.add(btnAjouterCompetition);
 		
 		JLabel lblJjmmaaaa = new JLabel("jj/mm/aaaa");
